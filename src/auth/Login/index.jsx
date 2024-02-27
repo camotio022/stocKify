@@ -1,7 +1,7 @@
 import { CircularProgress, InputAdornment, Stack, Typography } from '@mui/material'
 import * as Tag from './styles'
 import { Root } from '../../styles/Root/root_styles'
-import { LockClock, Password, PasswordOutlined, PasswordSharp, Person, Visibility, VisibilityOff } from '@mui/icons-material'
+import { LockClock, Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useState } from 'react'
 
 export const Login = () => {
@@ -52,7 +52,9 @@ export const Login = () => {
                             type={open ? 'text' : 'password'}
                             InputProps={{
                                 endAdornment: (
-                                    <InputAdornment position="start">
+                                    <InputAdornment sx={{
+                                        color: Root.color_button,
+                                    }}>
                                         {open ? <Visibility onClick={() => setOpen(!open)} /> :
                                             <VisibilityOff onClick={() => setOpen(!open)} />}
                                     </InputAdornment>
@@ -71,16 +73,19 @@ export const Login = () => {
                     mt={2.6}
                     sx={{
                         color: progress && 'white',
-                        bgcolor: progress&& Root.color_button,
+                        bgcolor: progress && Root.color_button,
                         gap: 2,
                         ...Root.hover
                     }}>
-                    <Typography>
+                    <Typography sx={{ fontFamily: Root.fontFamilyMonospace }}>
                         {progress ? 'LOGANDO' : 'LOGAR-SE'}
                     </Typography>
-                    {progress && <CircularProgress size={24} sx={{color: 'white'}} />}
+                    {progress && <CircularProgress size={24} sx={{ color: 'white' }} />}
                 </Tag.MuiGridForm>
             </Tag.MuiCard>
+            <Tag.MuiFooterLogin>
+                JUNTA MAIS STOCKIFY @2024
+            </Tag.MuiFooterLogin>
         </Tag.MuiContainer>
     )
 }

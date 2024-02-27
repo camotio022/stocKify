@@ -7,6 +7,7 @@ export const MuiContainer = styled(Stack)(({ }) => ({
     justifyContent: 'center',
     width: '100vw',
     height: '100vh',
+    fontFamily: Root.fontFamilyMonospace
 }))
 export const MuiCard = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -17,7 +18,9 @@ export const MuiCard = styled(Stack)(({ }) => ({
     width: '450px',
     height: '450px',
     boxShadow: Root.boxS,
-    background: Root.color_app_bar
+    background: Root.color_app_bar,
+
+
 }))
 export const MuiCardUser = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -64,4 +67,18 @@ export const MuiTextField = styled(TextField)(({ }) => ({
             color: 'white', 
         },
     },
+}))
+export const MuiFooterLogin = styled(Stack)(({ }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2,
+    width: '330px',
+    height: '48px',
+    marginTop: '-1px',
+    border: `1px solid ${Root.color_button_opacity}`,
+    backgroundColor: Root.color_app_bar,
+    color: Root.color_button,
+    fontWeight: 'bold',
+    fontFamily: Root.fontFamilyMonospace
 }))
