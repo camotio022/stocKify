@@ -2,10 +2,12 @@ import { CircularProgress, InputAdornment, Stack, Typography } from '@mui/materi
 import * as Tag from './styles'
 import { Root } from '../../styles/Root/root_styles'
 import { LockClock, Person, Visibility, VisibilityOff } from '@mui/icons-material'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AuthContext } from '../../auth_context'
 
 export const Login = () => {
     const [open, setOpen] = useState('')
+    const { loginWithEmailAndPassword } = useContext(AuthContext)
     const [progress, setProgress] = useState(false)
     const [data, setData] = useState({
         email: '',
@@ -18,6 +20,15 @@ export const Login = () => {
             [name]: value
         }));
     };
+    const login = async () => {
+        setProgress(true)
+        try {
+            await loginWithEmailAndPassword(data.email, data.password)
+            setProgress(false)
+        } catch (error) {
+            console.error(error)
+        }
+    }
     return (
         <Tag.MuiContainer>
             <Tag.MuiCard>
@@ -69,7 +80,7 @@ export const Login = () => {
                     </Stack>
                 </Tag.MuiGridForm>
                 <Tag.MuiGridForm
-                    onClick={() => setProgress(!progress)}
+                    onClick={login}
                     mt={2.6}
                     sx={{
                         color: progress && 'white',

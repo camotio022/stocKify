@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, setDoc, collection, getDocs, query, where, updateDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, collection, getDocs, query, where, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase_config';
 export const AuthContext = createContext();
 const provider = new GoogleAuthProvider();
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
             });
     };
 
-    const queryUser = async (id) => {
+    const queryUser = async (id, newUser) => {
         let userData;
         const usersRef = collection(db, 'users');
         const querySnapshot = await getDocs(query(usersRef, where('email', '==', id)));
@@ -90,7 +90,19 @@ export const AuthProvider = ({ children }) => {
                 userData = doc.data();
             });
         } else {
-            console.log('Usuário não encontrado no Firestore.');
+            const creatingUser = {
+                id: newUser.uid,
+                name: newUser.name || 'none',
+                email: newUser.email || 'none',
+                role: 'admin',
+                permissions: ['read', 'write', 'delete'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                isActive: true,
+                photoURL: newUser?.photoURL || null,
+            }
+            console.log(newUser)
+            await addDoc(usersRef, creatingUser);
         }
         return userData;
     };
@@ -99,12 +111,12 @@ export const AuthProvider = ({ children }) => {
         if (!email || !password) return;
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const userData = await queryUser(userCredential.user.email);
+            const userData = await queryUser(userCredential.user.email, userCredential.user);
             setUser(userData);
             login(userData);
         } catch (error) {
             const errorMessage = error.message || 'Ocorreu um erro ao fazer login.';
-            setMessage(errorMessage);
+            alert(errorMessage);
         }
     };
 

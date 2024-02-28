@@ -5,9 +5,9 @@ export const Root = {
   gray_desfius: '#A8ADB3',
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
-  color_button: '#932dd2',
+  color_button: '#723172',
   color_button_secondary: "#932dd2",
-  color_button_opacity: 'rgba(147, 45, 210, 0.3)',
+  color_button_opacity: 'rgba(114, 49, 114, 0.3)',
   color_link: '#93dd2',
   subButton: 'rgba(169, 169, 169, 0.5)',
   blue: '#007bff',
@@ -29,9 +29,18 @@ export const Root = {
   success: '#28a745',
   hover: {
     ':hover': {
-      backgroundColor: '#932dd2',
+      backgroundColor: '#723172',
       color: '#fff',
       transition: '0.3s ease',
+      cursor: 'pointer',
+    }
+  },
+  hoverReverse: {
+    ':hover': {
+      color: '#723172',
+      backgroundColor: '#fff',
+      transition: '0.3s ease',
+      cursor: 'pointer',
     }
   },
   hoverStatic: {
