@@ -1,5 +1,6 @@
 import { InputBase, Stack, styled } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
+import { Search } from "@mui/icons-material";
 
 export const MuiStock = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -25,7 +26,6 @@ export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    flexDirection: 'row',
     width: 'auto',
     height: '100%',
     gap: '12px'
@@ -45,7 +45,7 @@ export const MuiStockBotton = styled(Stack)(({ }) => ({
     borderRadius: '4px',
     ...Root.hover
 }))
-export const Search = styled('div')({
+export const MuiSearchContainer = styled('div')({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -84,3 +84,4 @@ export const MuiSearch = styled(Stack)(({ theme }) => ({
     fontFamily: Root.fontFamilyMonospace,
     borderBottom: `1px solid ${Root.color_button_opacity}`
 }));
+export const MuiSearchIcon = styled(Search)(({ theme }) => ({}));

@@ -47,6 +47,24 @@ export const Root = {
     backgroundColor: '#932dd2',
     color: '#fff',
   },
+  scrollBar: {
+    '&::-webkit-scrollbar': {
+      width: '5px',
+      height: '3px',
+      borderRadius: '6px',
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#723172',
+      borderRadius: '6px',
+    },
+
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: '#723172',
+    },
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#723172',
+  },
   info: '#17a2b8',
   warning: '#ffc107',
   danger: '#dc3545',
