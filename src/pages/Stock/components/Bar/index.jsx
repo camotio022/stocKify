@@ -3,11 +3,11 @@ import { MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth } from "../../style
 import { Add } from "@mui/icons-material";
 import { Root } from "../../../../styles/Root/root_styles";
 
-export const NavBarTop = ({ }) => {
+export const NavBarTop = ({ generateExcelFile }) => {
     const buttons = [
         {
             label: 'Export to Excel',
-            onclick: null,
+            onclick: 'excel',
             variant: null
 
         }, {
@@ -21,12 +21,19 @@ export const NavBarTop = ({ }) => {
             variant: 'contained'
         },
     ]
+    const clicks = (e) => {
+        if (e.onclick === 'excel') {
+            alert('opas')
+            generateExcelFile();
+        }
+    }
     return (
         <MuiStockNavBar>
             <Typography sx={{ fontWeight: 'bold' }}>Products</Typography>
             <MuiStockNavBarRigth>
                 {buttons.map((botton, index) => {
                     const isContained = botton.variant === 'contained';
+                    const isImportExcel = botton.onclick === 'excel';
                     return (
                         <MuiStockBotton
                             sx={isContained && {
@@ -36,7 +43,7 @@ export const NavBarTop = ({ }) => {
                             }}
                             key={index}
                             variant={botton.variant}
-                            onClick={botton.onclick}
+                            onClick={() => clicks(botton)}
                         >
                             {isContained && <Add />}
                             {botton.label}

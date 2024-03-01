@@ -2,6 +2,7 @@ import { Table, TableHead, TableRow, TableCell, TableBody, Checkbox, TableContai
 import { useState, useRef } from 'react';
 import { estoque } from '../mock';
 import { Root } from '../../../../styles/Root/root_styles';
+import { MuiTableClhild, MuiTableRow } from './styles';
 
 export const EstoqueTable = () => {
     const [selectedItems, setSelectedItems] = useState([]);
@@ -11,7 +12,6 @@ export const EstoqueTable = () => {
         'Nome',
         'Tipo',
         'Quantidade',
-        'Valor',
         'Data de Validade',
         'Data de Chegada'
     ];
@@ -29,7 +29,7 @@ export const EstoqueTable = () => {
             <Table sx={{ position: 'relative' }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>
+                        <MuiTableClhild>
                             <Checkbox
                                 onChange={(e) => {
                                     const isChecked = e.target.checked;
@@ -37,15 +37,15 @@ export const EstoqueTable = () => {
                                     setSelectedItems(newSelectedItems);
                                 }}
                             />
-                        </TableCell>
+                        </MuiTableClhild>
                         {headerInfos.map((header, index) => (
-                            <TableCell key={index}>{header}</TableCell>
+                            <MuiTableClhild key={index}>{header}</MuiTableClhild>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {estoque.map((item) => (
-                        <TableRow key={item.id}>
+                        <MuiTableRow key={item.id}>
                             <TableCell>
                                 <Checkbox
                                     checked={selectedItems.includes(item.id)}
@@ -56,10 +56,9 @@ export const EstoqueTable = () => {
                             <TableCell>{item.nome}</TableCell>
                             <TableCell>{item.tipo}</TableCell>
                             <TableCell>{item.quantidade}</TableCell>
-                            <TableCell>{item.valor}</TableCell>
                             <TableCell>{item.dataValidade}</TableCell>
                             <TableCell>{item.dataChegada}</TableCell>
-                        </TableRow>
+                        </MuiTableRow>
                     ))}
                 </TableBody>
             </Table>
