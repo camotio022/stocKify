@@ -35,7 +35,7 @@ export const MuiStockBotton = styled(Stack)(({ }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 2,
+    gap: 3,
     minWidth: '150px',
     height: '38px',
     border: `1px solid ${Root.color_button}`,

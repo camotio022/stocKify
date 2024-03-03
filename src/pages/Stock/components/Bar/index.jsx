@@ -1,30 +1,35 @@
 import { Typography } from "@mui/material";
 import { MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth } from "../../styles";
-import { Add } from "@mui/icons-material";
+import { Add, FileDownload } from "@mui/icons-material";
 import { Root } from "../../../../styles/Root/root_styles";
-
-export const NavBarTop = ({ generateExcelFile }) => {
+export const NavBarTop = ({
+    generateExcelFile,
+    saveExcel,
+    setSaveExcel
+}) => {
     const buttons = [
         {
-            label: 'Export to Excel',
-            onclick: 'excel',
-            variant: null
+            label: 'Download',
+            onclick: 'Download',
+            variant: null,
+            icon: <FileDownload />
 
         }, {
             label: 'Import Produts',
             onclick: null,
-            variant: null
+            variant: null,
+            icon: null
 
         }, {
             label: 'New Produt',
             onclick: null,
-            variant: 'contained'
+            variant: 'contained',
+            icon: <Add />
         },
     ]
     const clicks = (e) => {
-        if (e.onclick === 'excel') {
-            alert('opas')
-            generateExcelFile();
+        if (e.onclick === 'Download') {
+            setSaveExcel(!saveExcel)
         }
     }
     return (
@@ -39,13 +44,14 @@ export const NavBarTop = ({ generateExcelFile }) => {
                             sx={isContained && {
                                 backgroundColor: Root.color_button,
                                 color: Root.white,
-                                ...Root.hoverReverse
+                                ...Root.hoverReverse,
+
                             }}
                             key={index}
                             variant={botton.variant}
                             onClick={() => clicks(botton)}
                         >
-                            {isContained && <Add />}
+                            {botton.icon}
                             {botton.label}
                         </MuiStockBotton>
                     )

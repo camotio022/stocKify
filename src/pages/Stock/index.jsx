@@ -1,6 +1,4 @@
 import { Stack, Input, MenuItem, FormControl, Select, InputLabel, TextField } from "@mui/material"
-import ExcelJS from 'exceljs'
-import { saveAs } from 'file-saver';
 import {
     MuiSearch,
     MuiSearchContainer,
@@ -9,74 +7,22 @@ import {
 } from "./styles"
 import { NavBarTop } from "./components/Bar"
 import EstoqueTable from "./components/StoqueTable"
-import { estoque } from "./components/mock"
+import { ModalZindex } from "../../components/Modal";
+import generateExcelFile from "../../saveExcel"
+import { useState } from "react"
 export const Stock = () => {
-    const generateExcelFile = () => {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Estoque');
-        const headerStyle = {
-            font: { bold: true },
-            fill: {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: 'FFFFFF' },
-                bgColor: { argb: '4472C4' }
-            },
-            border: {
-                top: { style: 'thin', color: { argb: '000000' } },
-                left: { style: 'thin', color: { argb: '000000' } },
-                bottom: { style: 'thin', color: { argb: '000000' } },
-                right: { style: 'thin', color: { argb: '000000' } }
-            },
-            alignment: { horizontal: 'center', vertical: 'middle' }
-        };
-        const bodyStyle = {
-            fill: {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: 'FFFFFF' }
-            },
-            border: {
-                top: { style: 'thin', color: { argb: '000000' } },
-                left: { style: 'thin', color: { argb: '000000' } },
-                right: { style: 'thin', color: { argb: '000000' } }
-            },
-            alignment: { horizontal: 'center', vertical: 'middle' }
-        };
-        worksheet.columns = [
-            { header: 'ID', key: 'id', width: 10, style: headerStyle },
-            { header: 'Nome', key: 'nome', width: 20, style: headerStyle },
-            { header: 'Tipo', key: 'tipo', width: 15, style: headerStyle },
-            { header: 'Quantidade', key: 'quantidade', width: 15, style: headerStyle },
-            { header: 'Data de Validade', key: 'dataValidade', width: 20, style: headerStyle },
-            { header: 'Data de Chegada', key: 'dataChegada', width: 20, style: headerStyle }
-        ];
-        estoque.forEach(item => {
-            worksheet.addRow(item).eachCell({ includeEmpty: false }, cell => {
-                cell.style = bodyStyle;
-            });
-        });
-        const lastRow = worksheet.lastRow;
-        if (lastRow) {
-            lastRow.eachCell(cell => {
-                cell.border.bottom = { style: 'thin', color: { argb: '000000' } };
-            });
-        }
-        workbook.xlsx.writeBuffer()
-            .then(buffer => {
-                saveAs(new Blob([buffer]), 'estoque.xlsx');
-            })
-            .catch(error => {
-                console.error('Erro ao gerar o arquivo Excel:', error);
-            });
-    };
-
-
-
-
+    const [saveExcel, setSaveExcel] = useState(false)
     return (
         <MuiStock>
-            <NavBarTop generateExcelFile={generateExcelFile} />
+            {saveExcel && <ModalZindex
+                setSaveExcel={setSaveExcel}
+                saveExcel={saveExcel}
+            />}
+            <NavBarTop
+                generateExcelFile={generateExcelFile}
+                setSaveExcel={setSaveExcel}
+                saveExcel={saveExcel}
+            />
             <MuiSearch>
                 <MuiSearchContainer>
                     <SearchIconWrapper>
