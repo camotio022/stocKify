@@ -39,6 +39,7 @@ export const MuiTableRow = styled(Box)(({ }) => ({
     '&:hover': {
         backgroundColor: Root.color_button_opacity,
         transition: 'all .3s',
+        boxShadow: Root.boxS
     },
     borderBottom: `1px solid ${Root.color_button_opacity}`,
     boxSizing: 'border-box'

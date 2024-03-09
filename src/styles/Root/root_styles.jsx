@@ -5,9 +5,9 @@ export const Root = {
   gray_desfius: '#A8ADB3',
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
-  color_button: '#723172',
+  color_button: 'orange',
   color_button_secondary: "#932dd2",
-  color_button_opacity: 'rgba(114, 49, 114, 0.3)',
+  color_button_opacity: 'rgba(255, 165, 0, 0.3)',
   color_link: '#93dd2',
   subButton: 'rgba(169, 169, 169, 0.5)',
   blue: '#007bff',
@@ -29,7 +29,7 @@ export const Root = {
   success: '#28a745',
   hover: {
     ':hover': {
-      backgroundColor: '#723172',
+      backgroundColor: 'orange',
       color: '#fff',
       transition: '0.3s ease',
       cursor: 'pointer',
@@ -37,14 +37,14 @@ export const Root = {
   },
   hoverReverse: {
     ':hover': {
-      color: '#723172',
+      color: 'orange',
       backgroundColor: '#fff',
       transition: '0.3s ease',
       cursor: 'pointer',
     }
   },
   hoverStatic: {
-    backgroundColor: '#932dd2',
+    backgroundColor: 'orange',
     color: '#fff',
   },
   scrollBar: {
@@ -55,15 +55,15 @@ export const Root = {
     },
 
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#723172',
+      backgroundColor: 'orange',
       borderRadius: '6px',
     },
 
     '&::-webkit-scrollbar-track': {
-      backgroundColor: '#723172',
+      backgroundColor: 'orange',
     },
     scrollbarWidth: 'thin',
-    scrollbarColor: '#723172',
+    scrollbarColor: 'orange',
   },
   info: '#17a2b8',
   warning: '#ffc107',
