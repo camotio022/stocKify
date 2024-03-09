@@ -16,7 +16,7 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: '7vw',
+    width: '6.5vw',
     height: '100vh',
     backgroundColor: Root.color_button,
     color: Root.white,
@@ -27,7 +27,7 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    gap: '24px',
+    gap: '8px',
     marginTop: '34px',
     width: '100%',
 }))
@@ -35,9 +35,10 @@ export const MuiMainLayoutLink = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%',
+    width: '70%',
     paddingBlock: '6px',
-    transition: 'all .3s'
+    transition: 'all .3s',
+    fontSize: '100%'
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -46,7 +47,7 @@ export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     justifyContent: 'center',
     width: '100%',
     bottom: '36px',
-    gap: '36px',
+    gap: '20px',
     color: Root.white,
     cursor: 'pointer'
 }))
@@ -55,6 +56,6 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '93vw',
+    width: '95vw',
     height: '100%',
 }))

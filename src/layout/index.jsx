@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react"
 import * as Tag from './styles.js'
 import { Stack } from "@mui/material"
 import { Root } from "../styles/Root/root_styles.jsx"
-import Image from '../images/layout/junta.jpg'
+import Image from '../images/layout/junta2.png'
 import { LogoMainLayout } from "./components/Logo/index.jsx"
-import { History, Home, Insights, Inventory, Logout, Person2, Settings, StackedBarChart } from "@mui/icons-material"
+import { History, Home, Insights, Inventory, Logout, Person2, Settings } from "@mui/icons-material"
 import { AuthContext } from "../auth_context/index.jsx"
 export const MainLayout = ({ childrens }) => {
     const { logout } = useContext(AuthContext)
@@ -21,7 +21,7 @@ export const MainLayout = ({ childrens }) => {
             icon: <Inventory />
         },
         {
-            name: 'Insights',
+            name: 'Insight',
             link: 'insights',
             icon: <Insights />
         },
@@ -45,22 +45,21 @@ export const MainLayout = ({ childrens }) => {
                                 <Tag.MuiMainLayoutLink
                                     onClick={() => setValue(path.link)}
                                     sx={path.link === value && {
-                                        marginRight: '-9px',
-                                        color: Root.color_button,
-                                        backgroundColor: Root.color_app_bar,
+                                        color: Root.color_default,
+                                        boxShadow: Root.boxShadow,
+                                        height: '50px'
                                     }} key={index}>
-                                    <Stack>
+                                    <Stack sx={{fontSize: '90%'}}>
                                         {path.icon}
                                     </Stack>
-                                    <Stack>
+                                    {path.link === value && <Stack sx={{fontSize: '90%',}}>
                                         {path.name}
-                                    </Stack>
+                                    </Stack>}
                                 </Tag.MuiMainLayoutLink>
                             )
                         })
                     }
                 </Tag.MuiMainLayoutLinks>
-
                 <Tag.MuiMainLayoutSettingsUser>
                     <Settings />
                     <Person2 />

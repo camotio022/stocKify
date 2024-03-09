@@ -1,11 +1,15 @@
-import { Table, TableHead, TableRow, TableCell, TableBody, Checkbox, TableContainer } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, TableBody, Checkbox, TableContainer, Stack, Box } from '@mui/material';
 import { useState, useRef } from 'react';
 import { estoque } from '../mock';
 import { Root } from '../../../../styles/Root/root_styles';
-import { MuiTableClhild, MuiTableRow } from './styles';
+import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from './styles';
+import { ArrowDropDown } from '@mui/icons-material';
 
-export const EstoqueTable = () => {
-    const [selectedItems, setSelectedItems] = useState([]);
+export const EstoqueTable = ({
+    selectedItems, setSelectedItems
+}) => {
+
+    const [focus, setFocus] = useState(false)
     const tableRef = useRef(null);
     const headerInfos = [
         'ID',
@@ -15,7 +19,9 @@ export const EstoqueTable = () => {
         'Data de Validade',
         'Data de Chegada'
     ];
-
+    const focusItem = () => {
+        setFocus(!focus)
+    }
     const handleCheckboxChange = (id) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter(itemId => itemId !== id));
@@ -25,45 +31,52 @@ export const EstoqueTable = () => {
     };
 
     return (
-        <TableContainer sx={{ ...Root.scrollBar }} ref={tableRef}>
-            <Table sx={{ position: 'relative' }}>
-                <TableHead>
-                    <TableRow>
-                        <MuiTableClhild>
+        <TableContainer sx={{
+            ...Root.scrollBar,
+            width: '100%',
+            boxSizing: 'border-box'
+        }} ref={tableRef}>
+            <MuiHeaderTable>
+                <MuiTableClhild>
+                    <Checkbox
+                        sx={{
+                            color: Root.color_default
+                        }}
+                        onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            const newSelectedItems = isChecked ? estoque.map(item => item.id) : [];
+                            setSelectedItems(newSelectedItems);
+                        }}
+                    />
+                </MuiTableClhild>
+                {headerInfos.map((header, index) => (
+                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
+                ))}
+            </MuiHeaderTable>
+            <MuiRowTable>
+                {estoque.map((item) => (
+                    <MuiTableRow
+                        onClick={focusItem}
+                        key={item.id}>
+                        <MuiTableRowCell sx={{
+                            borderLeft: `1px solid ${Root.color_button_opacity}`
+                        }}>
                             <Checkbox
-                                onChange={(e) => {
-                                    const isChecked = e.target.checked;
-                                    const newSelectedItems = isChecked ? estoque.map(item => item.id) : [];
-                                    setSelectedItems(newSelectedItems);
-                                }}
+                                checked={selectedItems.includes(item.id)}
+                                onChange={() => handleCheckboxChange(item.id)}
                             />
-                        </MuiTableClhild>
-                        {headerInfos.map((header, index) => (
-                            <MuiTableClhild key={index}>{header}</MuiTableClhild>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {estoque.map((item) => (
-                        <MuiTableRow key={item.id}>
-                            <TableCell>
-                                <Checkbox
-                                    checked={selectedItems.includes(item.id)}
-                                    onChange={() => handleCheckboxChange(item.id)}
-                                />
-                            </TableCell>
-                            <TableCell>#{item.id}</TableCell>
-                            <TableCell>{item.nome}</TableCell>
-                            <TableCell>{item.tipo}</TableCell>
-                            <TableCell>{item.quantidade}</TableCell>
-                            <TableCell>{item.dataValidade}</TableCell>
-                            <TableCell>{item.dataChegada}</TableCell>
-                        </MuiTableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                        </MuiTableRowCell>
+                        <MuiTableRowCell>{item.id}</MuiTableRowCell>
+                        <MuiTableRowCell>{item.nome}</MuiTableRowCell>
+                        <MuiTableRowCell>{item.tipo}</MuiTableRowCell>
+                        <MuiTableRowCell>
+                            {item.quantidade} {item.quantidade > 1 ? 'unidades' : 'unidade'}
+                        </MuiTableRowCell>
+                        <MuiTableRowCell>{item.dataValidade}</MuiTableRowCell>
+                        <MuiTableRowCell>{item.dataChegada}</MuiTableRowCell>
+                    </MuiTableRow>
+                ))}
+            </MuiRowTable>
         </TableContainer>
     );
 };
-
-export default EstoqueTable;
