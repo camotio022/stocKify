@@ -9,7 +9,7 @@ export const EstoqueTable = ({
     selectedItems, setSelectedItems
 }) => {
 
-    const [focus, setFocus] = useState(false)
+    const [focus, setFocus] = useState(null)
     const tableRef = useRef(null);
     const headerInfos = [
         'ID',
@@ -19,8 +19,8 @@ export const EstoqueTable = ({
         'Data de Validade',
         'Data de Chegada'
     ];
-    const focusItem = () => {
-        setFocus(!focus)
+    const focusItem = (index) => {
+        setFocus(index)
     }
     const handleCheckboxChange = (id) => {
         if (selectedItems.includes(id)) {
@@ -54,9 +54,18 @@ export const EstoqueTable = ({
                 ))}
             </MuiHeaderTable>
             <MuiRowTable>
-                {estoque.map((item) => (
+                {estoque.map((item, index) => (
                     <MuiTableRow
-                        onClick={focusItem}
+                        onClick={()=>focusItem(index)}
+                        sx={focus === index&&{
+                            border: `1px dashed ${Root.color_button}`,
+                            boxShadow: Root.boxS,
+                            backgroundColor: Root.color_app_bar,
+                            color: Root.color_button,
+                            fontWeight: 'bold',
+                            fontFamily: Root.fontFamilyMonospace,
+                            animation: 'dash 2s infinite'
+                        }}
                         key={item.id}>
                         <MuiTableRowCell sx={{
                             borderLeft: `1px solid ${Root.color_button_opacity}`
