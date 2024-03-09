@@ -29,6 +29,7 @@ export const EstoqueTable = ({
             setSelectedItems([...selectedItems, id]);
         }
     };
+    console.log(selectedItems)
 
     return (
         <TableContainer sx={{
@@ -56,16 +57,15 @@ export const EstoqueTable = ({
             <MuiRowTable>
                 {estoque.map((item, index) => (
                     <MuiTableRow
-                        onClick={()=>focusItem(index)}
-                        sx={focus === index&&{
+                        onClick={() => focusItem(index)}
+                        sx={selectedItems.includes(item.id) || (focus === index)? {
                             border: `1px dashed ${Root.color_button}`,
-                            boxShadow: Root.boxS,
-                            backgroundColor: Root.color_app_bar,
+                            backgroundColor: Root.color_button_opacity,
                             color: Root.color_button,
                             fontWeight: 'bold',
                             fontFamily: Root.fontFamilyMonospace,
                             animation: 'dash 2s infinite'
-                        }}
+                        }: null}
                         key={item.id}>
                         <MuiTableRowCell sx={{
                             borderLeft: `1px solid ${Root.color_button_opacity}`
