@@ -14,7 +14,7 @@ export const MuiStock = styled(Stack)(({ }) => ({
 }))
 export const MuiStockModalTop = styled(Stack)(({ }) => ({
     position: 'absolute',
-    width: '95%',
+    width: '100%',
     height: '79px',
     display: 'flex',
     flexDirection: 'row',
@@ -31,7 +31,7 @@ export const MuiStockNavBar = styled(Stack)(({ }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: '95%',
+    width: '100%',
     height: '7%',
 }))
 export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
@@ -112,7 +112,7 @@ export const MuiSearch = styled(Stack)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: '95%',
+    width: '100%',
     height: '6vh',
     fontFamily: Root.fontFamilyMonospace,
 }));
@@ -124,7 +124,7 @@ export const MuiInputNative = styled('input')(({ }) => ({
     height: '75%',
     width: '100%',
     borderRadius: '4px',
-    border: `1px solid ${Root.color_button_opacity}`,
+    'border': `1px solid ${Root.color_button_opacity}`,
     backgroundColor: Root.color_app_bar,
     color: Root.color_button,
     fontWeight: 'bold',

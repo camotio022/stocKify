@@ -13,27 +13,27 @@ import {
     MuiSelectItemOptions,
     MuiStock, MuiStockModalTop, SearchIconWrapper, StyledInputBase,
 } from "./styles"
-import { NavBarTop } from "./components/Bar"
 import { ModalZindex } from "../../components/Modal";
 import generateExcelFile from "../../saveExcel"
 import { EstoqueTable } from './components/StoqueTable/index'
 import { useState } from "react"
 import { Root } from "../../styles/Root/root_styles";
 import { DeleteOutline, InsertInvitation, ShoppingCartCheckout } from "@mui/icons-material";
-import { TableScroll } from "./components/TableScroll";
-const items = [
-    { value: 'validade', label: 'Data de validade' },
-    { value: 'purchaseDate', label: 'Data de compra' },
-    { value: 'donationDate', label: 'Data de Doação' },
-    { value: 'itemType', label: 'Tipo de item' },
-    { value: 'amount', label: 'Quantidade' },
-    { value: 'users', label: 'Users' }
-];
+import { NavBarTop } from "../../components/Bar";
+import { NewItem } from "../NewItem";
+
 export const Stock = () => {
+    const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
     const [selectedItems, setSelectedItems] = useState([]);
     return (
         <MuiStock>
+            {true &&
+                <NewItem
+                    newItem={newItem}
+                    setNewItem={setNewItem}
+                />
+            }
             {selectedItems.length > 0 && <MuiStockModalTop>
                 <MuiSelectItem>
                     {selectedItems.length}
@@ -66,47 +66,19 @@ export const Stock = () => {
                 saveExcel={saveExcel}
             />}
             <NavBarTop
+                newItem={newItem}
+                setNewItem={setNewItem}
                 generateExcelFile={generateExcelFile}
                 setSaveExcel={setSaveExcel}
                 saveExcel={saveExcel}
             />
-            <MuiSearch>
-                <MuiSearchContainerFather>
-                    <MuiSearchContainer>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </MuiSearchContainer>
-                    <MuiSearchIconTeep >
-                        <MuiSearchIcon fontSize="small" />
-                    </MuiSearchIconTeep>
-                </MuiSearchContainerFather>
-                <MuiSelectContainer>
-                    <MuiInputNative
-                        size="small"
-                        type="date"
-                    ></MuiInputNative>
 
-                    <MuiSelect
-                        size="small"
-                        labelId="outlined-select-currency-label"
-                        id="outlined-select-currency"
-                        defaultValue="default"
-                    >
-                        <MenuItem value="default" disabled>Filtres</MenuItem>
-                        {items.map((item, index) => (
-                            <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                        ))}
-                    </MuiSelect>
-                </MuiSelectContainer>
-            </MuiSearch>
             <Stack sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 height: '85%',
-                width: '95%',
+                width: '100%',
                 mt: selectedItems.length > 0 ? '0px' : '17px',
                 ...Root.scrollBar
             }}>
@@ -115,6 +87,7 @@ export const Stock = () => {
                     setSelectedItems={setSelectedItems}
                 />
             </Stack>
+
         </MuiStock>
     )
 }

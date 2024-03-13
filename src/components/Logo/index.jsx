@@ -1,6 +1,4 @@
 import { Stack } from "@mui/material"
-import { Root } from "../../../styles/Root/root_styles"
-
 export const LogoMainLayout = ({ image, text }) => {
     return (
         <Stack sx={{
@@ -11,7 +9,6 @@ export const LogoMainLayout = ({ image, text }) => {
             marginTop: '12px',
             width: '80%',
             height: '10%',
-            height: 'auto',
 
         }}>
             <img

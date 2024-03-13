@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { Login } from "../auth/Login"
 import { MainLayout } from "../layout"
 import { Stock } from "../pages/Stock"
+import { ExitsItems } from "../pages/ExitsItems"
 
 export const MainRoutes = () => {
     const auth = useContext(AuthContext)
@@ -13,6 +14,7 @@ export const MainRoutes = () => {
                 <>
                     <Routes>
                         <Route path="/" element={<Stock />} />
+                        <Route path="/exits" element={<ExitsItems />} />
                     </Routes>
                 </>
             } />

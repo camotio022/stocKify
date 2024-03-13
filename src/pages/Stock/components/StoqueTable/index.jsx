@@ -1,4 +1,4 @@
-import { Table, TableHead, TableRow, TableCell, TableBody, Checkbox, TableContainer, Stack, Box } from '@mui/material';
+import { Checkbox, TableContainer } from '@mui/material';
 import { useState, useRef } from 'react';
 import { estoque } from '../mock';
 import { Root } from '../../../../styles/Root/root_styles';
@@ -38,7 +38,9 @@ export const EstoqueTable = ({
             boxSizing: 'border-box'
         }} ref={tableRef}>
             <MuiHeaderTable>
-                <MuiTableClhild>
+                <MuiTableClhild sx={{
+                    width: '50%',
+                }}>
                     <Checkbox
                         sx={{
                             color: Root.color_default
@@ -58,16 +60,17 @@ export const EstoqueTable = ({
                 {estoque.map((item, index) => (
                     <MuiTableRow
                         onClick={() => focusItem(index)}
-                        sx={selectedItems.includes(item.id) || (focus === index)? {
+                        sx={selectedItems.includes(item.id) || (focus === index) ? {
                             border: `1px dashed ${Root.color_button}`,
                             backgroundColor: Root.color_button_opacity,
                             color: Root.color_button,
                             fontWeight: 'bold',
                             fontFamily: Root.fontFamilyMonospace,
                             animation: 'dash 2s infinite'
-                        }: null}
+                        } : null}
                         key={item.id}>
                         <MuiTableRowCell sx={{
+                            width: '50%',
                             borderLeft: `1px solid ${Root.color_button_opacity}`
                         }}>
                             <Checkbox
@@ -75,14 +78,9 @@ export const EstoqueTable = ({
                                 onChange={() => handleCheckboxChange(item.id)}
                             />
                         </MuiTableRowCell>
-                        <MuiTableRowCell>{item.id}</MuiTableRowCell>
-                        <MuiTableRowCell>{item.nome}</MuiTableRowCell>
-                        <MuiTableRowCell>{item.tipo}</MuiTableRowCell>
-                        <MuiTableRowCell>
-                            {item.quantidade} {item.quantidade > 1 ? 'unidades' : 'unidade'}
-                        </MuiTableRowCell>
-                        <MuiTableRowCell>{item.dataValidade}</MuiTableRowCell>
-                        <MuiTableRowCell>{item.dataChegada}</MuiTableRowCell>
+                        {Object.values(item).map((value, i) => (
+                            <MuiTableRowCell key={i}>{value}</MuiTableRowCell>
+                        ))}
                     </MuiTableRow>
                 ))}
             </MuiRowTable>

@@ -1,5 +1,6 @@
 import { Stack, styled } from "@mui/material";
 import { Root } from "../styles/Root/root_styles";
+import { Link } from "react-router-dom";
 
 
 export const MuiMainLayout = styled(Stack)(({ }) => ({
@@ -31,14 +32,18 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     marginTop: '34px',
     width: '100%',
 }))
-export const MuiMainLayoutLink = styled(Stack)(({ }) => ({
+export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column',
     width: '70%',
     paddingBlock: '6px',
     transition: 'all .3s',
-    fontSize: '100%'
+    fontSize: '100%',
+    color: Root.white,
+    textDecoration: 'none',
+    ...Root.hoverReverse
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -58,4 +63,5 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     justifyContent: 'center',
     width: '95vw',
     height: '100%',
+    paddingInline: '18px'
 }))

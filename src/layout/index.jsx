@@ -3,31 +3,38 @@ import * as Tag from './styles.js'
 import { Stack } from "@mui/material"
 import { Root } from "../styles/Root/root_styles.jsx"
 import Image from '../images/layout/junta2.png'
-import { LogoMainLayout } from "./components/Logo/index.jsx"
-import { History, Home, Insights, Inventory, Logout, Person2, Settings } from "@mui/icons-material"
+import { ExitToApp, History, Home, Insights, Inventory, Logout, Person2, Settings } from "@mui/icons-material"
 import { AuthContext } from "../auth_context/index.jsx"
+import { useLocation } from "react-router-dom"
+import { LogoMainLayout } from "../components/Logo/index.jsx"
 export const MainLayout = ({ childrens }) => {
+    const location = useLocation()
     const { logout } = useContext(AuthContext)
     const [value, setValue] = useState('home')
     const paths = [
         {
             name: 'Home',
-            link: 'home',
+            link: '/',
             icon: <Home />
         },
         {
+            name: 'Exits',
+            link: '/exits',
+            icon: <ExitToApp />
+        },
+        {
             name: 'Stock',
-            link: 'stock',
+            link: '/stock',
             icon: <Inventory />
         },
         {
             name: 'Insight',
-            link: 'insights',
+            link: '/insights',
             icon: <Insights />
         },
         {
             name: 'history',
-            link: 'history',
+            link: '/history',
             icon: <History />
         },
     ]
@@ -43,16 +50,16 @@ export const MainLayout = ({ childrens }) => {
                         paths.map((path, index) => {
                             return (
                                 <Tag.MuiMainLayoutLink
-                                    onClick={() => setValue(path.link)}
-                                    sx={path.link === value && {
+                                    to={path.link}
+                                    sx={path.link === location.pathname && {
                                         color: Root.color_default,
                                         boxShadow: Root.boxShadow,
                                         height: '50px'
                                     }} key={index}>
-                                    <Stack sx={{fontSize: '90%'}}>
+                                    <Stack sx={{ fontSize: '90%' }}>
                                         {path.icon}
                                     </Stack>
-                                    {path.link === value && <Stack sx={{fontSize: '90%',}}>
+                                    {path.link === location.pathname && <Stack sx={{ fontSize: '90%', }}>
                                         {path.name}
                                     </Stack>}
                                 </Tag.MuiMainLayoutLink>
@@ -63,7 +70,7 @@ export const MainLayout = ({ childrens }) => {
                 <Tag.MuiMainLayoutSettingsUser>
                     <Settings />
                     <Person2 />
-                    <Logout onClick={()=> logout()}/>
+                    <Logout onClick={() => logout()} />
                 </Tag.MuiMainLayoutSettingsUser>
             </Tag.MuiMainLayoutLogo>
             <Tag.MuiMainLayoutRitghStep>
