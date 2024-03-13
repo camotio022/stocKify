@@ -28,7 +28,7 @@ export const Stock = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     return (
         <MuiStock>
-            {true &&
+            {newItem &&
                 <NewItem
                     newItem={newItem}
                     setNewItem={setNewItem}
