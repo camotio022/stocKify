@@ -5,12 +5,13 @@ import { Root } from '../../../../styles/Root/root_styles';
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from './styles';
 import { ArrowDropDown, More, MoreHoriz } from '@mui/icons-material';
 import { FormatRelativeTime } from '../../../../components/dateCalcs';
+import { Options } from '../../../../components/Options';
 
 export const EstoqueTable = ({
     selectedItems, setSelectedItems,
     stock,
 }) => {
-
+    const [options, setOptions] = useState('')
     const [focus, setFocus] = useState(null)
     const tableRef = useRef(null);
     const headerInfos = [
@@ -25,6 +26,10 @@ export const EstoqueTable = ({
     const focusItem = (index) => {
         setFocus(index)
     }
+    const handleOptions = (item) => {
+        console.log(item)
+        setOptions(item)
+    }
     const handleCheckboxChange = (id) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter(itemId => itemId !== id));
@@ -38,6 +43,7 @@ export const EstoqueTable = ({
             width: '100%',
             boxSizing: 'border-box'
         }} ref={tableRef}>
+            {options && <Options name={options.nome} setOptions={setOptions}/>}
             <MuiHeaderTable>
                 <MuiTableClhild sx={{
                     width: '50%',
@@ -102,10 +108,14 @@ export const EstoqueTable = ({
                                 </MuiTableRowCell>
                             );
                         })}
-                        <MuiTableRowCell sx={{
-                            width: '50%',
-                            ...Root.hoverReverse
-                        }}>
+                        <MuiTableRowCell
+                            onClick={(e) => {
+                                handleOptions(item)
+                            }}
+                            sx={{
+                                width: '50%',
+                                ...Root.hoverReverse
+                            }}>
                             <MoreHoriz />
                         </MuiTableRowCell>
                     </MuiTableRow>

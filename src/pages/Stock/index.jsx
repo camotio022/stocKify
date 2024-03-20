@@ -18,7 +18,7 @@ import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 
 export const Stock = () => {
-    const {user}=useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [stock, setStock] = useState([])
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
