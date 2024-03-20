@@ -54,5 +54,8 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     height: '100%',
     borderRight: `1px solid ${Root.color_button_opacity}`,
     fontFamily: Root.fontFamilyMonospace,
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
 }))
