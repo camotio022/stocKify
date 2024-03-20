@@ -34,13 +34,14 @@ const generateExcelFile = (estoque, fillname) => {
         alignment: { horizontal: 'center', vertical: 'middle' }
     };
     worksheet.columns = [
-        { header: 'ID', key: 'id', width: 10, style: headerStyle },
-        { header: 'Nome', key: 'nome', width: 20, style: headerStyle },
-        { header: 'Tipo', key: 'tipo', width: 15, style: headerStyle },
-        { header: 'Quantidade', key: 'quantidade', width: 15, style: headerStyle },
-        { header: 'Data de Validade', key: 'dataValidade', width: 20, style: headerStyle },
-        { header: 'Data de Chegada', key: 'dataChegada', width: 20, style: headerStyle }
+        { header: 'ID', key: 'id', width: null, style: headerStyle },
+        { header: 'Categória', key: 'categoria', width: null, style: headerStyle },
+        { header: 'Nome do alimento', key: 'nome', width: null, style: headerStyle },
+        { header: 'Quantidade', key: 'quantidade', width: null, style: headerStyle },
+        { header: 'Data de Validade', key: 'dataValidade', width: null, style: headerStyle },
+        { header: 'Data de Chegada', key: 'dataChegada', width: null, style: headerStyle }
     ];
+    
     estoque.forEach(item => {
         worksheet.addRow(item).eachCell({ includeEmpty: false }, cell => {
             cell.style = bodyStyle;

@@ -4,13 +4,14 @@ import { Root } from "../../styles/Root/root_styles"
 import { useState } from "react"
 import { Check, Close } from "@mui/icons-material"
 import generateExcelFile from "../../saveExcel"
-import { estoque } from "../../pages/Stock/components/mock"
+import { DownloadPDF } from "../../savePdf"
 function naoTemEspacos(texto) {
     return texto.indexOf(' ') === -1;
 }
 export const ModalZindex = ({
     setSaveExcel,
-    saveExcel
+    saveExcel,
+    stock
 }) => {
     const [focus, setFocus] = useState(false)
     const [extension, setExtension] = useState(null)
@@ -96,7 +97,17 @@ export const ModalZindex = ({
                 }} onClick={() => {
                     if (extension === 'xlsx') {
                         try {
-                            generateExcelFile(estoque, fillname)
+                            generateExcelFile(stock, fillname)
+                        } catch (error) {
+                            console.log(error)
+                        } finally {
+                            setOpen(true)
+                            success()
+                        }
+                        DownloadPDF(stock, fillname)
+                    } else {
+                        try {
+                            DownloadPDF(stock, fillname)
                         } catch (error) {
                             console.log(error)
                         } finally {

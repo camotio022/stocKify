@@ -1,31 +1,50 @@
-import { Stack, Input, MenuItem, FormControl, Select, InputLabel, TextField, Box } from "@mui/material"
+import { Stack } from "@mui/material"
 import {
-    MuiInputNative,
-    MuiSearch,
-    MuiSearchContainer,
-    MuiSearchContainerFather,
-    MuiSearchIcon,
-    MuiSearchIconTeep,
-    MuiSelect,
-    MuiSelectContainer,
     MuiSelectItem,
     MuiSelectItemOption,
     MuiSelectItemOptions,
-    MuiStock, MuiStockModalTop, SearchIconWrapper, StyledInputBase,
+    MuiStock, MuiStockModalTop
 } from "./styles"
 import { ModalZindex } from "../../components/Modal";
 import generateExcelFile from "../../saveExcel"
 import { EstoqueTable } from './components/StoqueTable/index'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Root } from "../../styles/Root/root_styles";
 import { DeleteOutline, InsertInvitation, ShoppingCartCheckout } from "@mui/icons-material";
 import { NavBarTop } from "../../components/Bar";
 import { NewItem } from "../NewItem";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebase_config";
 
 export const Stock = () => {
+    const [stock, setStock] = useState([])
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
     const [selectedItems, setSelectedItems] = useState([]);
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, 'stock'), (snapshot) => {
+            const stockItems = snapshot.docs.map((doc) => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    categoria: data.categoria || "",
+                    nome: data.nome || "",
+                    quantidade: data.quantidade || "",
+                    dataValidade: data.dataValidade || "",
+                    dataChegada: data.dataChegada || "",
+                    author: {
+                        userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
+                        userEmail: data.author?.userEmail || user.email,
+                        userId: data.author?.userId || user.id,
+                    }
+                };
+            });
+            setStock(stockItems);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    console.log(stock)
     return (
         <MuiStock>
             {newItem &&
@@ -64,6 +83,7 @@ export const Stock = () => {
             {saveExcel && <ModalZindex
                 setSaveExcel={setSaveExcel}
                 saveExcel={saveExcel}
+                stock={stock}
             />}
             <NavBarTop
                 newItem={newItem}
@@ -83,6 +103,8 @@ export const Stock = () => {
                 ...Root.scrollBar
             }}>
                 <EstoqueTable
+                    setStock={setStock}
+                    stock={stock}
                     selectedItems={selectedItems}
                     setSelectedItems={setSelectedItems}
                 />

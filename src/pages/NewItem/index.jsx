@@ -6,15 +6,17 @@ import { useContext, useState } from "react";
 import { Root } from "../../styles/Root/root_styles";
 import { addProduct } from "../../api/products/add";
 import { AuthContext } from '../../auth_context/index'
+import { SimpleAlert } from "../../components/Alert";
 export const NewItem = ({
     newItem,
     setNewItem
 }) => {
     const { user } = useContext(AuthContext)
     const [progress, setProgress] = useState(false)
+    const [success, setSuccess] = useState(false)
     const [data, setData] = useState({
-        categoria: "",
         nome: "",
+        categoria: "",
         quantidade: "",
         dataValidade: "",
         dataChegada: "",
@@ -35,12 +37,30 @@ export const NewItem = ({
             setProgress(false)
         } catch (err) {
             console.log(err)
+        } finally {
+            setSuccess(true)
+            setTimeout(() => {
+                setData({
+                    nome: '',
+                    categoria: '',
+                    quantidade: '',
+                    dataValidade: '',
+                    dataChegada: '',
+                })
+                setSuccess(false)
+            }, [
+                3000
+            ])
         }
 
     }
     return (
         <TagsNewItem.container>
             <TagsNewItem.paper moreitems={data.nome}>
+                {success && <SimpleAlert
+                    item={data.nome}
+                    quantidade={data.quantidade}
+                />}
                 <TagsNewItem.close onClick={() => setNewItem(false)}>
                     <Close fontSize="10px" />
                 </TagsNewItem.close>
@@ -91,7 +111,7 @@ export const NewItem = ({
                 <TagsNewItem.textfield
                     required
                     disabled={!data.nome}
-                    label={`Quantidade de ${data.nome}`}
+                    label={`Quantidade/unidade de ${data.nome}`}
                     type="number"
                     variant="filled"
                     value={data.quantidade}

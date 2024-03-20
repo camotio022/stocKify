@@ -1,20 +1,22 @@
 import { Checkbox, TableContainer } from '@mui/material';
 import { useState, useRef } from 'react';
-import { estoque } from '../mock';
+
 import { Root } from '../../../../styles/Root/root_styles';
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from './styles';
 import { ArrowDropDown } from '@mui/icons-material';
+import { FormatRelativeTime } from '../../../../components/dateCalcs';
 
 export const EstoqueTable = ({
-    selectedItems, setSelectedItems
+    selectedItems, setSelectedItems,
+    stock,
 }) => {
 
     const [focus, setFocus] = useState(null)
     const tableRef = useRef(null);
     const headerInfos = [
-        'ID',
-        'Nome',
-        'Tipo',
+        'Id',
+        'Categória',
+        'Nome do alimento',
         'Quantidade',
         'Data de Validade',
         'Data de Chegada'
@@ -29,8 +31,6 @@ export const EstoqueTable = ({
             setSelectedItems([...selectedItems, id]);
         }
     };
-    console.log(selectedItems)
-
     return (
         <TableContainer sx={{
             ...Root.scrollBar,
@@ -57,7 +57,8 @@ export const EstoqueTable = ({
                 ))}
             </MuiHeaderTable>
             <MuiRowTable>
-                {estoque.map((item, index) => (
+                {stock.map((item, index) => (
+                    
                     <MuiTableRow
                         onClick={() => focusItem(index)}
                         sx={selectedItems.includes(item.id) || (focus === index) ? {
@@ -78,9 +79,27 @@ export const EstoqueTable = ({
                                 onChange={() => handleCheckboxChange(item.id)}
                             />
                         </MuiTableRowCell>
-                        {Object.values(item).map((value, i) => (
-                            <MuiTableRowCell key={i}>{value}</MuiTableRowCell>
-                        ))}
+                        {Object.keys(item).map((key, i) => {
+                            if (key === 'author') {
+                                return null;
+                            }
+                            if (key === 'dataChegada') {
+                                return (
+                                    <MuiTableRowCell key={i}>
+                                        <FormatRelativeTime dateTimeString={item.dataChegada} />
+                                    </MuiTableRowCell>
+                                );
+                            }
+                            return (
+                                <MuiTableRowCell sx={key === 'id' && {
+                                    fontSize: '14px',
+                                    fontWeight: 'bold'
+                                }} key={i}>
+                                    {item[key]} {key === 'quantidade' && 'unidades'}
+                                </MuiTableRowCell>
+                            );
+                        })}
+
                     </MuiTableRow>
                 ))}
             </MuiRowTable>
