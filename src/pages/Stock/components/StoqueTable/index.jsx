@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 
 import { Root } from '../../../../styles/Root/root_styles';
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from './styles';
-import { ArrowDropDown } from '@mui/icons-material';
+import { ArrowDropDown, More, MoreHoriz } from '@mui/icons-material';
 import { FormatRelativeTime } from '../../../../components/dateCalcs';
 
 export const EstoqueTable = ({
@@ -19,7 +19,8 @@ export const EstoqueTable = ({
         'Nome do alimento',
         'Quantidade',
         'Data de Validade',
-        'Data de Chegada'
+        'Data de Chegada',
+        'Opções'
     ];
     const focusItem = (index) => {
         setFocus(index)
@@ -53,12 +54,14 @@ export const EstoqueTable = ({
                     />
                 </MuiTableClhild>
                 {headerInfos.map((header, index) => (
-                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
+                    <MuiTableClhild sx={header === 'Opções' && {
+                        width: '50%',
+                    }} key={index}>{header} <ArrowDropDown /></MuiTableClhild>
                 ))}
             </MuiHeaderTable>
             <MuiRowTable>
                 {stock.map((item, index) => (
-                    
+
                     <MuiTableRow
                         onClick={() => focusItem(index)}
                         sx={selectedItems.includes(item.id) || (focus === index) ? {
@@ -99,7 +102,12 @@ export const EstoqueTable = ({
                                 </MuiTableRowCell>
                             );
                         })}
-
+                        <MuiTableRowCell sx={{
+                            width: '50%',
+                            ...Root.hoverReverse
+                        }}>
+                            <MoreHoriz />
+                        </MuiTableRowCell>
                     </MuiTableRow>
                 ))}
             </MuiRowTable>

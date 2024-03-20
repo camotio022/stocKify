@@ -67,7 +67,8 @@ export const MuiSearchIconTeep = styled(Stack)(({ }) => ({
     borderRadius: '4px',
     backgroundColor: Root.color_button,
     color: Root.white,
-    ...Root.hoverReverse
+    ...Root.hoverReverse,
+    height: '60%',
 }))
 export const MuiSearchContainerFather = styled('div')({
     display: 'flex',
@@ -83,13 +84,13 @@ export const MuiSearchContainer = styled('div')({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: '4px',
-    backgroundColor: Root.color_button_opacity,
+    backgroundColor: Root.color_button,
     color: Root.color_default,
     gap: '4px',
-    ...Root.hover,
     marginLeft: 0,
     width: '35%',
     height: '80%',
+
 });
 
 export const SearchIconWrapper = styled('div')({
@@ -105,7 +106,7 @@ export const SearchIconWrapper = styled('div')({
 export const StyledInputBase = styled(InputBase)(({ theme }) => ({
     padding: '8px 8px 8px 32px',
     width: '100%',
-    color: Root.white
+    color: Root.color_default,
 }));
 export const MuiSearch = styled(Stack)(({ theme }) => ({
     display: 'flex',
@@ -130,7 +131,7 @@ export const MuiInputNative = styled('input')(({ }) => ({
     fontWeight: 'bold',
     fontFamily: Root.fontFamilyMonospace
 }))
-export const MuiSelectContainer = styled(Stack)(({})=> ({
+export const MuiSelectContainer = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

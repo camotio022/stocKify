@@ -8,15 +8,17 @@ import {
 import { ModalZindex } from "../../components/Modal";
 import generateExcelFile from "../../saveExcel"
 import { EstoqueTable } from './components/StoqueTable/index'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Root } from "../../styles/Root/root_styles";
 import { DeleteOutline, InsertInvitation, ShoppingCartCheckout } from "@mui/icons-material";
 import { NavBarTop } from "../../components/Bar";
 import { NewItem } from "../NewItem";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase_config";
+import { AuthContext } from "../../auth_context";
 
 export const Stock = () => {
+    const {user}=useContext(AuthContext)
     const [stock, setStock] = useState([])
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
@@ -43,8 +45,6 @@ export const Stock = () => {
         });
         return () => unsubscribe();
     }, []);
-
-    console.log(stock)
     return (
         <MuiStock>
             {newItem &&
