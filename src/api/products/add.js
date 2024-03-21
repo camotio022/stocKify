@@ -6,7 +6,10 @@ export const addProduct = {
         try {
             let id;
             const stockCollectionRef = collection(db, 'stock');
-            const querySnapshot = await getDocs(query(stockCollectionRef, where("nome", "==", data.nome)));
+            const querySnapshot = await getDocs(query(stockCollectionRef,
+                where("nome", "==", data.nome),
+                where("dataValidade", "==", data.dataValidade)
+            ));
             if (querySnapshot.size > 0) {
                 querySnapshot.forEach(async (doc) => {
                     const existingItem = doc.data();

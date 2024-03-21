@@ -24,7 +24,7 @@ export const StylesOptions = {
         justifyContent:  'flex-start',
         flexDirection: 'column',
         minWidth: '300px',
-        height: '300px',
+        minHeight: '100px',
         padding: '7px',
         backgroundColor: Root.color_app_bar,
         backgroundColor: Root.color_default,

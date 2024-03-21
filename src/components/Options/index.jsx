@@ -1,4 +1,4 @@
-import { Close, GetAppOutlined, InsertEmoticon, LeakRemove, List, PlaylistAdd, ProductionQuantityLimits, Remove, StopCircle, SupervisedUserCircle } from "@mui/icons-material"
+import { Close, Details, GetAppOutlined, InsertEmoticon, LeakRemove, List, PlaylistAdd, ProductionQuantityLimits, QrCode2, Remove, StopCircle, SupervisedUserCircle } from "@mui/icons-material"
 import { TagsNewItem } from "../../pages/NewItem/styles"
 import { StylesOptions } from "./stylesOptions"
 import { useState } from "react"
@@ -8,7 +8,14 @@ export const Options = ({ name, setOptions }) => {
     const handleNewPaper = () => {
 
     }
-
+    const items = [
+        { onclick: null, name: 'Detalhes', icon: <Details /> },
+        { onclick: null, name: 'Retirar do estoque', icon: <Remove /> },
+        { onclick: 'list', name: 'Adicionar na lista', icon: <PlaylistAdd /> },
+        { onclick: null, name: 'Supervisionar este item', icon: <ProductionQuantityLimits /> },
+        { onclick: null, name: 'Vazamento de estoque', icon: <LeakRemove /> },
+        { onclick: null, name: 'Código de barras', icon: <QrCode2 /> },
+    ]
     return (
         <>
             <StylesOptions.container>
@@ -20,25 +27,24 @@ export const Options = ({ name, setOptions }) => {
                         <Close fontSize="10px" />
                     </TagsNewItem.close>
                     <StylesOptions.title>
-                       {name}
+                        {name}
                     </StylesOptions.title>
                     <StylesOptions.divider />
-                    <StylesOptions.item>
-                        Retirar do estoque
-                        <Remove />
-                    </StylesOptions.item>
-                    <StylesOptions.item onClick={() => setPaper(!paper)}>
-                        Adicionar na lista
-                        <PlaylistAdd />
-                    </StylesOptions.item>
-                    <StylesOptions.item>
-                        Supervisionar este item
-                        <ProductionQuantityLimits />
-                    </StylesOptions.item>
-                    <StylesOptions.item>
-                        Vazamento de estoque
-                        <LeakRemove />
-                    </StylesOptions.item>
+                    {items.map((item, index) => {
+                        return (
+                            <StylesOptions.item onClick={
+                                () => {
+                                    if (item.onclick === 'list') {
+                                        setPaper(!paper)
+                                    }
+                                }
+                            }>
+                                {item.name}
+                                {item.icon}
+                            </StylesOptions.item>
+                        )
+                    })}
+
                 </StylesOptions.paper>
             </StylesOptions.container>
         </>
