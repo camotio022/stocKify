@@ -1,5 +1,6 @@
 import { Divider, MenuItem, Stack, styled } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
+import { Link } from "react-router-dom";
 
 export const StylesOptions = {
     container: styled(Stack)(() => ({
@@ -51,5 +52,13 @@ export const StylesOptions = {
         justifyContent:  'space-between',
         width: '90%',
         marginTop: '10px'
+    })),
+    link: styled(Link)(({})=> ({
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        textDecoration: 'none',
+        color: Root.color_button
     }))
 }

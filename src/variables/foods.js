@@ -12,7 +12,18 @@ export const alimentosCategorizados = {
         'Pepino',
         'Repolho',
         'Aipo',
-        'Alho-poró'
+        'Alho-poró',
+        'Couve',
+        'Brócolis',
+        'Couve-flor',
+        'Batata',
+        'Batata-doce',
+        'Ervilha',
+        'Vagem',
+        'Berinjela',
+        'Quiabo',
+        'Chuchu',
+        'Jiló'
     ],
     frutas: [
         'Maçã',
@@ -25,7 +36,18 @@ export const alimentosCategorizados = {
         'Abacaxi',
         'Melão',
         'Manga',
-        'Pêssego'
+        'Pêssego',
+        'Kiwi',
+        'Limão',
+        'Cereja',
+        'Framboesa',
+        'Amora',
+        'Pitaya',
+        'Goiaba',
+        'Coco',
+        'Ameixa',
+        'Caqui'
+
     ],
     carnes_proteinas: [
         'Presunto',
@@ -37,7 +59,18 @@ export const alimentosCategorizados = {
         'Salame de frango',
         'Salmão defumado',
         'Atum enlatado',
-        'Sardinha enlatada'
+        'Sardinha enlatada',
+        'Carne bovina',
+        'Carne suína',
+        'Carne de frango',
+        'Linguiça',
+        'Bacon',
+        'Costela',
+        'Filé mignon',
+        'Alcatra',
+        'Picanha',
+        'Frango assado',
+        'Peito de frango',
     ],
     produtos_lacteos: [
         'Leite',
@@ -45,7 +78,21 @@ export const alimentosCategorizados = {
         'Queijo',
         'Manteiga',
         'Creme de leite',
-        'Leite condensado'
+        'Leite condensado',
+        'Requeijão',
+        'Coalhada',
+        'Sorvete',
+        'Sorvete de massa',
+        'Sorvete de palito',
+        'Sorvete de pote',
+        'Sorvete de casquinha',
+        'Sorvete de picolé',
+        'Sorvete de cone',
+        'Sorvete de copinho',
+        'Sorvete de máquina',
+        'Sorvete de chocolate',
+        'Sorvete de baunilha',
+        'Sorvete de morango',
     ],
     produtos_secos_enlatados: [
         'Arroz',
@@ -68,7 +115,15 @@ export const alimentosCategorizados = {
         'Conservas de vegetais',
         'Conservas de frutas',
         'Conservas de peixe',
-        'Conservas de carne'
+        'Conservas de carne',
+        'Milho enlatado',
+        'Ervilha enlatada',
+        'Sardinha em lata',
+        'Atum em lata',
+        'Feijão enlatado',
+        'Tomate em lata',
+        'Milho de pipoca',
+        'Grão-de-bico'
     ],
     outros: [
         'Pão',
@@ -84,7 +139,8 @@ export const alimentosCategorizados = {
         'Barras de cereais',
         'Barras de proteína',
         'Biscoitos',
-        'Chocolate'
+        'Chocolate',
+        'Ovo de Páscoa',
     ]
 };
 

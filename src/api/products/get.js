@@ -2,6 +2,7 @@ import {
     collection,
     getDocs,
     getDoc,
+    doc,
 } from "firebase/firestore";
 import { db } from "../../../firebase_config";
 export const get_items = {

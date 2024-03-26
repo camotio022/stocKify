@@ -27,7 +27,6 @@ export const EstoqueTable = ({
         setFocus(index)
     }
     const handleOptions = (item) => {
-        console.log(item)
         setOptions(item)
     }
     const handleCheckboxChange = (id) => {
@@ -43,7 +42,11 @@ export const EstoqueTable = ({
             width: '100%',
             boxSizing: 'border-box'
         }} ref={tableRef}>
-            {options && <Options name={options.nome} setOptions={setOptions}/>}
+            {options && <Options
+                optionItem={options}
+                name={options.nome}
+                setOptions={setOptions}
+            />}
             <MuiHeaderTable>
                 <MuiTableClhild sx={{
                     width: '50%',

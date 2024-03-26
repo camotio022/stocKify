@@ -2,14 +2,16 @@ import { Close, Details, GetAppOutlined, InsertEmoticon, LeakRemove, List, Playl
 import { TagsNewItem } from "../../pages/NewItem/styles"
 import { StylesOptions } from "./stylesOptions"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
-export const Options = ({ name, setOptions }) => {
+export const Options = ({ name, setOptions, optionItem }) => {
     const [paper, setPaper] = useState(false)
+    const [details, setDetails] = useState(false)
     const handleNewPaper = () => {
 
     }
     const items = [
-        { onclick: null, name: 'Detalhes', icon: <Details /> },
+        { onclick: 'details', name: 'Detalhes', icon: <Details /> },
         { onclick: null, name: 'Retirar do estoque', icon: <Remove /> },
         { onclick: 'list', name: 'Adicionar na lista', icon: <PlaylistAdd /> },
         { onclick: null, name: 'Supervisionar este item', icon: <ProductionQuantityLimits /> },
@@ -31,11 +33,25 @@ export const Options = ({ name, setOptions }) => {
                     </StylesOptions.title>
                     <StylesOptions.divider />
                     {items.map((item, index) => {
+                        if (item.onclick === 'details') {
+                            return (
+                                <StylesOptions.link key={index} to={`/${item.onclick}/${optionItem.id}`}>
+                                    <StylesOptions.item>
+                                        {item.name}
+                                        {item.icon}
+                                    </StylesOptions.item>
+                                </StylesOptions.link>
+
+                            )
+                        }
                         return (
                             <StylesOptions.item onClick={
                                 () => {
                                     if (item.onclick === 'list') {
                                         setPaper(!paper)
+                                    }
+                                    if (item.onclick === 'details'){
+                                        setDetails(!details)
                                     }
                                 }
                             }>
