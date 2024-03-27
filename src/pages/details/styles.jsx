@@ -17,6 +17,7 @@ export const StylesDetailsItems = {
         left: 0,
         zIndex: 5,
         transition: 'all .3s',
+        ...Root.scrollBar
     })),
     nav_bar: styled(Box)(() => ({
         display: "flex",

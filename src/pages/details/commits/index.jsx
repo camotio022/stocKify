@@ -32,7 +32,7 @@ export const Commits = ({ id }) => {
                         <StyleCommits.card key={index}>
                             <StylesDetailsItems.barTag>{commit?.type ? commit.type : 'Não registrado'}</StylesDetailsItems.barTag>
                             <StylesDetailsItems.barTag>{commit.commitNumber}</StylesDetailsItems.barTag>
-                            <StylesDetailsItems.barTag>{commit.quantidade}</StylesDetailsItems.barTag>
+                            <StylesDetailsItems.barTag>{commit.quantidade} {commit.quantidade>1? 'Unidades': 'Unidade'}</StylesDetailsItems.barTag>
                             <StylesDetailsItems.barTag>{getDataDeSegundos(commit?.timestamp.seconds, commit?.timestamp.nanoseconds)}</StylesDetailsItems.barTag>
                             <StylesDetailsItems.barTag>{commit?.author.userName}</StylesDetailsItems.barTag>
                         </StyleCommits.card>

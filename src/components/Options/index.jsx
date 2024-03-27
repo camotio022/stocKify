@@ -3,16 +3,17 @@ import { TagsNewItem } from "../../pages/NewItem/styles"
 import { StylesOptions } from "./stylesOptions"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { RemoveItems } from "./components/Remove"
+import { Root } from "../../styles/Root/root_styles"
 
 export const Options = ({ name, setOptions, optionItem }) => {
     const [paper, setPaper] = useState(false)
     const [details, setDetails] = useState(false)
-    const handleNewPaper = () => {
+    const [remove, setRemove] = useState(false)
 
-    }
     const items = [
         { onclick: 'details', name: 'Detalhes', icon: <Details /> },
-        { onclick: null, name: 'Retirar do estoque', icon: <Remove /> },
+        { onclick: 'toremove', name: 'Retirar do estoque', icon: <Remove /> },
         { onclick: 'list', name: 'Adicionar na lista', icon: <PlaylistAdd /> },
         { onclick: null, name: 'Supervisionar este item', icon: <ProductionQuantityLimits /> },
         { onclick: null, name: 'Vazamento de estoque', icon: <LeakRemove /> },
@@ -21,8 +22,16 @@ export const Options = ({ name, setOptions, optionItem }) => {
     return (
         <>
             <StylesOptions.container>
+                {remove && <RemoveItems item={optionItem} setRemove={setRemove}>
+                </RemoveItems>}
                 {paper && <StylesOptions.paper>
-                    {name} para lista:
+                    <TagsNewItem.close onClick={() => setPaper(false)}>
+                        <Close fontSize="10px" />
+                    </TagsNewItem.close>
+                    <StylesOptions.title>
+                        {name} para lista:
+                    </StylesOptions.title>
+                    <StylesOptions.divider />
                 </StylesOptions.paper>}
                 <StylesOptions.paper>
                     <TagsNewItem.close onClick={() => setOptions(null)}>
@@ -41,17 +50,24 @@ export const Options = ({ name, setOptions, optionItem }) => {
                                         {item.icon}
                                     </StylesOptions.item>
                                 </StylesOptions.link>
-
                             )
                         }
                         return (
-                            <StylesOptions.item onClick={
+                            <StylesOptions.item sx={((item.onclick === 'toremove' && remove) ||
+                            (item.onclick === 'list' && paper))
+                            &&{
+                                borderLeft:  '3px solid',
+                                boxShadow: Root.boxS
+                            }} onClick={
                                 () => {
                                     if (item.onclick === 'list') {
-                                        setPaper(!paper)
+                                        setPaper(true)
                                     }
-                                    if (item.onclick === 'details'){
+                                    if (item.onclick === 'details') {
                                         setDetails(!details)
+                                    }
+                                    if (item.onclick === 'toremove') {
+                                        setRemove(!remove)
                                     }
                                 }
                             }>
