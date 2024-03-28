@@ -27,7 +27,6 @@ export const StylesOptions = {
         minHeight: '55%',
         minWidth: '300px',
         padding: '7px',
-        backgroundColor: Root.color_app_bar,
         backgroundColor: Root.color_default,
         color: Root.color_button,
         fontWeight: 'bold',

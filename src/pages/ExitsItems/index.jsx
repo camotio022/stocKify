@@ -1,15 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavBarTop } from "../../components/Bar"
 import { Root } from "../../styles/Root/root_styles";
 import { TagsExits } from "./styles"
 import { Checkbox, TableContainer } from "@mui/material";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
 import { ArrowDropDown } from "@mui/icons-material";
-import { saidas } from "./saidas";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebase_config";
+
 
 export const ExitsItems = ({
 
 }) => {
+    const [saidas, setSaidas] = useState([])
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
@@ -30,6 +33,24 @@ export const ExitsItems = ({
             setSelectedItems([...selectedItems, id]);
         }
     };
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, 'saidas'), (snapshot) => {
+            const stockItems = snapshot.docs.map((doc) => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    nome: data.nomeItem || "",
+                    quantidade: data.quantidade || "",
+                    dataValidade: data.dataValidade || "",
+                    dataRetirada: data.dataRetirada || "",
+                    author: data.author.userName || "",
+                };
+            });
+            setSaidas(stockItems);
+        });
+        return () => unsubscribe();
+    }, []);
+
     return (
         <TagsExits.container>
             <NavBarTop />
@@ -83,9 +104,19 @@ export const ExitsItems = ({
                                         onChange={() => handleCheckboxChange(item.item)}
                                     />
                                 </MuiTableRowCell>
-                                {Object.values(item).map((value, i) => (
-                                    <MuiTableRowCell key={i}>{value}</MuiTableRowCell>
-                                ))}
+                                {Object.entries(item).map(([key, value], i) => {
+                                    if (key !== 'id') {
+                                        return (
+                                            <MuiTableRowCell key={i}>{
+                                                key === 'quantidade' ? (item.quantidade > 1
+                                                    ? `${item.quantidade} unidades`
+                                                    : `${item.quantidade} unidade`)
+                                                    : value
+                                            }</MuiTableRowCell>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </MuiTableRow>
                         ))}
                     </MuiRowTable>

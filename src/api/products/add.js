@@ -1,5 +1,14 @@
 import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase_config";
+function formatDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+
+    return `${formattedDay}/${formattedMonth}/${year}`;
+}
 async function createCommit(refDocId, author, quantidade) {
     try {
         const commitCollectionRef = collection(db, 'commits');
@@ -9,7 +18,7 @@ async function createCommit(refDocId, author, quantidade) {
         const newCommit = {
             refDoc: refDocId,
             commitNumber: commitNumber,
-            timestamp: new Date(),
+            timestamp: formatDate(new Date()),
             author: author,
             quantidade: quantidade,
             type: 'saidas'
@@ -51,7 +60,7 @@ export const addProduct = {
             const newComnmit = {
                 refDoc: id,
                 commitNumber: lastCommitNumber,
-                timestamp: new Date(),
+                timestamp: formatDate(new Date()),
                 author: {
                     userName: data.author.userName,
                     userEmail: data.author.userEmail,
@@ -91,6 +100,27 @@ export const addProduct = {
             }
         } catch (error) {
             console.error("Erro ao remover quantidade: ", error);
+            throw error;
+        }
+    },
+    registerSaida: async (item, author, quantidade) => {
+        try {
+            const date = new Date()
+            const saidaCollectionRef = collection(db, 'saidas');
+            const newSaida = {
+                refDoc: item.id,
+                author: author,
+                quantidade: quantidade,
+                nomeItem: item.nome,
+                dataValidade: item.dataValidade,
+                dataRetirada: formatDate(date)
+            };
+
+            await addDoc(saidaCollectionRef, newSaida);
+
+            console.log("Saida registered successfully.");
+        } catch (error) {
+            console.error("Error registering saida: ", error);
             throw error;
         }
     }

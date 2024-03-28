@@ -2,7 +2,7 @@ import { Stack } from "@mui/system"
 import { StylesOptions } from "../../stylesOptions"
 import { Root } from "../../../../styles/Root/root_styles"
 import { useContext, useState } from "react"
-import { Alert, CircularProgress, LinearProgress, TextField } from "@mui/material"
+import { Alert, CircularProgress } from "@mui/material"
 import { StylesRemoveItem } from "./remove"
 import { addProduct } from "../../../../api/products/add"
 import { AuthContext } from '../../../../auth_context/index.jsx'
@@ -10,6 +10,7 @@ import { TagsNewItem } from "../../../../pages/NewItem/styles"
 import { Close } from "@mui/icons-material"
 export const RemoveItems = ({ item, setRemove }) => {
     const { user } = useContext(AuthContext)
+    const [alert, setAlert] = useState('error')
     const [showInput, setShowInput] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [progress, setProgress] = useState(false);
@@ -33,10 +34,17 @@ export const RemoveItems = ({ item, setRemove }) => {
         try {
             setProgress(true)
             await addProduct.to_remove_quantiadade(item.id, inputValue, author)
+            await addProduct.registerSaida(item, author, inputValue)
         } catch (error) {
             console.log(error)
         } finally {
             setProgress(false)
+            setAlert('success')
+            setInputValue(item.quantidade + 1)
+            setTimeout(() => {
+                setAlert('error')
+                setInputValue(item.quantidade - 1)
+            }, [3000])
         }
     }
     return (
@@ -111,7 +119,7 @@ export const RemoveItems = ({ item, setRemove }) => {
                         color: Root.color_button,
                     }} />}
                 </StylesRemoveItem.retirar>}
-            {inputValue > item.quantidade && <Alert sx={{ width: '80%' }} variant="filled" severity="error">
+            {inputValue > item.quantidade && <Alert sx={{ width: '80%' }} variant="filled" severity={alert}>
                 Quantidade maior que a do estoque a retirar.
             </Alert>}
         </StylesOptions.paper>
