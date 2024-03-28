@@ -53,7 +53,6 @@ export const ExitsItems = ({
 
     return (
         <TagsExits.container>
-            <NavBarTop />
             <TagsExits.containerTable sx={{
                 mt: selectedItems.length > 0 ? '0px' : '17px',
             }}>

@@ -60,7 +60,7 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '95vw',
     height: '100%',
     paddingInline: '18px',

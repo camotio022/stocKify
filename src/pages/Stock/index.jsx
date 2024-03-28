@@ -6,7 +6,6 @@ import {
     MuiStock, MuiStockModalTop
 } from "./styles"
 import { ModalZindex } from "../../components/Modal";
-import generateExcelFile from "../../saveExcel"
 import { EstoqueTable } from './components/StoqueTable/index'
 import { useContext, useEffect, useState } from "react"
 import { Root } from "../../styles/Root/root_styles";
@@ -18,11 +17,16 @@ import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 
 export const Stock = () => {
-    const { user } = useContext(AuthContext)
+    const {
+        user,
+        newItem,
+        setNewItem,
+        saveExcel,
+        setSaveExcel,
+        selectedItems,
+        setSelectedItems, } = useContext(AuthContext)
     const [stock, setStock] = useState([])
-    const [newItem, setNewItem] = useState(false)
-    const [saveExcel, setSaveExcel] = useState(false)
-    const [selectedItems, setSelectedItems] = useState([]);
+
     useEffect(() => {
         const unsubscribe = onSnapshot(collection(db, 'stock'), (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
@@ -47,52 +51,7 @@ export const Stock = () => {
     }, []);
     return (
         <MuiStock>
-            {newItem &&
-                <NewItem
-                    newItem={newItem}
-                    setNewItem={setNewItem}
-                />
-            }
-            {selectedItems.length > 0 && <MuiStockModalTop>
-                <MuiSelectItem>
-                    {selectedItems.length}
-                </MuiSelectItem>
-                <MuiSelectItemOptions>
-                    {[
-                        {
-                            icon: <InsertInvitation />,
-                            label: 'About expire',
-                        },
-                        {
-                            icon: <ShoppingCartCheckout />,
-                            label: 'Remove items',
-                        },
-                        {
-                            icon: <DeleteOutline />,
-                            label: 'Delete itens',
-                        },
-                    ].map((item, index) => {
-                        return (
-                            <MuiSelectItemOption key={index}>
-                                {item.icon} {item.label}
-                            </MuiSelectItemOption>
-                        )
-                    })}
-                </MuiSelectItemOptions>
-            </MuiStockModalTop>}
-            {saveExcel && <ModalZindex
-                setSaveExcel={setSaveExcel}
-                saveExcel={saveExcel}
-                stock={stock}
-            />}
-            <NavBarTop
-                newItem={newItem}
-                setNewItem={setNewItem}
-                generateExcelFile={generateExcelFile}
-                setSaveExcel={setSaveExcel}
-                saveExcel={saveExcel}
-            />
-
+           
             <Stack sx={{
                 display: 'flex',
                 alignItems: 'center',
