@@ -6,6 +6,7 @@ import { MainLayout } from "../layout"
 import { Stock } from "../pages/Stock"
 import { ExitsItems } from "../pages/ExitsItems"
 import { DetailsItems } from "../pages/details"
+import { Entradas } from "../pages/Entradas"
 
 export const MainRoutes = () => {
     const auth = useContext(AuthContext)
@@ -15,6 +16,7 @@ export const MainRoutes = () => {
                 <>
                     <Routes>
                         <Route path="/" element={<Stock />} />
+                        <Route path="/entradas" element={<Entradas />} />
                         <Route path="/exits" element={<ExitsItems />} />
                         <Route path="/details/:id" element={<DetailsItems/>}/>
                     </Routes>

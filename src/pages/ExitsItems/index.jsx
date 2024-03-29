@@ -50,7 +50,14 @@ export const ExitsItems = ({
         });
         return () => unsubscribe();
     }, []);
-
+    const selectSx = {
+        border: `1px dashed ${Root.color_button}`,
+        backgroundColor: Root.color_button_opacity,
+        color: Root.color_button,
+        fontWeight: 'bold',
+        fontFamily: Root.fontFamilyMonospace,
+        animation: 'dash 2s infinite'
+    }
     return (
         <TagsExits.container>
             <TagsExits.containerTable sx={{
@@ -85,14 +92,7 @@ export const ExitsItems = ({
                         {saidas.map((item, index) => (
                             <MuiTableRow
                                 onClick={() => focusItem(index)}
-                                sx={selectedItems.includes(item.item) || (focus === index) ? {
-                                    border: `1px dashed ${Root.color_button}`,
-                                    backgroundColor: Root.color_button_opacity,
-                                    color: Root.color_button,
-                                    fontWeight: 'bold',
-                                    fontFamily: Root.fontFamilyMonospace,
-                                    animation: 'dash 2s infinite'
-                                } : null}
+                                sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
                                 key={index}>
                                 <MuiTableRowCell sx={{
                                     width: '50%',

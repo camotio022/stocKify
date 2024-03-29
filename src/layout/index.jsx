@@ -30,7 +30,7 @@ export const MainLayout = ({ childrens }) => {
         },
         {
             name: 'Entrou',
-            link: '/stock',
+            link: '/entradas',
             icon: <Inventory />
         },
         {

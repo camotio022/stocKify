@@ -54,7 +54,7 @@ export const MuiStockBotton = styled(Stack)(({ }) => ({
     border: `1px solid ${Root.color_button}`,
     backgroundColor: Root.color_app_bar,
     color: Root.color_button,
-    fontWeight: 'bold',
+    fontWeight: 500,
     borderRadius: '4px',
     ...Root.hover
 }))

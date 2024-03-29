@@ -64,5 +64,4 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     width: '95vw',
     height: '100%',
     paddingInline: '18px',
-    ...Root.scrollBar
 }))

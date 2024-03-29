@@ -31,6 +31,7 @@ export const NewItem = ({
         setData({ ...data, [e.target.name]: e.target.value })
     }
     const handleSubmit = async () => {
+        console.log(data)
         setProgress(true)
         try {
             await addProduct.add(data)

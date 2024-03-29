@@ -35,6 +35,18 @@ export const addProduct = {
     add: async (data) => {
         try {
             let id;
+            let novas_entradas = {
+                nome: data.nome,
+                categoria: data.categoria,
+                quantidade: data.quantidade,
+                dataValidade: data.dataValidade,
+                dataChegada: data.dataChegada,
+                author: {
+                    userName: data.author.userName,
+                    userEmail: data.author.userEmail,
+                    userId: data.author.userId,
+                },
+            };
             const stockCollectionRef = collection(db, 'stock');
             const querySnapshot = await getDocs(query(stockCollectionRef,
                 where("nome", "==", data.nome),
@@ -56,7 +68,9 @@ export const addProduct = {
                 console.log("New item added to stock with ID: ", docRef.id);
             }
             const commitQuerySnapshot = await getDocs(collection(db, 'commits'));
+
             let lastCommitNumber = commitQuerySnapshot.size;
+            console.log(data.author)
             const newComnmit = {
                 refDoc: id,
                 commitNumber: lastCommitNumber,
@@ -70,6 +84,7 @@ export const addProduct = {
                 type: 'entradas'
             }
             await addDoc(collection(db, 'commits'), newComnmit)
+            await addDoc(collection(db, 'entradas'), novas_entradas);
             return true;
         } catch (error) {
             console.error("Error adding document: ", error);
@@ -98,6 +113,7 @@ export const addProduct = {
                 console.error("Item não encontrado no estoque.");
                 return false;
             }
+
         } catch (error) {
             console.error("Erro ao remover quantidade: ", error);
             throw error;
