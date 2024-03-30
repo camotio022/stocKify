@@ -7,9 +7,8 @@ export const StyleCommits = {
         alignItems: "center",
         justifyContent: "flex-start",
         width: "100%",
-        height: 'auto',
+        minHeight: 'auto',
         backgroundColor: Root.color_default,
-        marginBottom: '3rem'
     })),
     card: styled(Stack)(({})=> ({
         display: "flex",

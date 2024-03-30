@@ -121,7 +121,6 @@ export const MainLayout = ({ childrens }) => {
                 {saveExcel && <ModalZindex
                     setSaveExcel={setSaveExcel}
                     saveExcel={saveExcel}
-                    stock={''}
                 />}
                 <NavBarTop
                     newItem={newItem}

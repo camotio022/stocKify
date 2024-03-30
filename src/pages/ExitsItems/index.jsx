@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { NavBarTop } from "../../components/Bar"
 import { Root } from "../../styles/Root/root_styles";
 import { TagsExits } from "./styles"
@@ -7,11 +7,13 @@ import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCe
 import { ArrowDropDown } from "@mui/icons-material";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase_config";
+import { AuthContext } from "../../auth_context";
 
 
 export const ExitsItems = ({
 
 }) => {
+    const { setDownloads } = useContext(AuthContext)
     const [saidas, setSaidas] = useState([])
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
@@ -20,7 +22,7 @@ export const ExitsItems = ({
         'Item',
         'Quantidade Retirada',
         'Validade do Pacote',
-        'Data de Retirada',
+        'Data/Horas',
         'Quem Tirou'
     ];
     const focusItem = (index) => {
@@ -43,10 +45,15 @@ export const ExitsItems = ({
                     quantidade: data.quantidade || "",
                     dataValidade: data.dataValidade || "",
                     dataRetirada: data.dataRetirada || "",
+                    horaRetirada: data.horaRetirada || "",
                     author: data.author.userName || "",
                 };
             });
             setSaidas(stockItems);
+            setDownloads(prevState => ({
+                ...prevState,
+                saidas: stockItems,
+            }));
         });
         return () => unsubscribe();
     }, []);
@@ -104,7 +111,14 @@ export const ExitsItems = ({
                                     />
                                 </MuiTableRowCell>
                                 {Object.entries(item).map(([key, value], i) => {
-                                    if (key !== 'id') {
+                                    if (key === 'dataRetirada') {
+                                        return (
+                                            <MuiTableRowCell key={i}>
+                                                {item.dataRetirada}/{item.horaRetirada ? item.horaRetirada : 'null'}
+                                            </MuiTableRowCell>
+                                        )
+                                    }
+                                    if (key !== 'id' && key !== 'horaRetirada') {
                                         return (
                                             <MuiTableRowCell key={i}>{
                                                 key === 'quantidade' ? (item.quantidade > 1

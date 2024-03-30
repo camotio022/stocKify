@@ -1,19 +1,23 @@
-import { Alert, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Typography } from "@mui/material"
 import { MuiModalInpExtension, MuiModalInpExtensionChecked, MuiModalInput, MuiModalInputExtension, MuiModalPapper, MuiModalPapperClose, MuiModalSave, MuiModalTitle, MuiModalZindex } from "./styles"
 import { Root } from "../../styles/Root/root_styles"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Check, Close } from "@mui/icons-material"
 import generateExcelFile from "../../saveExcel"
 import { DownloadPDF } from "../../savePdf"
+import { AuthContext } from "../../auth_context"
+import { useLocation } from "react-router-dom"
+import salvaEntradas from "../../saveExcel/entradas"
+import salvandoAsSaidas from "../../saveExcel/salvaSaidas"
 function naoTemEspacos(texto) {
     return texto.indexOf(' ') === -1;
 }
 export const ModalZindex = ({
     setSaveExcel,
-    saveExcel,
-    stock
+    saveExcel
 }) => {
-    const [focus, setFocus] = useState(false)
+    const { downloads } = useContext(AuthContext)
+    const location = useLocation()
     const [extension, setExtension] = useState(null)
     const [open, setOpen] = useState(false)
     const [fillname, setFillname] = useState('')
@@ -26,6 +30,7 @@ export const ModalZindex = ({
         bgcolor: Root.color_button_opacity,
         color: Root.color_button
     }
+    console.log(downloads.estoque)
     const success = () => {
         setTimeout(() => {
             setFillname('')
@@ -50,7 +55,9 @@ export const ModalZindex = ({
                 <MuiModalInputExtension>
                     <MuiModalInput
                         value={fillname}
-                        onChange={(e) => setFillname(e.target.value)}
+                        onChange={(e) => {
+                            setFillname(e.target.value)
+                        }}
                         placeholder="Enter your fill name"
                     />
                     {extension &&
@@ -97,17 +104,22 @@ export const ModalZindex = ({
                 }} onClick={() => {
                     if (extension === 'xlsx') {
                         try {
-                            generateExcelFile(stock, fillname)
+                            if (location.pathname === '/') {
+                                generateExcelFile(downloads.estoque, fillname)
+                            } else if (location.pathname === '/entradas') {
+                                salvaEntradas(downloads.entradas, fillname)
+                            } else if (location.pathname === '/exits') {
+                                salvandoAsSaidas(downloads.saidas, fillname)
+                            }
                         } catch (error) {
                             console.log(error)
                         } finally {
                             setOpen(true)
                             success()
                         }
-                        DownloadPDF(stock, fillname)
                     } else {
                         try {
-                            DownloadPDF(stock, fillname)
+                            DownloadPDF(downloads.estoque, fillname)
                         } catch (error) {
                             console.log(error)
                         } finally {

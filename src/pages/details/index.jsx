@@ -9,6 +9,8 @@ import { Stack } from "@mui/material";
 import { TagsNewItem } from "../NewItem/styles";
 import { StyleCommits } from "./commits/styles";
 import { Commits } from "./commits";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebase_config";
 
 export const SectionTag = ({ value, labelExtern, backgroundColor }) => {
 
@@ -27,7 +29,7 @@ export const SectionTag = ({ value, labelExtern, backgroundColor }) => {
         </StylesDetailsItems.sectionsRow>
     )
 }
-export const DetailsItems = ({ }) => {
+export const DetailsItems = () => {
     const [item, setItem] = useState({})
     const { id } = useParams();
     const filteredKeys = Object.keys(item).filter(key => (
@@ -42,17 +44,21 @@ export const DetailsItems = ({ }) => {
         categoria: { label: 'Categoria', backgroundColor: 'orange' },
     };
     const geTokenItem = async () => {
-        try {
-            const response = await get_items.stock.get(id)
-            setItem(response)
-        } catch (error) {
-            console.log(error)
-        }
+        const stockDocRef = doc(db, 'stock', id);
+        const unsubscribe = onSnapshot(stockDocRef, (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                setItem(data);
+                console.log("Dados do documento atualizados:", data);
+            } else {
+                console.log("O documento não existe.");
+            }
+        });
+        return unsubscribe;
     }
     useEffect(() => {
         geTokenItem()
     }, [id])
-
     return (
         <StylesDetailsItems.container>
             <StylesDetailsItems.nav_bar>

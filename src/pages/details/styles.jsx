@@ -10,13 +10,14 @@ export const StylesDetailsItems = {
         justifyContent: "flex-start",
         gap: '1rem',
         width: "100%",
-        minHeight: "99%",
+        minHeight: ")%",
         overflowX: 'hidden',
         overflowY: 'scroll',
         top: 0,
         left: 0,
         zIndex: 5,
         transition: 'all .3s',
+        marginBlock: '12px',
         ...Root.scrollBar
     })),
     nav_bar: styled(Box)(() => ({

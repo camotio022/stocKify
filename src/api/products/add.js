@@ -35,18 +35,6 @@ export const addProduct = {
     add: async (data) => {
         try {
             let id;
-            let novas_entradas = {
-                nome: data.nome,
-                categoria: data.categoria,
-                quantidade: data.quantidade,
-                dataValidade: data.dataValidade,
-                dataChegada: data.dataChegada,
-                author: {
-                    userName: data.author.userName,
-                    userEmail: data.author.userEmail,
-                    userId: data.author.userId,
-                },
-            };
             const stockCollectionRef = collection(db, 'stock');
             const querySnapshot = await getDocs(query(stockCollectionRef,
                 where("nome", "==", data.nome),
@@ -84,12 +72,26 @@ export const addProduct = {
                 type: 'entradas'
             }
             await addDoc(collection(db, 'commits'), newComnmit)
-            await addDoc(collection(db, 'entradas'), novas_entradas);
+
             return true;
         } catch (error) {
             console.error("Error adding document: ", error);
             throw error;
         }
+    },
+    novas_entradas: async (data) => {
+        for (const chave in data) {
+            if (data.hasOwnProperty(chave) && data[chave] === undefined) {
+                console.log(`O campo ${chave} não está definido.`);
+            }
+        }
+        try {
+            await addDoc(collection(db, 'entradas'), data);
+            console.log('Entrada adicionada com sucesso!')
+        } catch (error) {
+            console.error(error)
+        }
+
     },
     to_remove_quantiadade: async (refDoc, quantidade_to_remove, author) => {
         console.log(refDoc, quantidade_to_remove)
@@ -122,6 +124,14 @@ export const addProduct = {
     registerSaida: async (item, author, quantidade) => {
         try {
             const date = new Date()
+            function getHoraExata() {
+                const dataAtual = new Date();
+                const horas = dataAtual.getHours();
+                const minutos = dataAtual.getMinutes();
+                const segundos = dataAtual.getSeconds();
+
+                return `${horas}:${minutos}:${segundos}`;
+            }
             const saidaCollectionRef = collection(db, 'saidas');
             const newSaida = {
                 refDoc: item.id,
@@ -129,7 +139,8 @@ export const addProduct = {
                 quantidade: quantidade,
                 nomeItem: item.nome,
                 dataValidade: item.dataValidade,
-                dataRetirada: formatDate(date)
+                dataRetirada: formatDate(date),
+                horaRetirada: getHoraExata()
             };
 
             await addDoc(saidaCollectionRef, newSaida);

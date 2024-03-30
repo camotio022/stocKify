@@ -35,6 +35,7 @@ export const NewItem = ({
         setProgress(true)
         try {
             await addProduct.add(data)
+            await addProduct.novas_entradas(data)
             setProgress(false)
         } catch (err) {
             console.log(err)

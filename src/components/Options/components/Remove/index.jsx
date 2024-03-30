@@ -1,7 +1,7 @@
 import { Stack } from "@mui/system"
 import { StylesOptions } from "../../stylesOptions"
 import { Root } from "../../../../styles/Root/root_styles"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Alert, CircularProgress } from "@mui/material"
 import { StylesRemoveItem } from "./remove"
 import { addProduct } from "../../../../api/products/add"
@@ -9,8 +9,9 @@ import { AuthContext } from '../../../../auth_context/index.jsx'
 import { TagsNewItem } from "../../../../pages/NewItem/styles"
 import { Close } from "@mui/icons-material"
 export const RemoveItems = ({ item, setRemove }) => {
-    const { user } = useContext(AuthContext)
-    const [alert, setAlert] = useState('error')
+    const { user } = useContext(AuthContext);
+
+    const [alert, setAlert] = useState('error');
     const [showInput, setShowInput] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [progress, setProgress] = useState(false);
@@ -45,6 +46,7 @@ export const RemoveItems = ({ item, setRemove }) => {
                 setAlert('error')
                 setInputValue(item.quantidade - 1)
             }, [3000])
+            // setRemove(false)
         }
     }
     return (

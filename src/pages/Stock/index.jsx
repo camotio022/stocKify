@@ -19,10 +19,7 @@ import { AuthContext } from "../../auth_context";
 export const Stock = () => {
     const {
         user,
-        newItem,
-        setNewItem,
-        saveExcel,
-        setSaveExcel,
+        setDownloads,
         selectedItems,
         setSelectedItems, } = useContext(AuthContext)
     const [stock, setStock] = useState([])
@@ -46,12 +43,16 @@ export const Stock = () => {
                 };
             });
             setStock(stockItems);
+            setDownloads(prevState => ({
+                ...prevState,
+                estoque: stockItems,
+            }));
         });
         return () => unsubscribe();
     }, []);
     return (
         <MuiStock>
-           
+
             <Stack sx={{
                 display: 'flex',
                 alignItems: 'center',

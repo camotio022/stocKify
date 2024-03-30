@@ -32,7 +32,7 @@ export const MuiStockNavBar = styled(Stack)(({ }) => ({
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: '100%',
-    height: '7%',
+    height: 'auto',
 }))
 export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     display: 'flex',

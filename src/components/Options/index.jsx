@@ -1,15 +1,17 @@
 import { Close, Details, GetAppOutlined, InsertEmoticon, LeakRemove, List, PlaylistAdd, ProductionQuantityLimits, QrCode2, Remove, StopCircle, SupervisedUserCircle } from "@mui/icons-material"
 import { TagsNewItem } from "../../pages/NewItem/styles"
 import { StylesOptions } from "./stylesOptions"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { RemoveItems } from "./components/Remove"
 import { Root } from "../../styles/Root/root_styles"
-
+import { doc, onSnapshot } from "firebase/firestore"
+import { db } from "../../../firebase_config"
 export const Options = ({ name, setOptions, optionItem }) => {
     const [paper, setPaper] = useState(false)
     const [details, setDetails] = useState(false)
     const [remove, setRemove] = useState(false)
+    const [docs, setDocs] = useState({});
 
     const items = [
         { onclick: 'details', name: 'Detalhes', icon: <Details /> },
@@ -19,10 +21,26 @@ export const Options = ({ name, setOptions, optionItem }) => {
         { onclick: null, name: 'Vazamento de estoque', icon: <LeakRemove /> },
         { onclick: null, name: 'Código de barras', icon: <QrCode2 /> },
     ]
+    const listenToChanges = (id) => {
+        const stockDocRef = doc(db, 'stock', id);
+        const unsubscribe = onSnapshot(stockDocRef, (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                setDocs(data);
+                console.log("Dados do documento atualizados:", data);
+            } else {
+                console.log("O documento não existe.");
+            }
+        });
+        return unsubscribe;
+    }
+    useEffect(() => {
+        listenToChanges(optionItem.id);
+    }, [optionItem.id])
     return (
         <>
             <StylesOptions.container>
-                {remove && <RemoveItems item={optionItem} setRemove={setRemove}>
+                {remove && <RemoveItems item={docs} setRemove={setRemove}>
                 </RemoveItems>}
                 {paper && <StylesOptions.paper>
                     <TagsNewItem.close onClick={() => setPaper(false)}>
@@ -44,7 +62,7 @@ export const Options = ({ name, setOptions, optionItem }) => {
                     {items.map((item, index) => {
                         if (item.onclick === 'details') {
                             return (
-                                <StylesOptions.link key={index} to={`/${item.onclick}/${optionItem.id}`}>
+                                <StylesOptions.link key={index} to={`/${item.onclick}/${docs.id}`}>
                                     <StylesOptions.item>
                                         {item.name}
                                         {item.icon}

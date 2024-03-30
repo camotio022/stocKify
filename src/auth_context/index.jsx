@@ -11,6 +11,11 @@ export const AuthProvider = ({ children }) => {
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
     const [selectedItems, setSelectedItems] = useState([]);
+    const [downloads, setDownloads] = useState({
+        estoque: [],
+        entradas: [],
+        saidas: []
+    })
     const checkUserAuthentication = async () => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
         setIsLoggedIn(loggedInStatus === 'true');
@@ -138,6 +143,8 @@ export const AuthProvider = ({ children }) => {
                 setSaveExcel,
                 selectedItems,
                 setSelectedItems,
+                downloads,
+                setDownloads
             }}
         >
             {children}
