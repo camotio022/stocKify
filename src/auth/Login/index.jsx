@@ -1,4 +1,4 @@
-import { CircularProgress, InputAdornment, Stack, Typography } from '@mui/material'
+import { CircularProgress, InputAdornment, Stack, Typography, useMediaQuery } from '@mui/material'
 import * as Tag from './styles'
 import { Root } from '../../styles/Root/root_styles'
 import { LockClock, Person, Visibility, VisibilityOff } from '@mui/icons-material'
@@ -6,6 +6,7 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../../auth_context'
 
 export const Login = () => {
+    const matches = useMediaQuery('(max-width:600px)');
     const [open, setOpen] = useState('')
     const { loginWithEmailAndPassword } = useContext(AuthContext)
     const [progress, setProgress] = useState(false)
@@ -30,8 +31,8 @@ export const Login = () => {
         }
     }
     return (
-        <Tag.MuiContainer>
-            <Tag.MuiCard>
+        <Tag.MuiContainer matches={matches}>
+            <Tag.MuiCard matches={matches}>
                 <Tag.MuiCardUser>
                     <Person sx={{
                         width: '90%',
@@ -39,7 +40,7 @@ export const Login = () => {
                         color: Root.color_button
                     }} />
                 </Tag.MuiCardUser>
-                <Tag.MuiGridForm mt={10}>
+                <Tag.MuiGridForm mt={10} matches={matches}>
                     <Tag.MuiLeftTag>
                         <Person />
                     </Tag.MuiLeftTag>
@@ -54,12 +55,13 @@ export const Login = () => {
                         />
                     </Stack>
                 </Tag.MuiGridForm>
-                <Tag.MuiGridForm mt={2.6}>
+                <Tag.MuiGridForm mt={2.6} matches={matches}>
                     <Tag.MuiLeftTag >
                         <LockClock />
                     </Tag.MuiLeftTag>
                     <Stack sx={{ height: '100%', width: '83%' }}>
                         <Tag.MuiTextField
+                            matches={matches}
                             type={open ? 'text' : 'password'}
                             InputProps={{
                                 endAdornment: (
@@ -80,6 +82,7 @@ export const Login = () => {
                     </Stack>
                 </Tag.MuiGridForm>
                 <Tag.MuiGridForm
+                    matches={matches}
                     onClick={login}
                     mt={2.6}
                     sx={{
@@ -94,7 +97,7 @@ export const Login = () => {
                     {progress && <CircularProgress size={24} sx={{ color: 'white' }} />}
                 </Tag.MuiGridForm>
             </Tag.MuiCard>
-            <Tag.MuiFooterLogin>
+            <Tag.MuiFooterLogin matches={matches}>
                 JUNTA MAIS STOCKIFY @2024
             </Tag.MuiFooterLogin>
         </Tag.MuiContainer>

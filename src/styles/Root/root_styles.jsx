@@ -5,7 +5,7 @@ export const Root = {
   gray_desfius: '#A8ADB3',
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
-  color_button: 'green',
+  color_button: 'gray',
   color_button_secondary: "#932dd2",
   color_button_opacity: 'rgba(255, 165, 0, 0.3)',
   color_link: '#93dd2',
