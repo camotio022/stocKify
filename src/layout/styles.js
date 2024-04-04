@@ -43,7 +43,14 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     fontSize: '100%',
     color: Root.white,
     textDecoration: 'none',
-    ...Root.hoverReverse
+    ...Root.hoverReverse,
+    ":hover": {
+        color: Root.color_button,
+        boxShadow: Root.boxShadow,
+        height: '50px',
+        backgroundColor: Root.color_app_bar,
+    
+    }
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     position: 'absolute',

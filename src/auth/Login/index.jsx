@@ -6,9 +6,10 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../../auth_context'
 
 export const Login = () => {
-    const matches = useMediaQuery('(max-width:600px)');
+
     const [open, setOpen] = useState('')
-    const { loginWithEmailAndPassword } = useContext(AuthContext)
+    const { loginWithEmailAndPassword, matches } = useContext(AuthContext)
+
     const [progress, setProgress] = useState(false)
     const [data, setData] = useState({
         email: '',

@@ -2,9 +2,11 @@ import React, { createContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, collection, getDocs, query, where, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase_config';
+import { useMediaQuery } from '@mui/material';
 export const AuthContext = createContext();
 const provider = new GoogleAuthProvider();
 export const AuthProvider = ({ children }) => {
+    const matches = useMediaQuery('(max-width:600px)');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
     const auth = getAuth();
@@ -144,7 +146,8 @@ export const AuthProvider = ({ children }) => {
                 selectedItems,
                 setSelectedItems,
                 downloads,
-                setDownloads
+                setDownloads,
+                matches
             }}
         >
             {children}

@@ -12,6 +12,7 @@ import generateExcelFile from "../saveExcel/index.js"
 import { NewItem } from "../pages/NewItem/index.jsx"
 import { MuiSelectItem, MuiSelectItemOption, MuiSelectItemOptions, MuiStockModalTop } from "../pages/Stock/styles.jsx"
 import { ModalZindex } from "../components/Modal/index.jsx"
+import { Mobile } from "../mobile/layout/index.jsx"
 export const MainLayout = ({ childrens }) => {
     const location = useLocation()
     const {
@@ -20,7 +21,8 @@ export const MainLayout = ({ childrens }) => {
         setNewItem,
         saveExcel,
         setSaveExcel,
-        selectedItems
+        selectedItems,
+        matches
     } = useContext(AuthContext)
     const paths = [
         {
@@ -49,6 +51,11 @@ export const MainLayout = ({ childrens }) => {
             icon: <History />
         },
     ]
+    if (matches) {
+        return (
+            <Mobile/>
+        )
+    }
     return (
         <Tag.MuiMainLayout>
             <Tag.MuiMainLayoutLogo>
