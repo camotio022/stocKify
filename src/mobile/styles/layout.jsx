@@ -20,10 +20,21 @@ export const LayoutMobile = {
         flexDirection: 'row',
         width: '100%',
         height: '70px',
-
         bottom: 0,
         left: 0,
+    })),
+    _app_bar_top: styled(Box)(({ }) => ({
+        position: 'fixed',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        width: '100%',
+        height: '60px',
 
+        paddingBlock: '4px',
+        top: 0,
+        left: 0,
     })),
     _logoMobile: styled(Stack)(({ }) => ({
         display: 'flex',
@@ -36,5 +47,13 @@ export const LayoutMobile = {
         justifyContent: 'center',
         width: '10%',
         cursor: 'pointer'
+    })),
+    _containerItemMap: styled(Stack)(({ }) => ({
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     })),
 }

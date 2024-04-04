@@ -5,7 +5,8 @@ import { LayoutMobile } from "../styles/layout"
 import { Root } from "../../styles/Root/root_styles"
 import { Box, Stack } from "@mui/material"
 import { Link, useLocation } from "react-router-dom"
-import { Fragment } from "react"
+import { Fragment, useContext } from "react"
+import { AuthContext } from '../../auth_context'
 const renderLink = (item, index, location, paths) => {
     const path = location.pathname === item.link;
     const previousIndex = paths.findIndex((item) => item.link === location.pathname) - 1;
@@ -16,10 +17,10 @@ const renderLink = (item, index, location, paths) => {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        width: '63px',
-        height:  '63px',
+        width: '61px',
+        height: '61px',
         border: `1px solid ${Root.color_default}`,
-        backgroundColor:  Root.color_default,
+        backgroundColor: Root.color_default,
         color: path ? Root.color_default : Root.color_button,
         fontWeight: path ? 'bold' : 'normal',
         fontFamily: path ? Root.fontFamilyMonospace : '',
@@ -28,15 +29,7 @@ const renderLink = (item, index, location, paths) => {
     };
 
     return (
-        <Box sx={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-    
-        }} key={index}>
+        <LayoutMobile._containerItemMap key={index}>
             {!path && (
                 <Box
                     sx={{
@@ -65,18 +58,17 @@ const renderLink = (item, index, location, paths) => {
                 </Stack>
 
             </Link>
-        </Box>
+        </LayoutMobile._containerItemMap>
     );
 };
 
 export const Mobile = ({ }) => {
+    const { user } = useContext(AuthContext)
+    const lengthNameAll = user.name.split(' ')
+    const firstLatter = user.name.split(' ')[0]
+    const secondLatter = user.name.split(' ')[1]
     const location = useLocation()
     const paths = [
-        {
-            name: 'Stock',
-            link: '/',
-            icon: <Home />
-        },
         {
             name: 'Entrou',
             link: '/entradas',
@@ -86,6 +78,11 @@ export const Mobile = ({ }) => {
             name: 'Exits',
             link: '/exits',
             icon: <ExitToApp />
+        },
+        {
+            name: 'Stock',
+            link: '/',
+            icon: <Home />
         },
         {
             name: 'Insight',
@@ -108,7 +105,34 @@ export const Mobile = ({ }) => {
                     </Fragment>
                 ))}
             </LayoutMobile._app_bar>
-
+            <LayoutMobile._app_bar_top>
+                <Stack sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 'auto',
+                    height: '90%'
+                }}>
+                    <LogoMainLayout black={true} top={true} />
+                </Stack>
+                <Stack sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '50px',
+                    height: '50px',
+                    border: `1px solid ${Root.color_button_opacity}`,
+                    fontWeight: 'bold',
+                    fontFamily: Root.fontFamilyMonospace,
+                    color: Root.color_button,
+                    cursor: 'pointer',
+                    mr: '4px',
+                    borderRadius: '50%'
+                }}>
+                    {firstLatter[0]}
+                    {lengthNameAll.length > 1 && secondLatter[0]}
+                </Stack>
+            </LayoutMobile._app_bar_top>
         </LayoutMobile._containerMobile>
     )
 }
