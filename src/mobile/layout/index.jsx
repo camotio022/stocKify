@@ -16,8 +16,8 @@ const renderLink = (item, index, location, paths) => {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        width: '60px',
-        height:  '60px',
+        width: '63px',
+        height:  '63px',
         border: `1px solid ${Root.color_default}`,
         backgroundColor:  Root.color_default,
         color: path ? Root.color_default : Root.color_button,
@@ -60,7 +60,7 @@ const renderLink = (item, index, location, paths) => {
                 <Stack sx={{ fontSize: '90%' }}>
                     {item.icon}
                 </Stack>
-                <Stack sx={{ fontSize: '90%' }}>
+                <Stack sx={{ fontSize: '80%' }}>
                     {item.name}
                 </Stack>
 
