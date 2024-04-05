@@ -15,13 +15,14 @@ import { NewItem } from "../NewItem";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
+import { TableStock } from "../../mobile/components/tableStock";
 
 export const Stock = () => {
     const {
         user,
         setDownloads,
         selectedItems,
-        setSelectedItems, } = useContext(AuthContext)
+        setSelectedItems, matches } = useContext(AuthContext)
     const [stock, setStock] = useState([])
 
     useEffect(() => {
@@ -50,9 +51,13 @@ export const Stock = () => {
         });
         return () => unsubscribe();
     }, []);
+    if (matches) {
+        return (
+            <TableStock item={stock}/>
+        )
+    }
     return (
         <MuiStock>
-
             <Stack sx={{
                 display: 'flex',
                 alignItems: 'center',

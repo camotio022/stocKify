@@ -53,7 +53,7 @@ export const MainLayout = ({ childrens }) => {
     ]
     if (matches) {
         return (
-            <Mobile/>
+            <Mobile childrens={childrens}/>
         )
     }
     return (
