@@ -40,7 +40,10 @@ export const EstoqueTable = ({
         <TableContainer sx={{
             ...Root.scrollBar,
             width: '100%',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            backgroundColor: Root.color_default,
+            borderRadius: '4px',
+            color: Root.color_button,
         }} ref={tableRef}>
             {options && <Options
                 optionItem={options}
@@ -53,7 +56,7 @@ export const EstoqueTable = ({
                 }}>
                     <Checkbox
                         sx={{
-                            color: Root.color_default
+                            color: Root.color_button
                         }}
                         onChange={(e) => {
                             const isChecked = e.target.checked;
@@ -64,13 +67,13 @@ export const EstoqueTable = ({
                 </MuiTableClhild>
                 {headerInfos.map((header, index) => (
                     <MuiTableClhild sx={header === 'Opções' && {
+                        fontWeight: 'bold',
                         width: '50%',
                     }} key={index}>{header} <ArrowDropDown /></MuiTableClhild>
                 ))}
             </MuiHeaderTable>
             <MuiRowTable>
                 {stock.map((item, index) => (
-
                     <MuiTableRow
                         onClick={() => focusItem(index)}
                         sx={selectedItems.includes(item.id) || (focus === index) ? {
@@ -84,9 +87,11 @@ export const EstoqueTable = ({
                         key={item.id}>
                         <MuiTableRowCell sx={{
                             width: '50%',
-                            borderLeft: `1px solid ${Root.color_button_opacity}`
                         }}>
                             <Checkbox
+                                sx={{
+                                    color: Root.color_button
+                                }}
                                 checked={selectedItems.includes(item.id)}
                                 onChange={() => handleCheckboxChange(item.id)}
                             />
@@ -103,10 +108,7 @@ export const EstoqueTable = ({
                                 );
                             }
                             return (
-                                <MuiTableRowCell sx={key === 'id' && {
-                                    fontSize: '14px',
-                                    fontWeight: 'bold'
-                                }} key={i}>
+                                <MuiTableRowCell key={i}>
                                     {item[key]} {key === 'quantidade' && 'unidades'}
                                 </MuiTableRowCell>
                             );

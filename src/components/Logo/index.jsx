@@ -9,13 +9,13 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
             justifyContent: 'center',
             flexDirection: 'column',
             marginTop: top ? '0px' : '12px',
-            width: '80%',
-            height: '10%',
+            width: '12vw',
+            height: '80px',
 
         }}>
             <Link sx={{
-                width: '100%',
-                height: '90px'
+                width: '90px',
+                height: '80px'
             }} href={'/'}>
                 <img
                     style={{

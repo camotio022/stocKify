@@ -53,7 +53,7 @@ export const Stock = () => {
     }, []);
     if (matches) {
         return (
-            <TableStock item={stock}/>
+            <TableStock item={stock} />
         )
     }
     return (

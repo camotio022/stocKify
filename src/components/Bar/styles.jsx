@@ -3,7 +3,6 @@ import { Stack, styled } from "@mui/material";
 export const StylesBar = {
 
     conatiner: styled(Stack)(({})=> ({
-        marginTop: '20px',
         width: '100%',
         display: 'flex',
         justifyContent:'space-between',
