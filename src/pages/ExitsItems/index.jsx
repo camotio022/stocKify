@@ -66,7 +66,9 @@ export const ExitsItems = ({
         animation: 'dash 2s infinite'
     }
     return (
-        <TagsExits.container>
+        <TagsExits.container sx={{
+            backgroundColor: Root.color_default
+        }}>
             <TagsExits.containerTable sx={{
                 mt: selectedItems.length > 0 ? '0px' : '17px',
             }}>
@@ -82,7 +84,7 @@ export const ExitsItems = ({
                         }}>
                             <Checkbox
                                 sx={{
-                                    color: Root.color_default
+                                    color: Root.color_button
                                 }}
                                 onChange={(e) => {
                                     const isChecked = e.target.checked;
@@ -103,9 +105,12 @@ export const ExitsItems = ({
                                 key={index}>
                                 <MuiTableRowCell sx={{
                                     width: '50%',
-                                    borderLeft: `1px solid ${Root.color_button_opacity}`
+                                    color: Root.color_button
                                 }}>
                                     <Checkbox
+                                        sx={{
+                                            color: Root.color_button
+                                        }}
                                         checked={selectedItems.includes(item.item)}
                                         onChange={() => handleCheckboxChange(item.item)}
                                     />

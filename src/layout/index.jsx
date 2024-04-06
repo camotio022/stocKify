@@ -28,17 +28,17 @@ export const MainLayout = ({ childrens }) => {
     } = useContext(AuthContext)
     const paths = [
         {
-            name: 'Stock',
+            name: 'Estoque',
             link: '/',
             icon: <Home />
         },
         {
-            name: 'Entrou',
+            name: 'Entradas',
             link: '/entradas',
             icon: <Inventory />
         },
         {
-            name: 'Exits',
+            name: 'Saídas',
             link: '/exits',
             icon: <ExitToApp />
         },
@@ -48,7 +48,7 @@ export const MainLayout = ({ childrens }) => {
             icon: <Insights />
         },
         {
-            name: 'history',
+            name: 'Histórico',
             link: '/history',
             icon: <History />
         },
@@ -123,15 +123,7 @@ export const MainLayout = ({ childrens }) => {
                     setSaveExcel={setSaveExcel}
                     saveExcel={saveExcel}
                 />}
-                <Stack sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '100%',
-                    paddingInline: '12px',
-                    height: '95%',
-                }}>
+                <Tag.RenderChildrensAndNavBar>
                     <NavBarTop
                         newItem={newItem}
                         setNewItem={setNewItem}
@@ -140,7 +132,7 @@ export const MainLayout = ({ childrens }) => {
                         saveExcel={saveExcel}
                     />
                     {childrens}
-                </Stack>
+                </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>
         </Tag.MuiMainLayout>
     )

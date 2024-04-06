@@ -40,6 +40,7 @@ export const EstoqueTable = ({
         <TableContainer sx={{
             ...Root.scrollBar,
             width: '100%',
+            height: '100%',
             boxSizing: 'border-box',
             backgroundColor: Root.color_default,
             borderRadius: '4px',

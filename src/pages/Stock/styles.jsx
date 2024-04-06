@@ -28,15 +28,16 @@ export const MuiStockModalTop = styled(Stack)(({ }) => ({
 }))
 export const MuiStockNavBar = styled(Stack)(({ }) => ({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    flexDirection: 'row',
-    width: '100%',
-    height: 'auto',
+    flexDirection: 'column',
+    width: '50%',
+    height: '100%',
+
 }))
 export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
     flexDirection: 'row',
     width: 'auto',
@@ -48,13 +49,12 @@ export const MuiStockBotton = styled(Stack)(({ }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 3,
-    minWidth: '150px',
-    height: 'auto',
-    border: `1px solid ${Root.color_button}`,
-    backgroundColor: Root.color_app_bar,
+    gap: '8px',
+    minWidth: 'auto',
+    height: '24px',
+    padding: '8px',
+    backgroundColor: Root.color_default,
     color: Root.color_button,
-    fontWeight: 500,
     borderRadius: '4px',
     ...Root.hover
 }))
@@ -78,43 +78,43 @@ export const MuiSearchContainerFather = styled('div')({
     width: '70%',
     height: '100%',
 });
-export const MuiSearchContainer = styled('div')({
+export const MuiSearchContainer = styled(Stack)({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    flexDirection: 'row',
     borderRadius: '4px',
-    backgroundColor: Root.color_button,
-    color: Root.color_default,
+    backgroundColor: Root.color_default,
+    color: Root.color_button,
     gap: '4px',
-    marginLeft: 0,
-    width: '35%',
-    height: '80%',
-
+    width: '50%',
+    height: '40px',
 });
 
-export const SearchIconWrapper = styled('div')({
-    padding: '0 8px',
-    height: '100%',
+export const SearchIconWrapper = styled(Stack)({
     position: 'absolute',
-    pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%',
+    pointerEvents: 'none',
+    marginLeft: '12px'
 });
 
 export const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    padding: '8px 8px 8px 32px',
     width: '100%',
-    color: Root.color_default,
+    color: Root.color_button,
+    marginRight: '12px'
 }));
 export const MuiSearch = styled(Stack)(({ theme }) => ({
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
     flexDirection: 'row',
+    gap: '12px',
     width: '100%',
-    height: '6vh',
+    height: '100%',
     fontFamily: Root.fontFamilyMonospace,
 }));
 export const MuiSearchIcon = styled(Search)(({ theme }) => ({}));
@@ -139,15 +139,32 @@ export const MuiSelectContainer = styled(Stack)(({ }) => ({
     height: '95%',
     gap: '12px',
 }))
-export const MuiSelect = styled(Select)(({ }) => ({
-    paddingInline: '6px',
-    outline: 'none',
-    border: 'none',
-    height: '75%',
-    width: '100%',
-    color: Root.color_button,
-    fontWeight: 'bold',
-    fontFamily: Root.fontFamilyMonospace
+export const MuiSelect = styled(Select)(({ theme }) => ({
+    '&&': {
+        '&.MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                border: 'none', // Remover a borda ao passar o mouse
+            },
+            '&.Mui-focused fieldset': {
+                border: 'none', // Remover a borda quando estiver focado
+            },
+            '& fieldset': {
+                border: 'none', // Remover a borda
+            },
+        },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: '8px',
+        minWidth: 'auto',
+        height: '40px',
+        padding: '8px',
+        backgroundColor: Root.color_default,
+        color: Root.color_button,
+        borderRadius: '4px',
+        ...Root.hover
+    }
 }))
 export const MuiSelectItem = styled(Stack)(({ }) => ({
     display: 'flex',

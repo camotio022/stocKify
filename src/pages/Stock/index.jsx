@@ -57,24 +57,22 @@ export const Stock = () => {
         )
     }
     return (
-        <MuiStock>
-            <Stack sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                height: '85%',
-                width: '100%',
-                mt: selectedItems.length > 0 ? '0px' : '17px',
-                ...Root.scrollBar
-            }}>
-                <EstoqueTable
-                    setStock={setStock}
-                    stock={stock}
-                    selectedItems={selectedItems}
-                    setSelectedItems={setSelectedItems}
-                />
-            </Stack>
 
-        </MuiStock>
+        <Stack sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            height: '100%',
+            width: '100%',
+            ...Root.scrollBar
+        }}>
+            <EstoqueTable
+                setStock={setStock}
+                stock={stock}
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
+            />
+        </Stack>
+
     )
 }

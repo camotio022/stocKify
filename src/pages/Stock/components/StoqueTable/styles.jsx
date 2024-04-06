@@ -57,4 +57,5 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    color: Root.color_button
 }))

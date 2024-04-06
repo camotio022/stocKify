@@ -18,7 +18,7 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: '12vw',
+    width: '14vw',
     height: '100%',
     backgroundColor: Root.color_default,
     color: Root.color_button,
@@ -32,7 +32,7 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     flexDirection: 'column',
     gap: '8px',
     paddingBlock: '4px',
-    marginTop: '44px',
+    marginTop: '36px',
     width: '100%',
     overflow: 'hidden'
 }))
@@ -42,16 +42,16 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     justifyContent: 'fles-start',
     gap: '12px',
     flexDirection: 'row',
-    width: '80%',
+    width: '90%',
     height: '50px',
     transition: 'all .3s',
     paddingLeft: '4px',
-    borderTopLeftRadius: '8px',
-    borderBottomLeftRadius: '8px',
+    borderTopLeftRadius: '4px',
+    borderBottomLeftRadius: '4px',
     fontSize: '15px',
     color: Root.gray,
     textDecoration: 'none',
-    marginRight: '-1px',
+
     ...Root.hoverReverse,
     ":hover": {
         color: Root.color_button,
@@ -94,4 +94,14 @@ export const AppBar = styled(Stack)(({ }) => ({
     width: '100vw',
     height: '8vh',
     backgroundColor: Root.color_default,
+}))
+export const RenderChildrensAndNavBar = styled(Stack)(({})=> ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: '12px',
+    width: '100%',
+    paddingInline: '12px',
+    height: '95%',
 }))

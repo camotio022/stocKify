@@ -1,6 +1,6 @@
 import { MenuItem, Stack, Typography } from "@mui/material";
-import { MuiInputNative, MuiSearch, MuiSearchContainer, MuiSearchContainerFather, MuiSearchIcon, MuiSearchIconTeep, MuiSelect, MuiSelectContainer, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, StyledInputBase } from "../../pages/Stock/styles";
-import { Add, FileDownload } from "@mui/icons-material";
+import { MuiInputNative, MuiSearch, MuiSearchContainer, MuiSearchContainerFather, MuiSearchIcon, MuiSearchIconTeep, MuiSelect, MuiSelectContainer, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, SearchIconWrapper, StyledInputBase } from "../../pages/Stock/styles";
+import { Add, Delete, FileDownload, SaveAlt, Search, Upgrade } from "@mui/icons-material";
 import { Root } from "../../styles/Root/root_styles";
 import { StylesBar } from "./styles";
 import { useLocation } from "react-router-dom";
@@ -36,22 +36,22 @@ export const NavBarTop = ({
     })
     const buttons = [
         {
-            label: 'Download',
-            onclick: 'Download',
+            label: 'Export',
+            onclick: 'Export',
             variant: null,
-            icon: <FileDownload />
+            icon: <Upgrade />
 
         }, {
-            label: 'Import Produts',
+            label: 'Import',
             onclick: null,
             variant: null,
-            icon: null
+            icon: <SaveAlt />
 
         }, {
-            label: 'New Produt',
-            onclick: 'New_Produt',
+            label: 'Delete',
+            onclick: 'Delete',
             variant: 'contained',
-            icon: <Add />
+            icon: <Delete />
         },
     ]
     const items = [
@@ -63,25 +63,27 @@ export const NavBarTop = ({
         { value: 'users', label: 'Users' }
     ];
     const clicks = (e) => {
-        if (e.onclick === 'Download') {
+        if (e.onclick === 'Export') {
             setSaveExcel(!saveExcel)
-        }
-        if (e.onclick === 'New_Produt') {
-            setNewItem(!NewItem)
         }
     }
     if (routes.some((i) => i.route === location.pathname && i.canBar)) {
         return (
             <StylesBar.conatiner>
                 <MuiStockNavBar>
-                    <Typography sx={{ fontWeight: 'bold' }}>{routes.map((r) => r.label)}</Typography>
+                    <Typography sx={{
+                        textTransform: 'uppercase',
+                        fontWeight: 'bold'
+,                        color: Root.gray,
+                        fontFamily: Root.fontFamilyMonospace
+                    }}>{routes.map((r) => r.label)}</Typography>
                     <MuiStockNavBarRigth>
                         {buttons.map((botton, index) => {
                             const isContained = botton.variant === 'contained';
                             return (
                                 <MuiStockBotton
                                     sx={isContained && {
-                                        backgroundColor: Root.color_button,
+                                        backgroundColor: Root.red,
                                         color: Root.white,
                                         ...Root.hoverReverse,
 
@@ -98,35 +100,34 @@ export const NavBarTop = ({
                     </MuiStockNavBarRigth>
                 </MuiStockNavBar>
                 <MuiSearch>
-                    <MuiSearchContainerFather>
-                        <MuiSearchContainer>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </MuiSearchContainer>
-                        <MuiSearchIconTeep >
-                            <MuiSearchIcon fontSize="small" />
-                        </MuiSearchIconTeep>
-                    </MuiSearchContainerFather>
-                    <MuiSelectContainer>
-                        <MuiInputNative
-                            size="small"
-                            type="date"
-                        ></MuiInputNative>
-
-                        <MuiSelect
-                            size="small"
-                            labelId="outlined-select-currency-label"
-                            id="outlined-select-currency"
-                            defaultValue="default"
-                        >
-                            <MenuItem value="default" disabled>Filtres</MenuItem>
-                            {items.map((item, index) => (
-                                <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                            ))}
-                        </MuiSelect>
-                    </MuiSelectContainer>
+                    <MuiSelect
+                        size="small"
+                        labelId="outlined-select-currency-label"
+                        id="outlined-select-currency"
+                        defaultValue="default"
+                    >
+                        <MenuItem value="default" disabled>Filtres</MenuItem>
+                        {items.map((item, index) => (
+                            <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+                        ))}
+                    </MuiSelect>
+                    <MuiSearchContainer>
+                        <Search sx={{
+                            ml: '12px'
+                        }} />
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </MuiSearchContainer>
+                    <MuiStockBotton
+                        onClick={() => setNewItem(!NewItem)} sx={{
+                            backgroundColor: Root.color_button,
+                            color: Root.color_default,
+                            ...Root.hoverReverse,
+                        }}>
+                        <Add /> Add New
+                    </MuiStockBotton>
                 </MuiSearch>
             </StylesBar.conatiner>
         )

@@ -47,60 +47,51 @@ export const Entradas = () => {
                 entradas: stockItems,
             }));
         });
-
         return () => unsubscribe();
     }, []);
-
     return (
-        <TagsExits.container>
-            <TagsExits.containerTable sx={{
-                mt: selectedItems.length > 0 ? '0px' : '17px',
-            }}>
-                <TableContainer sx={{
-                    ...Root.scrollBar,
-                    width: '100%',
-                    boxSizing: 'border-box'
-                }} ref={tableRef}>
-                    <MuiHeaderTable>
-                        {headerkeys.map((header, index) => (
-                            <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
-                        ))}
-                    </MuiHeaderTable>
-                    <MuiRowTable>
-                        {entradas.map((item, index) => (
-                            <MuiTableRow
-                                sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
-                                key={index}>
-                                {Object.entries(item).map(([key, value], i) => {
-                                    if (key === 'author') {
-                                        return (
-                                            <MuiTableRowCell key={i}>
-                                                {item.author.userName}
-                                            </MuiTableRowCell>
-                                        );
-                                    }
+        <TagsExits.container sx={{
+            backgroundColor: Root.color_default,
+            borderRadius: '4px',
+        }}>
+            <TableContainer sx={{
+                ...Root.scrollBar,
+                width: '98%',
+                boxSizing: 'border-box'
+            }} ref={tableRef}>
+                <MuiHeaderTable>
+                    {headerkeys.map((header, index) => (
+                        <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
+                    ))}
+                </MuiHeaderTable>
+                <MuiRowTable>
+                    {entradas.map((item, index) => (
+                        <MuiTableRow
+                            sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
+                            key={index}>
+                            {Object.entries(item).map(([key, value], i) => {
+                                if (key === 'author') {
                                     return (
-                                        <MuiTableRowCell sx={key === 'id' && {
-                                            fontSize: '14px',
-                                            fontWeight: 600,
-                                            borderLeft: `1px solid ${Root.color_button_opacity}`
-
-                                        }} key={i}>{
-                                                key === 'quantidade' ? (item.quantidade > 1
-                                                    ? `${item.quantidade} unidades`
-                                                    : `${item.quantidade} unidade`)
-                                                    : value
-                                            }</MuiTableRowCell>
+                                        <MuiTableRowCell key={i}>
+                                            {item.author.userName}
+                                        </MuiTableRowCell>
                                     );
+                                }
+                                return (
+                                    <MuiTableRowCell key={i}>{
+                                        key === 'quantidade' ? (item.quantidade > 1
+                                            ? `${item.quantidade} unidades`
+                                            : `${item.quantidade} unidade`)
+                                            : value
+                                    }</MuiTableRowCell>
+                                );
 
-                                    return null;
-                                })}
-                            </MuiTableRow>
-                        ))}
-                    </MuiRowTable>
-                </TableContainer>
-
-            </TagsExits.containerTable>
+                                return null;
+                            })}
+                        </MuiTableRow>
+                    ))}
+                </MuiRowTable>
+            </TableContainer>
         </TagsExits.container>
     )
 }

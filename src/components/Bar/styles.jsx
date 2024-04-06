@@ -1,14 +1,14 @@
-import { Stack, styled } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
 
 export const StylesBar = {
 
-    conatiner: styled(Stack)(({})=> ({
-        width: '100%',
+    conatiner: styled(Box)(({})=> ({
         display: 'flex',
-        justifyContent:'space-between',
+        justifyContent:'center',
         alignItems: 'center',
-        height: 'auto',
-        paddingBlock: '12px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.125)',
+        flexDirection: 'row',
+        width: '100%',
+        height: '80px',
+  
     }))
 }

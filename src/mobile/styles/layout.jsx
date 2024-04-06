@@ -89,5 +89,6 @@ export const LayoutMobile = {
         marginRight: '4px',
         borderRadius: '50%'
     })),
+ 
 
 }
