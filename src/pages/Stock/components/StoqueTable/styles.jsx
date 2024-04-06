@@ -51,6 +51,7 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     gap: '4px',
     width: '100%',
     height: '100%',
+    fontSize: '14px',
     fontFamily: Root.fontFamilyMonospace,
     boxSizing: 'border-box',
     whiteSpace: 'nowrap',

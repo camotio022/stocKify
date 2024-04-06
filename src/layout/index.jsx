@@ -14,6 +14,7 @@ import { MuiSelectItem, MuiSelectItemOption, MuiSelectItemOptions, MuiStockModal
 import { ModalZindex } from "../components/Modal/index.jsx"
 import { Mobile } from "../mobile/layout/index.jsx"
 import { LayoutMobile } from "../mobile/styles/layout.jsx"
+import { UserItens } from "./components/user/index.jsx"
 export const MainLayout = ({ childrens }) => {
     const location = useLocation()
     const {
@@ -68,10 +69,11 @@ export const MainLayout = ({ childrens }) => {
                     height: '85%',
                     width: '100%',
                 }}>
-                    <LayoutMobile._bigTitle>
+                    <LayoutMobile._bigTitle cor>
                         Junta Mais
                     </LayoutMobile._bigTitle>
                 </Stack>
+                <UserItens />
             </Tag.AppBar>
             <Tag.MuiMainLayoutRitghStep>
                 <Tag.MuiMainLayoutLogo>

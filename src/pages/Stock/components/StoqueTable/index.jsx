@@ -16,7 +16,7 @@ export const EstoqueTable = ({
     const tableRef = useRef(null);
     const headerInfos = [
         'Id',
-        'Categória',
+        'Categoria',
         'Nome do alimento',
         'Quantidade',
         'Data de Validade',
@@ -43,6 +43,7 @@ export const EstoqueTable = ({
             boxSizing: 'border-box',
             backgroundColor: Root.color_default,
             borderRadius: '4px',
+            paddingInline: '4px',
             color: Root.color_button,
         }} ref={tableRef}>
             {options && <Options
