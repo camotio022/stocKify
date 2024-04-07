@@ -30,13 +30,14 @@ export const MuiTableClhild = styled(Box)(({ }) => ({
 
     boxSizing: 'border-box'
 }))
-export const MuiTableRow = styled(Box)(({ }) => ({
+export const MuiTableRow = styled(Box)(({ index }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '12px',
     width: '100%',
     height: '40px',
+    backgroundColor: index % 2 === 1 && Root.tableBg,
     '&:hover': {
         backgroundColor: Root.color_button_opacity,
         transition: 'all .3s',

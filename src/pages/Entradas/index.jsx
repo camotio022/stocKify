@@ -67,6 +67,7 @@ export const Entradas = () => {
                 <MuiRowTable>
                     {entradas.map((item, index) => (
                         <MuiTableRow
+                        index={index+1}
                             sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
                             key={index}>
                             {Object.entries(item).map(([key, value], i) => {

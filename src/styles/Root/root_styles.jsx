@@ -3,6 +3,7 @@ import { grey } from "@mui/material/colors";
 export const Root = {
   containTask: 'white',
   gray_desfius: '#A8ADB3',
+  tableBg: 'rgba(128, 128, 128, 0.1)',
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
   color_button: 'orange',

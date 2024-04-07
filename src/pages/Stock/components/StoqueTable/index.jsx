@@ -77,6 +77,7 @@ export const EstoqueTable = ({
             <MuiRowTable>
                 {stock.map((item, index) => (
                     <MuiTableRow
+                        index={index+1}
                         onClick={() => focusItem(index)}
                         sx={selectedItems.includes(item.id) || (focus === index) ? {
                             border: `1px dashed ${Root.color_button}`,

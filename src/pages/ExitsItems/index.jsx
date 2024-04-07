@@ -100,6 +100,7 @@ export const ExitsItems = ({
                     <MuiRowTable>
                         {saidas.map((item, index) => (
                             <MuiTableRow
+                            index={index+1}
                                 onClick={() => focusItem(index)}
                                 sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
                                 key={index}>
