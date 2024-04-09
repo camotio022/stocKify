@@ -2,11 +2,11 @@ import { Close, Details, GetAppOutlined, InsertEmoticon, LeakRemove, List, Playl
 import { TagsNewItem } from "../../pages/NewItem/styles"
 import { StylesOptions } from "./stylesOptions"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { RemoveItems } from "./components/Remove"
 import { Root } from "../../styles/Root/root_styles"
 import { doc, onSnapshot } from "firebase/firestore"
 import { db } from "../../../firebase_config"
+import { MyLists } from "./components/Lists"
 export const Options = ({ name, setOptions, optionItem }) => {
     const [paper, setPaper] = useState(false)
     const [details, setDetails] = useState(false)
@@ -50,6 +50,7 @@ export const Options = ({ name, setOptions, optionItem }) => {
                         {name} para lista:
                     </StylesOptions.title>
                     <StylesOptions.divider />
+                    <MyLists/>
                 </StylesOptions.paper>}
                 <StylesOptions.paper>
                     <TagsNewItem.close onClick={() => setOptions(null)}>

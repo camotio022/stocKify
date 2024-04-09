@@ -48,6 +48,19 @@ export const Root = {
     backgroundColor: 'orange',
     color: '#fff',
   },
+  defaultBotton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: '8px',
+    minWidth: 'auto',
+    height: '24px',
+    padding: '8px',
+    backgroundColor: 'orange',
+    color: '#fff',
+    borderRadius: '4px',
+  },
   scrollBar: {
     '&::-webkit-scrollbar': {
       width: '5px',
@@ -55,7 +68,6 @@ export const Root = {
       borderRadius: '6px',
       backgroundColor: 'orange',
     },
-
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'orange',
       borderRadius: '6px',

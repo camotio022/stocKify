@@ -25,7 +25,7 @@ export const StylesOptions = {
         justifyContent:  'flex-start',
         flexDirection: 'column',
         minHeight: '55%',
-        minWidth: '300px',
+        width: '300px',
         padding: '7px',
         backgroundColor: Root.color_default,
         color: Root.color_button,
