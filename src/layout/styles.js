@@ -30,7 +30,7 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     alignItems: 'flex-end',
     justifyContent: 'center',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '3px',
     paddingBlock: '4px',
     marginTop: '36px',
     width: '100%',
@@ -67,7 +67,7 @@ export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     justifyContent: 'center',
     width: '100%',
     bottom: '36px',
-    gap: '20px',
+    gap: '3px',
     color: Root.gray,
     cursor: 'pointer'
 }))

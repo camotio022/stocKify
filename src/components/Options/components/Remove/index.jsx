@@ -53,7 +53,6 @@ export const RemoveItems = ({ item, setRemove }) => {
 
         <StylesOptions.paper sx={{
             minHeight: '55%',
-            maxWidth: '200px',
             gap: 1
         }}>
             <TagsNewItem.close onClick={() => setRemove(false)}>
