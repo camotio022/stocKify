@@ -1,4 +1,4 @@
-import { collection, getDocs, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, getDocs, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase_config";
 
 export const my_lists = {
@@ -14,5 +14,18 @@ export const my_lists = {
         console.error("userId não fornecido.");
         return [];
     },
-    
+    addItemToList: async (listId, newItem) => {
+        try {
+            if (!listId || !newItem) {
+                throw new Error("ID da lista ou novo item não fornecido.");
+            }
+            const listRef = doc(db, "lists", listId);
+            await updateDoc(listRef, {
+                listItens: arrayUnion(newItem)
+            });
+            console.log("Item adicionado com sucesso à lista", listId);
+        } catch (error) {
+            console.error("Erro ao adicionar/atualizar item na lista:", error.message);
+        }
+    }
 }

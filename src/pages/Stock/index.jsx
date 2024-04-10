@@ -62,9 +62,10 @@ export const Stock = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            height: '100%',
+
             width: '100%',
-            ...Root.scrollBar
+            ...Root.scrollBar,
+            border: '2px solid white'
         }}>
             <EstoqueTable
                 setStock={setStock}

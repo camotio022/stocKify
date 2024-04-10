@@ -50,7 +50,7 @@ export const Options = ({ name, setOptions, optionItem }) => {
                         {name} para lista:
                     </StylesOptions.title>
                     <StylesOptions.divider />
-                    <MyLists/>
+                    <MyLists item={optionItem}/>
                 </StylesOptions.paper>}
                 <StylesOptions.paper>
                     <TagsNewItem.close onClick={() => setOptions(null)}>

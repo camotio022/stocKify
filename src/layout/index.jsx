@@ -87,7 +87,6 @@ export const MainLayout = ({ childrens }) => {
                                             color: Root.color_button,
                                             backgroundColor: Root.color_app_bar,
                                             fontWeight: 'bold',
-                                            boxShadow: Root.boxS,
                                             height: '50px'
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>

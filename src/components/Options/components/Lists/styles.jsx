@@ -23,7 +23,9 @@ export const StylesLists = {
         transition: 'all .4s',
         transition: 'height width 0.4s',
         marginBottom: '12px',
+        boxSizing: 'border-box',
         overflow: 'auto',
+        overflowX: 'hidden',
         ...Root.scrollBar
     })),
     headerInfos: styled(Stack)(({ }) => ({
@@ -71,27 +73,39 @@ export const StylesLists = {
     tagDescription: styled(Stack)(({})=> ({
         position: 'relative',
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
         flexWrap: 'wrap',
-        maxWidth: '288px',
+        width: '288px',
         padding: '12px',
         height: 'auto',
         fontFamily: 'Arial, sans-serif',
         fontSize: '13px',
         lineHeight: '1.6',
         color: Root.gray_desfius,
+        zIndex: '99999'
     })),
-    tagDescriptionButton: styled(Stack)(({})=> ({
+    tagDescriptionButton: styled(MenuItem)(({})=> ({
         marginTop: '12px',
-        bottom: '12px',
-        right: '12px',
         display: 'flex',
         alignItems: 'center',
         backgroundColor: Root.color_button,
         color: Root.color_default,
         padding: '4px',
         ...Root.hoverReverse,
-        zIndex: '99999'
+    })),
+    tagDescriptionInput: styled('input')(({})=> ({
+        outline: 'none',
+        border: 'none',
+        marginTop: '12px',
+        bottom: '12px',
+
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: Root.color_button,
+        color: Root.color_default,
+        padding: '4px',
+        ...Root.hoverReverse,
     }))
 }

@@ -7,11 +7,14 @@ import { AuthContext } from "../../../../auth_context"
 import { collection, onSnapshot, query, where } from "firebase/firestore"
 import { db } from "../../../../../firebase_config"
 import { descriptionsTypeLists } from "./descriptionsTypeLists"
+import { my_lists } from "../../../../api/lists/get"
 
-export const MyLists = ({ }) => {
+export const MyLists = ({ item }) => {
     const [lists, setLists] = useState([])
     const { user } = useContext(AuthContext)
+    const [value, setValue] = useState(0)
     const [openDs, setOpenDs] = useState('')
+    const [progress, setProgress] = useState(false)
     const getLists = async (id) => {
         if (!id) {
             console.error("userId não fornecido.");
@@ -49,6 +52,26 @@ export const MyLists = ({ }) => {
         }
         setOpenDs(i.listName)
     }
+    const handleAddList = async (list, i) => {
+        if (!list.id) return;
+        setProgress(true)
+        try {
+
+            const newItemInList = {
+                idItem: i.id,
+                name: i.nome,
+                category: i.categoria,
+                quantidade: value
+            }
+            await my_lists.addItemToList(list.id, newItemInList)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setProgress(false)
+            setValue('')
+        }
+    }
+
     return (
         <Fragment>
             <StylesLists.headerInfos direction={'row'}>
@@ -63,31 +86,42 @@ export const MyLists = ({ }) => {
                     const icon = iconType[list.type]
                     const description = descriptionsTypeLists[list.type]
                     return (
-                        <StylesLists.listContain key={index} onClick={() => openDescription(list)} sx={{
+                        <StylesLists.listContain key={index} sx={{
                             backgroundColor: (openDs === list.listName) && Root.color_button_opacity,
                             borderLeft: `5px solid ${Root.color_button}`,
                             boxSizing: 'border-box'
-                            
+
                         }}>
-                            <StylesLists.menuItem sx={(openDs === list.listName) && {
+                            <StylesLists.menuItem onClick={() => openDescription(list)} sx={(openDs === list.listName) && {
                                 backgroundColor: Root.color_button,
                                 color: Root.color_default,
                                 borderRadius: '0px',
-                                
                             }}
                             >
                                 {list.listName} {icon}
                             </StylesLists.menuItem>
                             {(openDs === list.listName) && <StylesLists.tagDescription>
-                                {description}
-                                <StylesLists.tagDescriptionButton>
-                                    Adicionar
-                                </StylesLists.tagDescriptionButton>
+                                <Stack sx={{ width: '88%' }}>{description}</Stack>
+                                <Stack direction={'row'}>
+                                    <StylesLists.tagDescriptionInput
+                                        value={value}
+                                        type="number"
+                                        onChange={(e) => setValue(e.target.value)}
+                                        placeholder="Digite a quantidade" />
+                                    <StylesLists.tagDescriptionButton
+
+                                        disabled={!value}
+                                        onClick={() => handleAddList(list, item)}
+                                    >
+                                        {progress? 'loading...':'Adicionar'}
+                                    </StylesLists.tagDescriptionButton>
+                                </Stack>
                             </StylesLists.tagDescription>}
                         </StylesLists.listContain>
                     )
                 })}
             </StylesLists.contain>
+
             <StylesLists.button>
                 <Add /> Nova Lista
             </StylesLists.button>

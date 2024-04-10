@@ -44,7 +44,7 @@ export const EstoqueTable = ({
             boxSizing: 'border-box',
             backgroundColor: Root.color_default,
             borderRadius: '4px',
-            paddingInline: '4px',
+
             color: Root.color_button,
         }} ref={tableRef}>
             {options && <Options
@@ -122,6 +122,7 @@ export const EstoqueTable = ({
                             }}
                             sx={{
                                 width: '50%',
+                                alignItems: 'center',
                                 ...Root.hoverReverse
                             }}>
                             <MoreHoriz />

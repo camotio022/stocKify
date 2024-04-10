@@ -66,81 +66,77 @@ export const ExitsItems = ({
         animation: 'dash 2s infinite'
     }
     return (
-        <TagsExits.container sx={{
-            backgroundColor: Root.color_default
-        }}>
-            <TagsExits.containerTable sx={{
-                mt: selectedItems.length > 0 ? '0px' : '17px',
-            }}>
-                <TableContainer sx={{
-                    ...Root.scrollBar,
-                    width: '100%',
-                    boxSizing: 'border-box'
-                }} ref={tableRef}>
-                    <MuiHeaderTable>
-                        <MuiTableClhild sx={{
-                            width: '50%',
 
+        <TableContainer sx={{
+            backgroundColor: Root.color_default,
+            ...Root.scrollBar,
+            width: '100%',
+            boxSizing: 'border-box',
+            border: '2px solid white'
+        }} ref={tableRef}>
+            <MuiHeaderTable>
+                <MuiTableClhild sx={{
+                    width: '50%',
+
+                }}>
+                    <Checkbox
+                        sx={{
+                            color: Root.color_button
+                        }}
+                        onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            const newSelectedItems = isChecked ? saidas.map(item => item.item) : [];
+                            setSelectedItems(newSelectedItems);
+                        }}
+                    />
+                </MuiTableClhild>
+                {headerInfos.map((header, index) => (
+                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
+                ))}
+            </MuiHeaderTable>
+            <MuiRowTable>
+                {saidas.map((item, index) => (
+                    <MuiTableRow
+                        index={index + 1}
+                        onClick={() => focusItem(index)}
+                        sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
+                        key={index}>
+                        <MuiTableRowCell sx={{
+                            width: '50%',
+                            color: Root.color_button,
                         }}>
                             <Checkbox
                                 sx={{
                                     color: Root.color_button
                                 }}
-                                onChange={(e) => {
-                                    const isChecked = e.target.checked;
-                                    const newSelectedItems = isChecked ? saidas.map(item => item.item) : [];
-                                    setSelectedItems(newSelectedItems);
-                                }}
+                                checked={selectedItems.includes(item.item)}
+                                onChange={() => handleCheckboxChange(item.item)}
                             />
-                        </MuiTableClhild>
-                        {headerInfos.map((header, index) => (
-                            <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
-                        ))}
-                    </MuiHeaderTable>
-                    <MuiRowTable>
-                        {saidas.map((item, index) => (
-                            <MuiTableRow
-                            index={index+1}
-                                onClick={() => focusItem(index)}
-                                sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
-                                key={index}>
-                                <MuiTableRowCell sx={{
-                                    width: '50%',
-                                    color: Root.color_button
-                                }}>
-                                    <Checkbox
-                                        sx={{
-                                            color: Root.color_button
-                                        }}
-                                        checked={selectedItems.includes(item.item)}
-                                        onChange={() => handleCheckboxChange(item.item)}
-                                    />
-                                </MuiTableRowCell>
-                                {Object.entries(item).map(([key, value], i) => {
-                                    if (key === 'dataRetirada') {
-                                        return (
-                                            <MuiTableRowCell key={i}>
-                                                {item.dataRetirada}/{item.horaRetirada ? item.horaRetirada : 'null'}
-                                            </MuiTableRowCell>
-                                        )
-                                    }
-                                    if (key !== 'id' && key !== 'horaRetirada') {
-                                        return (
-                                            <MuiTableRowCell key={i}>{
-                                                key === 'quantidade' ? (item.quantidade > 1
-                                                    ? `${item.quantidade} unidades`
-                                                    : `${item.quantidade} unidade`)
-                                                    : value
-                                            }</MuiTableRowCell>
-                                        );
-                                    }
-                                    return null;
-                                })}
-                            </MuiTableRow>
-                        ))}
-                    </MuiRowTable>
-                </TableContainer>
-            </TagsExits.containerTable>
-        </TagsExits.container>
+                        </MuiTableRowCell>
+                        {Object.entries(item).map(([key, value], i) => {
+                            if (key === 'dataRetirada') {
+                                return (
+                                    <MuiTableRowCell key={i}>
+                                        {item.dataRetirada}/{item.horaRetirada ? item.horaRetirada : 'null'}
+                                    </MuiTableRowCell>
+                                )
+                            }
+                            if (key !== 'id' && key !== 'horaRetirada') {
+                                return (
+                                    <MuiTableRowCell key={i}>{
+                                        key === 'quantidade' ? (item.quantidade > 1
+                                            ? `${item.quantidade} unidades`
+                                            : `${item.quantidade} unidade`)
+                                            : value
+                                    }</MuiTableRowCell>
+                                );
+                            }
+                            return null;
+                        })}
+                    </MuiTableRow>
+                ))}
+            </MuiRowTable>
+        </TableContainer>
+
     )
 }

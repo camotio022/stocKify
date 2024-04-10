@@ -22,7 +22,6 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     height: '100%',
     backgroundColor: Root.color_default,
     color: Root.color_button,
-    fontFamily: Root.fontFamilyMonospace
 }))
 export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -34,7 +33,8 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     paddingBlock: '4px',
     marginTop: '36px',
     width: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+
 }))
 export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',
@@ -48,14 +48,12 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     paddingLeft: '4px',
     borderTopLeftRadius: '4px',
     borderBottomLeftRadius: '4px',
-    fontSize: '15px',
+    fontSize: '14px',
     color: Root.gray,
     textDecoration: 'none',
-
     ...Root.hoverReverse,
     ":hover": {
         color: Root.color_button,
-        boxShadow: Root.boxS,
         height: '50px',
         backgroundColor: Root.color_app_bar,
     }
@@ -98,7 +96,7 @@ export const AppBar = styled(Stack)(({ }) => ({
 export const RenderChildrensAndNavBar = styled(Stack)(({})=> ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
     gap: '12px',
     width: '100%',

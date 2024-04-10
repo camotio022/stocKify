@@ -4,7 +4,7 @@ import { TableContainer } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
 import { collection, onSnapshot } from "firebase/firestore";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
-import { ArrowDropDown } from "@mui/icons-material";
+import { ArrowDropDown, CheckBox } from "@mui/icons-material";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 export const Entradas = () => {
@@ -50,49 +50,69 @@ export const Entradas = () => {
         return () => unsubscribe();
     }, []);
     return (
-        <TagsExits.container sx={{
+
+        <TableContainer sx={{
+            ...Root.scrollBar,
+            width: '1oo%',
+            boxSizing: 'border-box',
             backgroundColor: Root.color_default,
             borderRadius: '4px',
-        }}>
-            <TableContainer sx={{
-                ...Root.scrollBar,
-                width: '98%',
-                boxSizing: 'border-box'
-            }} ref={tableRef}>
-                <MuiHeaderTable>
-                    {headerkeys.map((header, index) => (
-                        <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
-                    ))}
-                </MuiHeaderTable>
-                <MuiRowTable>
-                    {entradas.map((item, index) => (
-                        <MuiTableRow
-                        index={index+1}
-                            sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
-                            key={index}>
-                            {Object.entries(item).map(([key, value], i) => {
-                                if (key === 'author') {
-                                    return (
-                                        <MuiTableRowCell key={i}>
-                                            {item.author.userName}
-                                        </MuiTableRowCell>
-                                    );
-                                }
+            border: '2px solid white'
+        }} ref={tableRef}>
+            <MuiHeaderTable>
+                <MuiTableClhild sx={{
+                    width: '50%',
+                    ml: '12px'
+                }}>
+                    <CheckBox
+                        sx={{
+                            color: Root.color_button
+                        }}
+                    />
+                </MuiTableClhild>
+                {headerkeys.map((header, index) => (
+                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
+                ))}
+            </MuiHeaderTable>
+            <MuiRowTable>
+                {entradas.map((item, index) => (
+                    <MuiTableRow
+                        index={index + 1}
+                        sx={selectedItems.includes(item.item) || (focus === index) ? selectSx : null}
+                        key={index}>
+                        <MuiTableClhild sx={{
+                            width: '50%',
+                            ml: '12px'
+                        }}>
+                            <CheckBox
+                                sx={{
+                                    color: Root.color_button
+                                }}
+                                checked={false}
+                            />
+                        </MuiTableClhild>
+                        {Object.entries(item).map(([key, value], i) => {
+                            if (key === 'author') {
                                 return (
-                                    <MuiTableRowCell key={i}>{
-                                        key === 'quantidade' ? (item.quantidade > 1
-                                            ? `${item.quantidade} unidades`
-                                            : `${item.quantidade} unidade`)
-                                            : value
-                                    }</MuiTableRowCell>
+                                    <MuiTableRowCell key={i}>
+                                        {item.author.userName}
+                                    </MuiTableRowCell>
                                 );
+                            }
+                            return (
+                                <MuiTableRowCell key={i}>{
+                                    key === 'quantidade' ? (item.quantidade > 1
+                                        ? `${item.quantidade} unidades`
+                                        : `${item.quantidade} unidade`)
+                                        : value
+                                }</MuiTableRowCell>
+                            );
 
-                                return null;
-                            })}
-                        </MuiTableRow>
-                    ))}
-                </MuiRowTable>
-            </TableContainer>
-        </TagsExits.container>
+                            return null;
+                        })}
+                    </MuiTableRow>
+                ))}
+            </MuiRowTable>
+        </TableContainer>
     )
 }
