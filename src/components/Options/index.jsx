@@ -7,19 +7,20 @@ import { Root } from "../../styles/Root/root_styles"
 import { doc, onSnapshot } from "firebase/firestore"
 import { db } from "../../../firebase_config"
 import { MyLists } from "./components/Lists"
+import { QRCodeReaderData } from "./components/Qr_code"
 export const Options = ({ name, setOptions, optionItem }) => {
     const [paper, setPaper] = useState(false)
     const [details, setDetails] = useState(false)
     const [remove, setRemove] = useState(false)
     const [docs, setDocs] = useState({});
-
+    const [qr, setQr] = useState(false)
     const items = [
         { onclick: 'details', name: 'Detalhes', icon: <Details /> },
         { onclick: 'toremove', name: 'Retirar do estoque', icon: <Remove /> },
         { onclick: 'list', name: 'Adicionar na lista', icon: <PlaylistAdd /> },
         { onclick: null, name: 'Supervisionar este item', icon: <ProductionQuantityLimits /> },
         { onclick: null, name: 'Vazamento de estoque', icon: <LeakRemove /> },
-        { onclick: null, name: 'Código de barras', icon: <QrCode2 /> },
+        { onclick: 'qr', name: 'Código de barras', icon: <QrCode2 /> },
     ]
     const listenToChanges = (id) => {
         const stockDocRef = doc(db, 'stock', id);
@@ -50,7 +51,10 @@ export const Options = ({ name, setOptions, optionItem }) => {
                         {name} para lista:
                     </StylesOptions.title>
                     <StylesOptions.divider />
-                    <MyLists item={optionItem}/>
+                    <MyLists item={optionItem} />
+                </StylesOptions.paper>}
+                {qr&&<StylesOptions.paper>
+                    <QRCodeReaderData data={optionItem} />
                 </StylesOptions.paper>}
                 <StylesOptions.paper>
                     <TagsNewItem.close onClick={() => setOptions(null)}>
@@ -73,9 +77,9 @@ export const Options = ({ name, setOptions, optionItem }) => {
                         }
                         return (
                             <StylesOptions.item sx={((item.onclick === 'toremove' && remove) ||
-                            (item.onclick === 'list' && paper))
-                            &&{
-                                borderLeft:  '3px solid',
+                                (item.onclick === 'list' && paper))
+                                && {
+                                borderLeft: '3px solid',
                                 boxShadow: Root.boxS
                             }} onClick={
                                 () => {
@@ -87,6 +91,9 @@ export const Options = ({ name, setOptions, optionItem }) => {
                                     }
                                     if (item.onclick === 'toremove') {
                                         setRemove(!remove)
+                                    }
+                                    if(item.onclick === 'qr'){
+                                        setQr(!qr)
                                     }
                                 }
                             }>
