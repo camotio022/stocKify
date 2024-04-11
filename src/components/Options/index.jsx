@@ -53,7 +53,21 @@ export const Options = ({ name, setOptions, optionItem }) => {
                     <StylesOptions.divider />
                     <MyLists item={optionItem} />
                 </StylesOptions.paper>}
-                {qr&&<StylesOptions.paper>
+                {qr && <StylesOptions.paper sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '24px'
+                }}>
+                    <TagsNewItem.close onClick={() => setQr(false)}>
+                        <Close fontSize="10px" />
+                    </TagsNewItem.close>
+                    <StylesOptions.title sx={{
+                        width: '80%',
+                        textAlign: 'center'
+                    }}>
+                        Escaneie o código abaixo para continuar.
+                    </StylesOptions.title>
                     <QRCodeReaderData data={optionItem} />
                 </StylesOptions.paper>}
                 <StylesOptions.paper>
@@ -76,8 +90,11 @@ export const Options = ({ name, setOptions, optionItem }) => {
                             )
                         }
                         return (
-                            <StylesOptions.item sx={((item.onclick === 'toremove' && remove) ||
-                                (item.onclick === 'list' && paper))
+                            <StylesOptions.item sx={(
+                                (item.onclick === 'toremove' && remove) ||
+                                (item.onclick === 'list' && paper) ||
+                                (item.onclick === 'qr' && qr)
+                            )
                                 && {
                                 borderLeft: '3px solid',
                                 boxShadow: Root.boxS
@@ -92,7 +109,7 @@ export const Options = ({ name, setOptions, optionItem }) => {
                                     if (item.onclick === 'toremove') {
                                         setRemove(!remove)
                                     }
-                                    if(item.onclick === 'qr'){
+                                    if (item.onclick === 'qr') {
                                         setQr(!qr)
                                     }
                                 }

@@ -7,6 +7,7 @@ import { Stock } from "../pages/Stock"
 import { ExitsItems } from "../pages/ExitsItems"
 import { DetailsItems } from "../pages/details"
 import { Entradas } from "../pages/Entradas"
+import { ItemQrCode } from "../pages/Qr_Code"
 
 export const MainRoutes = () => {
     const auth = useContext(AuthContext)
@@ -19,6 +20,8 @@ export const MainRoutes = () => {
                         <Route path="/entradas" element={<Entradas />} />
                         <Route path="/exits" element={<ExitsItems />} />
                         <Route path="/details/:id" element={<DetailsItems/>}/>
+                        <Route path="/detailsItem/:id" element={<ItemQrCode/>}/>
+
                     </Routes>
                 </>
             } />

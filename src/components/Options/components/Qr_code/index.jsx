@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import QRCode from 'qrcode.react';
 
 export const QRCodeReaderData = ({ data }) => {
-    let dataString = JSON.stringify(data);
+    const link = `https://stoc-kify-juntamias.vercel.app/details/${data.id}`
     return (
         <div>
-            <QRCode value={dataString}
+            <QRCode value={link}
                 delay={300}
                 style={{ width: '100%' }}
             />
