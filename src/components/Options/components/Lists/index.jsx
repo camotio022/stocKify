@@ -39,7 +39,7 @@ export const MyLists = ({ item }) => {
         to_sell: <AttachMoney />,
         to_sample: <Hd />,
         to_donate: <CardGiftcard />,
-        to_donate: <FavoriteBorder />,
+        to_donates: <FavoriteBorder />,
         to_consume: <Restaurant />,
         to_customize: <Build />,
         to_repurpose: <Cached />,

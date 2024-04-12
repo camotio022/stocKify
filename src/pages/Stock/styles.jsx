@@ -125,7 +125,7 @@ export const MuiInputNative = styled('input')(({ }) => ({
     height: '75%',
     width: '100%',
     borderRadius: '4px',
-    'border': `1px solid ${Root.color_button_opacity}`,
+    border: `1px solid ${Root.color_button_opacity}`,
     backgroundColor: Root.color_app_bar,
     color: Root.color_button,
     fontWeight: 'bold',
