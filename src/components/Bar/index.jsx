@@ -12,7 +12,6 @@ export const NavBarTop = ({
     setNewItem
 }) => {
     const location = useLocation()
-    const [canShow, setCanShow] = useState(false)
     const isRoutesNow = [
         {
             label: 'Todos os items do estoque',

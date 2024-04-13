@@ -62,7 +62,7 @@ export const LayoutMobile = {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         textAlign: 'center',
-        fontFamily: 'cursive',
+        fontFamily: 'a',
         width: '90%',
         fontSize: '2.8rem',
         color: 'transparent',

@@ -1,4 +1,4 @@
-import { Stack, Typography, styled } from "@mui/material";
+import { Stack, Typography, styled, MenuItem} from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
 
 export const MuiModalZindex = styled(Stack)(({ }) => ({
@@ -92,7 +92,7 @@ export const MuiModalInpExtensionChecked = styled(Stack)(({ }) => ({
     cursor: 'pointer',
     ...Root.hover
 }))
-export const MuiModalSave = styled(Stack)(({ }) => ({
+export const MuiModalSave = styled(MenuItem)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

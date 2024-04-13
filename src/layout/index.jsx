@@ -15,6 +15,7 @@ import { ModalZindex } from "../components/Modal/index.jsx"
 import { Mobile } from "../mobile/layout/index.jsx"
 import { LayoutMobile } from "../mobile/styles/layout.jsx"
 import { UserItens } from "./components/user/index.jsx"
+import { NotificationsApp } from "../pages/Notifications/index.jsx"
 export const MainLayout = ({ childrens }) => {
     const location = useLocation()
     const {
@@ -130,6 +131,7 @@ export const MainLayout = ({ childrens }) => {
                         setSaveExcel={setSaveExcel}
                         saveExcel={saveExcel}
                     />
+                    <NotificationsApp/>
                     {childrens}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>

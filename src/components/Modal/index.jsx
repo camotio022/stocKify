@@ -95,9 +95,9 @@ export const ModalZindex = ({
                 </MuiModalInpExtension>
                 <MuiModalSave sx={{
                     backgroundColor:
-                        !extension ||
+                        (!extension ||
                             !fillname ||
-                            !naoTemEspacos(fillname) ?
+                            !naoTemEspacos(fillname)) ?
                             Root.color_button_opacity : Root.color_button,
                     color: Root.white,
                     fontFamily: Root.fontFamilyMonospace
@@ -117,7 +117,7 @@ export const ModalZindex = ({
                             setOpen(true)
                             success()
                         }
-                    } else {
+                    } else if(extension === 'pdf') {
                         try {
                             DownloadPDF(downloads.estoque, fillname)
                         } catch (error) {

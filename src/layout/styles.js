@@ -77,9 +77,9 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     gap: '1vw',
     flexDirection: 'row',
     width: '100vw',
-    height: '92vh',
+    height: '90vh',
     paddingInline: '18px',
-    marginTop: '8vh'
+    marginTop: '10vh'
 }))
 export const AppBar = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -90,10 +90,11 @@ export const AppBar = styled(Stack)(({ }) => ({
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: '100vw',
-    height: '8vh',
+    height: '10vh',
     backgroundColor: Root.color_default,
 }))
 export const RenderChildrensAndNavBar = styled(Stack)(({})=> ({
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
