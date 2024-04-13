@@ -25,7 +25,9 @@ export const MainLayout = ({ childrens }) => {
         saveExcel,
         setSaveExcel,
         selectedItems,
-        matches
+        matches,
+        notifications, setNotifications,
+        messages, setMessage
     } = useContext(AuthContext)
     const paths = [
         {
@@ -131,7 +133,7 @@ export const MainLayout = ({ childrens }) => {
                         setSaveExcel={setSaveExcel}
                         saveExcel={saveExcel}
                     />
-                    <NotificationsApp/>
+                    {notifications&&<NotificationsApp />}
                     {childrens}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>

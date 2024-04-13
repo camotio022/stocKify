@@ -13,6 +13,8 @@ export const AuthProvider = ({ children }) => {
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
     const [selectedItems, setSelectedItems] = useState([]);
+    const [notifications, setNotifications] = useState(false)
+    const [messages, setMessage] = useState(false)
     const [downloads, setDownloads] = useState({
         estoque: [],
         entradas: [],
@@ -147,7 +149,9 @@ export const AuthProvider = ({ children }) => {
                 setSelectedItems,
                 downloads,
                 setDownloads,
-                matches
+                matches,
+                notifications, setNotifications,
+                messages, setMessage
             }}
         >
             {children}

@@ -6,7 +6,7 @@ import { AuthContext } from "../../../auth_context"
 import { StyleUser } from "./style"
 
 export const UserItens = ({ }) => {
-    const { user } = useContext(AuthContext)
+    const { user, setNotifications,notifications } = useContext(AuthContext)
     const firstLatter = user.name.split(' ')[0]
     const secondLatter = user.name.split(' ')[1]
     const centerRow = {
@@ -18,12 +18,20 @@ export const UserItens = ({ }) => {
     }
     return (
         <StyleUser.contain>
-            <MailOutline />
-            <Notifications />
+            <StyleUser.item onClick >
+                <MailOutline />
+            </StyleUser.item >
+            <StyleUser.item sx={notifications&&{
+                backgroundColor: Root.color_button,
+                color: Root.color_default,
+            }} onClick={()=> setNotifications(!notifications)}>
+                <Notifications />
+            </StyleUser.item>
+
             <Stack sx={{ ...centerRow, width: 'auto' }}>
                 <StyleUser.avatar>
                     {firstLatter[0]}
-                    {secondLatter? secondLatter[0] : ''}
+                    {secondLatter ? secondLatter[0] : ''}
                 </StyleUser.avatar>
 
             </Stack>
