@@ -4,9 +4,10 @@ import { Root } from "../../../styles/Root/root_styles"
 import { useContext } from "react"
 import { AuthContext } from "../../../auth_context"
 import { StyleUser } from "./style"
+import { notificationsMasks } from "../../../pages/Notifications/mask"
 
 export const UserItens = ({ }) => {
-    const { user, setNotifications,notifications } = useContext(AuthContext)
+    const { user, setNotifications, notifications } = useContext(AuthContext)
     const firstLatter = user.name.split(' ')[0]
     const secondLatter = user.name.split(' ')[1]
     const centerRow = {
@@ -16,15 +17,17 @@ export const UserItens = ({ }) => {
         flexDirection: 'row',
         gap: '12px',
     }
+    const isRead = notificationsMasks.filter((item) => item.isRead === true)
     return (
         <StyleUser.contain>
             <StyleUser.item onClick >
                 <MailOutline />
             </StyleUser.item >
-            <StyleUser.item sx={notifications&&{
+            <StyleUser.item sx={notifications && {
                 backgroundColor: Root.color_button,
                 color: Root.color_default,
-            }} onClick={()=> setNotifications(!notifications)}>
+            }} onClick={() => setNotifications(!notifications)}>
+                {isRead.length > 0 && <StyleUser.isRead />}
                 <Notifications />
             </StyleUser.item>
 

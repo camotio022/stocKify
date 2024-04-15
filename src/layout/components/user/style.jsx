@@ -14,6 +14,7 @@ export const StyleUser = {
         color: Root.color_button
     })),
     item: styled(Stack)(({ }) => ({
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -22,6 +23,20 @@ export const StyleUser = {
         backgroundColor: Root.color_app_bar,
         color: Root.color_button,
         ...Root.hover
+    })),
+    isRead: styled(Stack)(({})=> ({
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        padding: '4px',
+        backgroundColor: Root.red,
+        color: Root.color_button,
+        ...Root.hover,
+        top: -4,
+        right:-4,
+        borderRadius: '50%',
     })),
     avatar: styled(Avatar)(({ }) => ({
         width: '38px',

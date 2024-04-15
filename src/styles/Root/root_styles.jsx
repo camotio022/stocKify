@@ -9,6 +9,7 @@ export const Root = {
   color_button: '#800080',
   color_button_secondary: "#932dd2",
   color_button_opacity: 'rgba(128, 0, 128, 0.3)',
+  color_button_opacity2: 'rgba(128, 0, 128, 0.5)',
   color_link: '#93dd2',
   subButton: 'rgba(169, 169, 169, 0.5)',
   blue: '#007bff',

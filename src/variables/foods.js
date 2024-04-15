@@ -103,6 +103,7 @@ export const alimentosCategorizados = {
         'Açúcar',
         'Sal',
         'Café',
+        'Café/Torrado/Moído',
         'Chá',
         'Óleo de cozinha',
         'Vinagre',
