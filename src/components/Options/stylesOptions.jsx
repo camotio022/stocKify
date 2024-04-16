@@ -30,7 +30,7 @@ export const StylesOptions = {
         backgroundColor: Root.color_default,
         color: Root.color_button,
         fontWeight: 'bold',
-        fontFamily: Root.fontFamilyMonospace,
+
         borderRadius: '4px',
         marginRight: '20px'
     })),

@@ -57,23 +57,11 @@ export const Stock = () => {
         )
     }
     return (
-
-        <Stack sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-
-            width: '100%',
-            ...Root.scrollBar,
-            border: '2px solid white'
-        }}>
-            <EstoqueTable
-                setStock={setStock}
-                stock={stock}
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-            />
-        </Stack>
-
+        <EstoqueTable
+            setStock={setStock}
+            stock={stock}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+        />
     )
 }
