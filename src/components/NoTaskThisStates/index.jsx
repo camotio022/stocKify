@@ -18,29 +18,24 @@ export const NoTasksFromThisState = ({
     const mobile = useMediaQuery('(max-width:600px)');
     return (
         <Box sx={{
-            width: mobile ? '90%' : 375,
+            width: mobile ? '90%' : '100%',
         }}>
-            <Card variant="outlined" sx={{border: 'none', }}>
-                <CardContent sx={{...jsx, }}>
-                    <PriorityHigh sx={{ border: `2px solid`, borderRadius: '50%', padding: 0.2}} fontSize="large" />
+            <Card variant="outlined" sx={{ border: 'none', }}>
+                <CardContent sx={{ ...jsx, }}>
+                    <PriorityHigh sx={{ border: `2px solid`, borderRadius: '50%', padding: 0.2 }} fontSize="large" />
                 </CardContent>
                 <CardContent sx={jsx} >
                     <Typography fontWeight={600} variant="h5" component="div">
-                        No {routeTasks} tasks
+                        Nenhum documento encontrado nas {routeTasks}
                     </Typography>
                     <Typography sx={{
                         ...jsx,
-                        color: Root.color_button_opacity,
+                        color: Root.color_button,
                         fontWeight: 500
                     }} color="text.secondary">
-                        Still no data to show in the outputs!!
+                        Ainda não há dados para exibir nos resultados!!
                     </Typography>
                 </CardContent>
-                {/* <Link to={'/createTask'}>
-                    <CardActions sx={{mb:1}}>
-                        <MyButton fullWidth={mobile} variant='contained' size="small">New Task</MyButton>
-                    </CardActions>
-                </Link> */}
             </Card>
         </Box>
     )

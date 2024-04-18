@@ -9,7 +9,12 @@ import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 export const Entradas = () => {
     const [entradas, setEntradas] = useState([])
-    const { user, setDownloads } = useContext(AuthContext)
+    const {
+        user,
+        setDownloads,
+        search,
+        select,
+    } = useContext(AuthContext)
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
@@ -23,32 +28,53 @@ export const Entradas = () => {
         'Quem adicionou'
     ]
     useEffect(() => {
-        const c = collection(db, 'entradas')
+        const c = collection(db, 'entradas');
         const unsubscribe = onSnapshot(c, (querySnapshot) => {
             const stockItems = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
-                return {
-                    id: doc.id,
-                    categoria: data.categoria || "",
-                    nome: data.nome || "",
-                    quantidade: data.quantidade || "",
-                    dataValidade: data.dataValidade || "",
-                    dataChegada: data.dataChegada || "",
-                    author: {
-                        userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
-                        userEmail: data.author?.userEmail || user.email,
-                        userId: data.author?.userId || user.id,
+                if (!search && !select) {
+                    return {
+                        id: doc.id,
+                        categoria: data.categoria || "",
+                        nome: data.nome || "",
+                        quantidade: data.quantidade || "",
+                        dataValidade: data.dataValidade || "",
+                        dataChegada: data.dataChegada || "",
+                        author: {
+                            userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
+                            userEmail: data.author?.userEmail || user.email,
+                            userId: data.author?.userId || user.id,
+                        }
+                    };
+                } else {
+                    if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
+                        return {
+                            id: doc.id,
+                            categoria: data.categoria || "",
+                            nome: data.nome || "",
+                            quantidade: data.quantidade || "",
+                            dataValidade: data.dataValidade || "",
+                            dataChegada: data.dataChegada || "",
+                            author: {
+                                userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
+                                userEmail: data.author?.userEmail || user.email,
+                                userId: data.author?.userId || user.id,
+                            }
+                        };
+                    } else {
+                        return null;
                     }
-                };
-            });
-            setEntradas(stockItems)
+                }
+            }).filter(item => item !== null);
+            setEntradas(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
                 entradas: stockItems,
             }));
         });
         return () => unsubscribe();
-    }, []);
+    }, [search, select]);
+
     return (
 
         <TableContainer sx={{

@@ -46,12 +46,12 @@ export const MainLayout = ({ childrens }) => {
             icon: <ExitToApp />
         },
         {
-            name: 'Insight',
+            name: 'Percepções',
             link: '/insights',
             icon: <Insights />
         },
         {
-            name: 'Histórico',
+            name: 'Históricos',
             link: '/history',
             icon: <History />
         },
@@ -105,13 +105,13 @@ export const MainLayout = ({ childrens }) => {
                     </Tag.MuiMainLayoutLinks>
                     <Tag.MuiMainLayoutSettingsUser>
                         <Tag.MuiMainLayoutLink>
-                            <Person2 /> {'Porfile'}
+                            <Person2 /> {'Minha conta'}
                         </Tag.MuiMainLayoutLink>
                         <Tag.MuiMainLayoutLink>
-                            <Settings /> {'Settings'}
+                            <Settings /> {'Configurações'}
                         </Tag.MuiMainLayoutLink>
                         <Tag.MuiMainLayoutLink>
-                            <Logout onClick={() => logout()} /> {'Logout'}
+                            <Logout onClick={() => logout()} /> {'Saír'}
                         </Tag.MuiMainLayoutLink>
                     </Tag.MuiMainLayoutSettingsUser>
                 </Tag.MuiMainLayoutLogo>

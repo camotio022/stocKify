@@ -10,7 +10,7 @@ import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
 import { LoadingTable } from "../../components/LoadingSkeletonCard";
 export const ExitsItems = () => {
     const [loading, setLoading] = useState(false)
-    const { setDownloads } = useContext(AuthContext)
+    const { setDownloads, search, select } = useContext(AuthContext)
     const [saidas, setSaidas] = useState([])
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
@@ -33,31 +33,50 @@ export const ExitsItems = () => {
         }
     };
     const fetchData = async () => {
-        setLoading(true)
-        const unsubscribe = onSnapshot(collection(db, 'saidas'), (snapshot) => {
-            const stockItems = snapshot.docs.map((doc) => {
+        setLoading(true);
+        const c = collection(db, 'saidas');
+        const unsubscribe = onSnapshot(c, (querySnapshot) => {
+            const stockItems = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
-                return {
-                    id: doc.id,
-                    nome: data.nomeItem || "",
-                    quantidade: data.quantidade || "",
-                    dataValidade: data.dataValidade || "",
-                    dataRetirada: data.dataRetirada || "",
-                    horaRetirada: data.horaRetirada || "",
-                    author: data.author.userName || "",
-                };
-            });
+                if (!search && !select) {
+                    return {
+                        id: doc.id,
+                        nome: data.nomeItem || "",
+                        quantidade: data.quantidade || "",
+                        dataValidade: data.dataValidade || "",
+                        dataRetirada: data.dataRetirada || "",
+                        horaRetirada: data.horaRetirada || "",
+                        author: data.author.userName || "",
+                    };
+                } else {
+                    if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
+                        return {
+                            id: doc.id,
+                            nome: data.nomeItem || "",
+                            quantidade: data.quantidade || "",
+                            dataValidade: data.dataValidade || "",
+                            dataRetirada: data.dataRetirada || "",
+                            horaRetirada: data.horaRetirada || "",
+                            author: data.author.userName || "",
+                        };
+                    } else {
+                        return null;
+                    }
+                }
+            }).filter(item => item !== null);
             setSaidas(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
                 saidas: stockItems,
             }));
-            setLoading(false)
-            console.log('passou')
+            setLoading(false);
+            console.log('passou');
         });
         return () => unsubscribe();
 
-    }
+    };
+
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -105,7 +124,7 @@ export const ExitsItems = () => {
                     <LoadingTable />
                     :
                     <Fragment>
-                        {saidas.length > 0 ? saidas.map((item, index) => (
+                        {saidas.map((item, index) => (
                             <MuiTableRow
                                 index={index + 1}
                                 onClick={() => focusItem(index)}
@@ -144,9 +163,8 @@ export const ExitsItems = () => {
                                     return null;
                                 })}
                             </MuiTableRow>
-                        )) : (<>
-                            <NoTasksFromThisState />
-                        </>)}
+                        ))}
+                        {(saidas.length < 0) && <NoTasksFromThisState routeTasks={'saídas'} />}
                     </Fragment>
                 }
             </MuiRowTable>

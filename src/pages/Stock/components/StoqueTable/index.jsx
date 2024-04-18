@@ -8,8 +8,10 @@ import { FormatRelativeTime } from '../../../../components/dateCalcs';
 import { Options } from '../../../../components/Options';
 
 export const EstoqueTable = ({
-    selectedItems, setSelectedItems,
+    selectedItems,
+    setSelectedItems,
     stock,
+ 
 }) => {
     const [options, setOptions] = useState('')
     const [focus, setFocus] = useState(null)

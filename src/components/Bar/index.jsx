@@ -1,18 +1,27 @@
-import { MenuItem, Stack, Typography } from "@mui/material";
-import { MuiInputNative, MuiSearch, MuiSearchContainer, MuiSearchContainerFather, MuiSearchIcon, MuiSearchIconTeep, MuiSelect, MuiSelectContainer, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, SearchIconWrapper, StyledInputBase } from "../../pages/Stock/styles";
-import { Add, Delete, FileDownload, SaveAlt, Search, Upgrade } from "@mui/icons-material";
+import { MenuItem, Typography } from "@mui/material";
+import { MuiSearch, MuiSearchContainer, MuiSelect, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, StyledInputBase } from "../../pages/Stock/styles";
+import { Add, Delete, SaveAlt, Search, Upgrade } from "@mui/icons-material";
 import { Root } from "../../styles/Root/root_styles";
 import { StylesBar } from "./styles";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../auth_context";
 export const NavBarTop = ({
     saveExcel,
     setSaveExcel,
     NewItem,
-    setNewItem
+    setNewItem,
 }) => {
-    const [select, setSelect] = useState(undefined)
+    const {
+        select,
+        setSelect,
+        search,
+        setSearch
+    } = useContext(AuthContext)
     const location = useLocation()
+    const handleSelectChange = (event) => {
+        setSelect(event.target.value);
+    };
     const isRoutesNow = [
         {
             label: 'Todos os items do estoque',
@@ -36,25 +45,26 @@ export const NavBarTop = ({
     })
     const buttons = [
         {
-            label: 'Export',
+            label: 'Baixar',
             onclick: 'Export',
             variant: null,
             icon: <Upgrade />
 
         }, {
-            label: 'Import',
+            label: 'Importar',
             onclick: null,
             variant: null,
             icon: <SaveAlt />
 
         }, {
-            label: 'Delete',
+            label: 'Deletar',
             onclick: 'Delete',
             variant: 'contained',
             icon: <Delete />
         },
     ]
     const filtres = [
+        { value: '', label: 'Sem filtro' },
         { value: 'nome', label: 'Nome', }, { value: 'categoria', label: 'Categoria', },
         { value: 'dataChegada', label: 'Data de Chegada', }, { value: 'dataValidade', label: 'Data de Validade', },
         { value: 'id', label: 'Id', }, { value: 'author', label: 'Usuário', }, { value: 'donor', label: 'Doador', },
@@ -103,7 +113,7 @@ export const NavBarTop = ({
                         labelId="outlined-select-currency-label"
                         id="outlined-select-currency"
                         value={select}
-                        onChange={(e) => setSelect(e.target.value)}
+                        onChange={handleSelectChange}
                         defaultValue={!select ? "default" : undefined}
                     >
                         <MenuItem value="default" disabled>Filtres</MenuItem>
@@ -116,6 +126,8 @@ export const NavBarTop = ({
                             ml: '12px'
                         }} />
                         <StyledInputBase
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                             placeholder={select ?
                                 `Filtrar por ${filtro.label}` : 'Filtrar por nome'}
                             inputProps={{ 'aria-label': 'search' }}
@@ -127,7 +139,7 @@ export const NavBarTop = ({
                             color: Root.color_default,
                             ...Root.hoverReverse,
                         }}>
-                        <Add /> Add New
+                        <Add /> Novo produto
                     </MuiStockBotton>
                 </MuiSearch>
             </StylesBar.conatiner>
