@@ -11,6 +11,7 @@ export const NavBarTop = ({
     NewItem,
     setNewItem
 }) => {
+    const [select, setSelect] = useState(undefined)
     const location = useLocation()
     const isRoutesNow = [
         {
@@ -53,14 +54,12 @@ export const NavBarTop = ({
             icon: <Delete />
         },
     ]
-    const items = [
-        { value: 'validade', label: 'Data de validade' },
-        { value: 'purchaseDate', label: 'Data de compra' },
-        { value: 'donationDate', label: 'Data de Doação' },
-        { value: 'itemType', label: 'Tipo de item' },
-        { value: 'amount', label: 'Quantidade' },
-        { value: 'users', label: 'Users' }
-    ];
+    const filtres = [
+        { value: 'nome', label: 'Nome', }, { value: 'categoria', label: 'Categoria', },
+        { value: 'dataChegada', label: 'Data de Chegada', }, { value: 'dataValidade', label: 'Data de Validade', },
+        { value: 'id', label: 'Id', }, { value: 'author', label: 'Usuário', }, { value: 'donor', label: 'Doador', },
+    ]
+    const filtro = filtres.find(item => item.value === select);
     const clicks = (e) => {
         if (e.onclick === 'Export') {
             setSaveExcel(!saveExcel)
@@ -73,7 +72,7 @@ export const NavBarTop = ({
                     <Typography sx={{
                         textTransform: 'uppercase',
                         fontWeight: 'bold'
-,                        color: Root.gray,
+                        , color: Root.gray,
                         fontFamily: Root.fontFamilyMonospace
                     }}>{routes.map((r) => r.label)}</Typography>
                     <MuiStockNavBarRigth>
@@ -103,10 +102,12 @@ export const NavBarTop = ({
                         size="small"
                         labelId="outlined-select-currency-label"
                         id="outlined-select-currency"
-                        defaultValue="default"
+                        value={select}
+                        onChange={(e) => setSelect(e.target.value)}
+                        defaultValue={!select ? "default" : undefined}
                     >
                         <MenuItem value="default" disabled>Filtres</MenuItem>
-                        {items.map((item, index) => (
+                        {filtres.map((item, index) => (
                             <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
                         ))}
                     </MuiSelect>
@@ -115,7 +116,8 @@ export const NavBarTop = ({
                             ml: '12px'
                         }} />
                         <StyledInputBase
-                            placeholder="Search…"
+                            placeholder={select ?
+                                `Filtrar por ${filtro.label}` : 'Filtrar por nome'}
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </MuiSearchContainer>
