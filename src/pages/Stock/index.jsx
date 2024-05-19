@@ -1,17 +1,6 @@
-import { Stack } from "@mui/material"
-import {
-    MuiSelectItem,
-    MuiSelectItemOption,
-    MuiSelectItemOptions,
-    MuiStock, MuiStockModalTop
-} from "./styles"
-import { ModalZindex } from "../../components/Modal";
+import React from 'react';
 import { EstoqueTable } from './components/StoqueTable/index'
 import { useContext, useEffect, useState } from "react"
-import { Root } from "../../styles/Root/root_styles";
-import { DeleteOutline, InsertInvitation, ShoppingCartCheckout } from "@mui/icons-material";
-import { NavBarTop } from "../../components/Bar";
-import { NewItem } from "../NewItem";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
@@ -24,9 +13,7 @@ export const Stock = () => {
         selectedItems,
         setSelectedItems, matches,
         search,
-        setSearch,
         select,
-        setSelect
     } = useContext(AuthContext)
     const [stock, setStock] = useState([])
 

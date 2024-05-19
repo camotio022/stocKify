@@ -22,6 +22,11 @@ export const Login = () => {
             [name]: value
         }));
     };
+    document.addEventListener('keydown', (e)=> {
+        if (e.key === 'Enter') {
+            login()
+        }
+    })
     const login = async () => {
         setProgress(true)
         try {
