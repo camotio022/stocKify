@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { StylesDetailsItems } from "./styles"
 import Image from '../../images/layout/pass.png'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { get_items } from "../../api/products/get";
 import { Root } from "../../styles/Root/root_styles";
 import { Close, Info, UnfoldMore } from "@mui/icons-material";
@@ -30,8 +30,12 @@ export const SectionTag = ({ value, labelExtern, backgroundColor }) => {
     )
 }
 export const DetailsItems = () => {
+    const navigate = useNavigate()
     const [item, setItem] = useState({})
     const { id } = useParams();
+    const closeDetails = () => {
+        navigate(-1)
+    }
     const filteredKeys = Object.keys(item).filter(key => (
         key !== 'author' &&
         key !== 'nome' &&
@@ -67,7 +71,7 @@ export const DetailsItems = () => {
                 </StylesDetailsItems.title>
             </StylesDetailsItems.nav_bar>
             <StylesDetailsItems.container2>
-                <TagsNewItem.close>
+                <TagsNewItem.close onClick={closeDetails}>
                     <Close />
                 </TagsNewItem.close>
 
