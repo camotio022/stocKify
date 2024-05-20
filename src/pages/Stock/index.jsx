@@ -26,6 +26,9 @@ export const Stock = () => {
                         id: doc.id,
                         categoria: data.categoria || "",
                         nome: data.nome || "",
+                        donation: data.donation || "",
+                        price: data.price || "",
+                        typeItem: data.typeItem || "",
                         quantidade: data.quantidade || "",
                         dataValidade: data.dataValidade || "",
                         dataChegada: data.dataChegada || "",
@@ -41,6 +44,9 @@ export const Stock = () => {
                             id: doc.id,
                             categoria: data.categoria || "",
                             nome: data.nome || "",
+                            donation: data.donation || "",
+                            price: data.price || "",
+                            typeItem: data.typeItem || "",
                             quantidade: data.quantidade || "",
                             dataValidade: data.dataValidade || "",
                             dataChegada: data.dataChegada || "",
@@ -63,7 +69,7 @@ export const Stock = () => {
         });
         return () => unsubscribe();
     }, [search, select]);
-    
+console.log(stock)
     if (matches) {
         return (
             <TableStock item={stock} />

@@ -7,11 +7,22 @@ import { Root } from "../../styles/Root/root_styles";
 import { addProduct } from "../../api/products/add";
 import { AuthContext } from '../../auth_context/index'
 import { SimpleAlert } from "../../components/Alert";
+const formattedDate = (today) => `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')
+}-${today.getDate().toString().padStart(2, '0')}`;
+const genderCheck = (word) => {
+    const lowerWord = word.toLowerCase();
+    if (lowerWord.endsWith('a') && !['ma', 'pa', 'ta'].includes(lowerWord.slice(-2))) {
+        return `da ${word}`;
+    } else if (lowerWord.endsWith('o') || lowerWord.endsWith('e')) {
+        return `do ${word}`;
+    }
+}
 export const NewItem = ({
     newItem,
     setNewItem
 }) => {
     const { user } = useContext(AuthContext)
+    const today = new Date();
     const [progress, setProgress] = useState(false)
     const [success, setSuccess] = useState(false)
     const [data, setData] = useState({
@@ -19,7 +30,10 @@ export const NewItem = ({
         categoria: "",
         quantidade: "",
         dataValidade: "",
-        dataChegada: "",
+        typeItem: "",
+        donation: "",
+        price: "",
+        dataChegada: formattedDate(today),
         author: {
             userName: user.name === 'none' ? 'Junta Mais' : user.name,
             userEmail: user.email,
@@ -48,6 +62,9 @@ export const NewItem = ({
                     quantidade: '',
                     dataValidade: '',
                     dataChegada: '',
+                    typeItem: '',
+                    donation: '',
+                    price: ''
                 })
                 setSuccess(false)
             }, [
@@ -110,9 +127,36 @@ export const NewItem = ({
                         ))}
                     </Select>
                 </TagsNewItem.fromControl>
+                <TagsNewItem.fromControl disabled={!data.nome} variant="filled">
+
+                    <InputLabel id="demo-simple-select-filled">
+                        {data.nome} foi doado ou comprado?
+                    </InputLabel>
+                    <Select
+                        required
+                        value={data.typeItem}
+                        onChange={handleData}
+                        name="typeItem"
+                        defaultValue="default"
+                    >
+                        {['comprado', 'doação'].map((item, index) => (
+                            <MenuItem key={index} value={item}>
+                                {item}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </TagsNewItem.fromControl>
+                {data.typeItem && <TagsNewItem.textfield
+                    label={(data.typeItem === 'comprado') ? `Insira o valor ${genderCheck(data.nome)}` : `Quem é o doador ${genderCheck(data.nome)}`}
+                    type={(data.typeItem === 'comprado') ? 'number' : 'text'}
+                    variant="filled"
+                    value={(data.typeItem === 'comprado')? data.price: data.donation}
+                    onChange={handleData}
+                    name={(data.typeItem === 'comprado')? "price": "donation"}
+                ></TagsNewItem.textfield>}
                 <TagsNewItem.textfield
                     required
-                    disabled={!data.nome}
+                    disabled={!data.typeItem}
                     label={`Quantidade/unidade de ${data.nome}`}
                     type="number"
                     variant="filled"
@@ -130,20 +174,6 @@ export const NewItem = ({
                     onChange={handleData}
                     name="dataValidade"
                 ></TagsNewItem.textfield>
-                <TagsNewItem.textfield
-                    disabled={!data.dataValidade}
-                    sx={data.categoria && {
-                        width: '98%'
-                    }}
-                    required
-                    label={`Date de chegada: ${data.nome}`}
-                    type="date"
-                    variant="filled"
-                    value={data.dataChegada}
-                    name="dataChegada"
-                    onChange={handleData}
-                ></TagsNewItem.textfield>
-
                 {data.dataChegada &&
                     <TagsNewItem.submit
                         onClick={handleSubmit}

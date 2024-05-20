@@ -119,7 +119,7 @@ export const ModalZindex = ({
                         }
                     } else if(extension === 'pdf') {
                         try {
-                            DownloadPDF(downloads.estoque, fillname)
+                            DownloadPDF(downloads.estoque, fillname, location.pathname)
                         } catch (error) {
                             console.log(error)
                         } finally {

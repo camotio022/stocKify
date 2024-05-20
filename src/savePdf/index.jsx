@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-export const DownloadPDF = (stockData, name) => {
+export const DownloadPDF = (stockData, name, location) => {
     const pdf = new jsPDF();
     const title = 'Dados do nosso estoque da junta mais';
     const headers = Object.keys(stockData[0]).map(key => {

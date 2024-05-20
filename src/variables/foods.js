@@ -117,7 +117,7 @@ export const alimentosCategorizados = {
         'Sorvete de morango',
     ],
 
-    produtos_secos_enlatados: [
+    secos_enlatados: [
         'Arroz Branco 1kg',
         'Arroz Branco 5kg',
         'Arroz Integral 1kg',

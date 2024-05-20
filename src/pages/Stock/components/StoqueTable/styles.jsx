@@ -21,13 +21,14 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     justifyContent: 'flex-start',
     gap: '4px',
     fontWeight: 'bold',
+    flexWrap: 'nowrap',
     fontSize: '14px',
     color: Root.black,
     width: '100%',
     height: '100%',
     color: Root.color_button,
-
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    padding: '10px'
 }))
 export const MuiTableRow = styled(Box)(({ index }) => ({
     display: 'flex',
@@ -56,5 +57,6 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    color: Root.color_button
+    color: Root.color_button,
+    padding: '10px'
 }))
