@@ -110,8 +110,8 @@ export const MainLayout = ({ childrens }) => {
                         <Tag.MuiMainLayoutLink>
                             <Settings /> {'Configurações'}
                         </Tag.MuiMainLayoutLink>
-                        <Tag.MuiMainLayoutLink>
-                            <Logout onClick={() => logout()} /> {'Saír'}
+                        <Tag.MuiMainLayoutLink onClick={() => logout()} >
+                            <Logout /> {'Saír'}
                         </Tag.MuiMainLayoutLink>
                     </Tag.MuiMainLayoutSettingsUser>
                 </Tag.MuiMainLayoutLogo>
