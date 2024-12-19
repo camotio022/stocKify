@@ -95,6 +95,7 @@ export const MainLayout = ({ childrens }) => {
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
                                         </Stack>
+                                        
                                         {<Stack sx={{ fontSize: '90%', }}>
                                             {path.name}
                                         </Stack>}
