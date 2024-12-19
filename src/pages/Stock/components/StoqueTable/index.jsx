@@ -1,4 +1,4 @@
-import { Checkbox, TableContainer } from '@mui/material';
+import { Checkbox, CircularProgress, Stack, TableContainer, Typography } from '@mui/material';
 import { useState, useRef } from 'react';
 
 import { Root } from '../../../../styles/Root/root_styles';
@@ -19,7 +19,7 @@ export const EstoqueTable = ({
     const headerInfos = [
         'Categoria',
         'Nome do alimento',
-        'Doador/Valor',
+        'Doador & Valor',
         'Quantidade',
         'Data de Validade',
         'Data de Chegada',
@@ -33,6 +33,7 @@ export const EstoqueTable = ({
     }
     return (
         <TableContainer sx={{
+            position: 'relative',
             width: '100%',
             height: '100%',
             overflow: 'scroll',
@@ -41,6 +42,28 @@ export const EstoqueTable = ({
             ...Root.scrollBar,
             color: Root.color_button,
         }} ref={tableRef}>
+            {!stock &&
+                <Stack sx={{
+                    position: 'absolute',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '12px',
+                    minWidth: '100%',
+                    height: '100%',
+                }}>
+                    <Typography sx={{
+                        color: Root.color_button,
+                        fontWeight: 'bold',
+                        fontFamily: Root.fontFamilyMonospace,
+                    }}>
+                        Loading data, please wait...
+                    </Typography>
+                    <CircularProgress sx={{
+                        color: Root.color_button,
+                    }} />
+                </Stack>}
             {options && <Options
                 optionItem={options}
                 name={options.nome}

@@ -8,7 +8,7 @@ export const MuiContainer = styled(Stack)(({ matches }) => ({
     width: '100vw',
     height: '100vh',
     fontFamily: Root.fontFamilyMonospace,
-    backgroundColor: Root.color_button
+    backgroundColor: Root.gray
 }))
 export const MuiCard = styled(Stack)(({ matches }) => ({
     position: 'relative',

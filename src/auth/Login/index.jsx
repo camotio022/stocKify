@@ -6,10 +6,8 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../../auth_context'
 
 export const Login = () => {
-
     const [open, setOpen] = useState('')
     const { loginWithEmailAndPassword, matches } = useContext(AuthContext)
-
     const [progress, setProgress] = useState(false)
     const [data, setData] = useState({
         email: '',
@@ -65,7 +63,7 @@ export const Login = () => {
                     <Tag.MuiLeftTag >
                         <LockClock />
                     </Tag.MuiLeftTag>
-                    <Stack sx={{ height: '100%', width: '83%' }}>
+                    <Stack sx={{ height: '100%', width: '83%',backgroundColor: Root.color_app_bar }}>
                         <Tag.MuiTextField
                             matches={matches}
                             type={open ? 'text' : 'password'}
@@ -73,6 +71,7 @@ export const Login = () => {
                                 endAdornment: (
                                     <InputAdornment sx={{
                                         color: Root.color_button,
+                                        backgroundColor: Root.color_default
                                     }}>
                                         {open ? <Visibility onClick={() => setOpen(!open)} /> :
                                             <VisibilityOff onClick={() => setOpen(!open)} />}

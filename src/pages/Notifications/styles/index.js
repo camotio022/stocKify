@@ -2,6 +2,23 @@ import { Box, Drawer, MenuItem, Stack, Typography, styled } from "@mui/material"
 
 import { Settings } from "@mui/icons-material";
 import { Root } from "../../../styles/Root/root_styles";
+export const ContainAbsolute = styled(Stack)(({})=> ({
+    zIndex: 4,
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    minWidth: '30%',
+    height: '100%',
+    right: '12px',
+    overflow: 'auto',
+    backgroundColor: Root.color_app_bar,
+    boxShadow: Root.boxS,
+    borderRadius: '12px',
+    ...Root.scrollBar,
+    boxSizing: 'border-box'
+}))
 export const ContainerDrawer = styled(Drawer)(({ }) => ({
     zIndex: 222222,
     '& .MuiDrawer-paper': {

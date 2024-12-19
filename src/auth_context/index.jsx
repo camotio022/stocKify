@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     const matches = useMediaQuery('(max-width:600px)');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [select, setSelect] = useState('')
-    const [search, setSearch]=useState('')
+    const [search, setSearch] = useState('')
     const [user, setUser] = useState(null);
     const auth = getAuth();
     const [newItem, setNewItem] = useState(false)
@@ -137,25 +137,12 @@ export const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                isLoggedIn,
-                login,
-                logout,
-                loginWithGoogle,
-                loginWithEmailAndPassword,
-                user,
-                newItem,
-                setNewItem,
-                saveExcel,
-                setSaveExcel,
-                selectedItems,
-                setSelectedItems,
-                downloads,
-                setDownloads,
-                matches,
-                notifications, setNotifications,
-                messages, setMessage,
-                select, setSelect,
-                search, setSearch
+                isLoggedIn, login, logout,
+                loginWithGoogle, loginWithEmailAndPassword,
+                user, newItem, setNewItem, saveExcel, setSaveExcel,
+                selectedItems, setSelectedItems, downloads, setDownloads,
+                matches, notifications, setNotifications, messages, setMessage,
+                select, setSelect, search, setSearch
             }}
         >
             {children}

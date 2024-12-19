@@ -16,7 +16,6 @@ export const Stock = () => {
         select,
     } = useContext(AuthContext)
     const [stock, setStock] = useState([])
-
     useEffect(() => {
         const unsubscribe = onSnapshot(collection(db, 'stock'), (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
@@ -69,7 +68,6 @@ export const Stock = () => {
         });
         return () => unsubscribe();
     }, [search, select]);
-console.log(stock)
     if (matches) {
         return (
             <TableStock item={stock} />

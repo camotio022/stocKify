@@ -16,22 +16,7 @@ export const NotificationsApp = ({ }) => {
     };
     const texte = 'Notifications'
     return (
-        <Stack sx={{
-            position: 'absolute',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            flexDirection: 'column',
-            minWidth: '30%',
-            height: '100%',
-            right: '12px',
-            overflow: 'auto',
-            backgroundColor: Root.color_app_bar,
-            boxShadow: Root.boxS,
-            borderRadius: '12px',
-            ...Root.scrollBar,
-            boxSizing: 'border-box'
-        }}>
+        <Tag.ContainAbsolute>
             <Tag.ContainerNotifications
             >
                 <Tag.AppBarNotifications >
@@ -126,6 +111,6 @@ export const NotificationsApp = ({ }) => {
                     </Tag.NotificationComponent>
                 )
             })}
-        </Stack>
+        </Tag.ContainAbsolute>
     )
 }
