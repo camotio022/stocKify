@@ -30,18 +30,21 @@ export const StyleUser = {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        padding: '4px',
+        padding: '5px',
+        height: '10px',
+        width: '10px',
         backgroundColor: Root.red,
-        color: Root.color_button,
+        color: Root.white,
         ...Root.hover,
-        top: -4,
-        right:-4,
+        top: -10,
+        right:-10,
         borderRadius: '50%',
     })),
     avatar: styled(Avatar)(({ }) => ({
         width: '38px',
-        height: '36px',
+        height: '38px',
         backgroundColor: Root.color_app_bar,
-        color: Root.color_button
+        color: Root.color_button,
+        cursor: 'pointer'
     }))
 }
