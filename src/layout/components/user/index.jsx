@@ -27,12 +27,13 @@ export const UserItens = ({ }) => {
                 backgroundColor: Root.color_button,
                 color: Root.color_default,
             }} onClick={() => setNotifications(!notifications)}>
-                {isRead.length > 0 && <StyleUser.isRead />}
+                {isRead.length > 0 && <StyleUser.isRead >{isRead.length}</StyleUser.isRead>}
                 <Notifications />
             </StyleUser.item>
 
-            <Stack sx={{ ...centerRow, width: 'auto' }}>
-                <StyleUser.avatar>
+            <Stack sx={{ ...centerRow, width: 'auto',ml: 5 }}>
+                {user.name}
+                <StyleUser.avatar src={user.photoURL}>
                     {firstLatter[0]}
                     {secondLatter ? secondLatter[0] : ''}
                 </StyleUser.avatar>
