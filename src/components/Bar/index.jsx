@@ -99,6 +99,7 @@ export const NavBarTop = ({
                                     key={index}
                                     variant={botton.variant}
                                     onClick={() => clicks(botton)}
+                                    disabled={isContained}
                                 >
                                     {botton.icon}
                                     {botton.label}
