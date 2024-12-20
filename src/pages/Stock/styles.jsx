@@ -1,6 +1,6 @@
-import { Box, InputBase, Select, Stack, styled } from "@mui/material";
+import { Box, Button, InputBase, Select, Stack, styled } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
-import { Search } from "@mui/icons-material";
+import { BorderColor, Search } from "@mui/icons-material";
 
 export const MuiStock = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -44,19 +44,28 @@ export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     height: '100%',
     gap: '12px'
 }))
-export const MuiStockBotton = styled(Stack)(({ }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: '8px',
-    minWidth: 'auto',
-    height: '24px',
-    padding: '8px',
+export const MuiStockBotton = styled(Button)(({ }) => ({
+    ":root": {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: '8px',
+        minWidth: 'auto',
+        height: '24px',
+        padding: '8px',
+        borderRadius: '4px',
+        BorderColor: Root.color_default
+    },
     backgroundColor: Root.color_default,
     color: Root.color_button,
-    borderRadius: '4px',
-    ...Root.hover
+    ":hover": {
+        ...Root.hover
+    },
+    ":focus": {
+        border: '0px'
+    }
+
 }))
 export const MuiSearchIconTeep = styled(Stack)(({ }) => ({
     display: 'flex',
