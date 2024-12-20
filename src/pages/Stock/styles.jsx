@@ -46,17 +46,16 @@ export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
 }))
 export const MuiStockBotton = styled(Button)(({ }) => ({
     ":root": {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        gap: '8px',
         minWidth: 'auto',
         height: '24px',
-        padding: '8px',
-        borderRadius: '4px',
-        BorderColor: Root.color_default
     },
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderRadius: '4px',
+    gap: '8px',
+    fontFamily: Root.fontFamilyMonospace,
     backgroundColor: Root.color_default,
     color: Root.color_button,
     ":hover": {
