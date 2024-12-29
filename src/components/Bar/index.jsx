@@ -16,7 +16,8 @@ export const NavBarTop = ({
         select,
         setSelect,
         search,
-        setSearch
+        setSearch,
+        enablingDeleteButtom
     } = useContext(AuthContext)
     const location = useLocation()
     const handleSelectChange = (event) => {
@@ -99,7 +100,7 @@ export const NavBarTop = ({
                                     key={index}
                                     variant={botton.variant}
                                     onClick={() => clicks(botton)}
-                                    disabled={isContained}
+                                    disabled={isContained ? !enablingDeleteButtom : false}
                                 >
                                     {botton.icon}
                                     {botton.label}
