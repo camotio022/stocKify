@@ -1,11 +1,12 @@
 import { Checkbox, CircularProgress, Stack, TableContainer, Typography } from '@mui/material';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 
 import { Root } from '../../../../styles/Root/root_styles';
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from './styles';
 import { ArrowDropDown, More, MoreHoriz } from '@mui/icons-material';
 import { FormatRelativeTime } from '../../../../components/dateCalcs';
 import { Options } from '../../../../components/Options';
+import { AuthContext } from '../../../../auth_context';
 
 export const EstoqueTable = ({
     selectedItems,
@@ -13,8 +14,10 @@ export const EstoqueTable = ({
     stock,
 
 }) => {
+    const { enablingDeleteButtom, setEnablingDeleteButtom } = useContext(AuthContext)
     const [options, setOptions] = useState('')
-    const [focus, setFocus] = useState(null)
+    const [focus, setFocus] = useState(null); // Índice do item focado
+    const [disabledItems, setDisabledItems] = useState([]); // Lista de itens desabilitados
     const tableRef = useRef(null);
     const headerInfos = [
         'Categoria',
@@ -25,8 +28,18 @@ export const EstoqueTable = ({
         'Data de Chegada',
         'Opções'
     ];
-    const focusItem = (index) => {
-        setFocus(index)
+    const focusItem = (index, item) => {
+        if (focus === index) {
+            setEnablingDeleteButtom(false)
+            setDisabledItems((prev) =>
+                prev.includes(item.id)
+                    ? prev.filter((id) => id !== item.id)
+                    : [...prev, item.id]
+            );
+        } else {
+            setEnablingDeleteButtom(true)
+            setFocus(index);
+        }
     }
     const handleOptions = (item) => {
         setOptions(item)
@@ -79,19 +92,28 @@ export const EstoqueTable = ({
             </MuiHeaderTable>
             <MuiRowTable>
                 {stock.map((item, index) => {
-                    const { typeItem, price, donation, ...otherKeys } = item
+                    const { typeItem, price, donation, ...otherKeys } = item;
+                    const isFocused = focus === index; // Verifica se o item está focado
+                    const isDisabled = disabledItems.includes(item.id); // Verifica se o item está desabilitado
                     return (
                         <MuiTableRow
+                            key={item.id}
                             index={index + 1}
-                            onClick={() => focusItem(index)}
-                            sx={selectedItems.includes(item.id) || (focus === index) ? {
-                                border: `1px dashed ${Root.color_button}`,
-                                backgroundColor: Root.color_button_opacity,
-                                color: Root.color_button,
-                                fontWeight: 'bold',
-                                animation: 'dash 2s infinite'
-                            } : null}
-                            key={item.id}>
+                            onClick={() => focusItem(index, item)}
+                            sx={
+                                isDisabled
+                                    ? { opacity: 0.5 } // Estilo para itens desabilitados
+                                    : isFocused
+                                        ? {
+                                            border: `1px dashed ${Root.color_button}`,
+                                            backgroundColor: Root.color_button_opacity,
+                                            color: Root.color_button,
+                                            fontWeight: 'bold',
+                                            animation: 'dash 2s infinite',
+                                        }
+                                        : {}
+                            }
+                        >
 
                             {Object.keys(item).map((key, i) => {
                                 if ((key === 'author') ||
