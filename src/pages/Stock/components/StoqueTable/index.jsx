@@ -44,6 +44,11 @@ export const EstoqueTable = ({
     const handleOptions = (item) => {
         setOptions(item)
     }
+    function isItemExpired(expiryDate) {
+        const itemDate = new Date(expiryDate);
+        const currentDate = new Date();
+        return itemDate < currentDate;
+    }
     return (
         <TableContainer sx={{
             position: 'relative',
@@ -111,7 +116,10 @@ export const EstoqueTable = ({
                                             fontWeight: 'bold',
                                             animation: 'dash 2s infinite',
                                         }
-                                        : {}
+                                        : isItemExpired(item.dataValidade) ? {
+                                            borderLeft: `4px solid ${Root.green}`,
+                                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                                        } : {}
                             }
                         >
 
