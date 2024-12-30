@@ -1,4 +1,4 @@
-import { MenuItem, Typography } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Typography } from "@mui/material";
 import { MuiSearch, MuiSearchContainer, MuiSelect, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, StyledInputBase } from "../../pages/Stock/styles";
 import { Add, Delete, SaveAlt, Search, Upgrade } from "@mui/icons-material";
 import { Root } from "../../styles/Root/root_styles";
@@ -65,7 +65,6 @@ export const NavBarTop = ({
         },
     ]
     const filtres = [
-        { value: '', label: 'Sem filtro' },
         { value: 'nome', label: 'Nome', }, { value: 'categoria', label: 'Categoria', },
         { value: 'dataChegada', label: 'Data de Chegada', }, { value: 'dataValidade', label: 'Data de Validade', },
         { value: 'id', label: 'Id', }, { value: 'author', label: 'Usuário', }, { value: 'donor', label: 'Doador', },
@@ -110,19 +109,20 @@ export const NavBarTop = ({
                     </MuiStockNavBarRigth>
                 </MuiStockNavBar>
                 <MuiSearch>
-                    <MuiSelect
-                        size="small"
-                        labelId="outlined-select-currency-label"
-                        id="outlined-select-currency"
-                        value={select}
-                        onChange={handleSelectChange}
-                        defaultValue={!select ? "default" : undefined}
-                    >
-                        <MenuItem value="default" disabled>Filtres</MenuItem>
-                        {filtres.map((item, index) => (
-                            <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                        ))}
-                    </MuiSelect>
+                    <FormControl style={{maxWidth: '100px'}}>
+                        <InputLabel>Filtros</InputLabel>
+                        <MuiSelect
+                            size="small"
+                            labelId="outlined-select-currency-label"
+                            id="outlined-select-currency"
+                            value={select}
+                            onChange={handleSelectChange}
+                        >
+                            {filtres.map((item, index) => (
+                                <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+                            ))}
+                        </MuiSelect>
+                    </FormControl>
                     <MuiSearchContainer>
                         <Search sx={{
                             ml: '12px'

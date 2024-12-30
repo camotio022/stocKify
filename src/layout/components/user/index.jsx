@@ -1,4 +1,4 @@
-import { MailOutline, Notifications } from "@mui/icons-material"
+import { CardMembership, EditCalendar, Group, MailOutline, Notifications } from "@mui/icons-material"
 import { Avatar, Box, Stack } from "@mui/material"
 import { Root } from "../../../styles/Root/root_styles"
 import { useContext } from "react"
@@ -20,7 +20,13 @@ export const UserItens = ({ }) => {
     const isRead = notificationsMasks.filter((item) => item.isRead === true)
     return (
         <StyleUser.contain>
-            <StyleUser.item onClick >
+            <StyleUser.item >
+                <Group />
+            </StyleUser.item >
+            <StyleUser.item >
+                <EditCalendar />
+            </StyleUser.item >
+            <StyleUser.item >
                 <MailOutline />
             </StyleUser.item >
             <StyleUser.item sx={notifications && {
@@ -31,7 +37,7 @@ export const UserItens = ({ }) => {
                 <Notifications />
             </StyleUser.item>
 
-            <Stack sx={{ ...centerRow, width: 'auto',ml: 5 }}>
+            <Stack sx={{ ...centerRow, width: 'auto', ml: 5 }}>
                 {user.name}
                 <StyleUser.avatar src={user.photoURL}>
                     {firstLatter[0]}

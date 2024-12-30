@@ -73,7 +73,7 @@ export const MainLayout = ({ childrens }) => {
                     width: '100%',
                 }}>
                     <LayoutMobile._bigTitle cor>
-                        Junta Mais
+                        Stockfy
                     </LayoutMobile._bigTitle>
                 </Stack>
                 <UserItens />

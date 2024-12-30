@@ -156,9 +156,7 @@ export const MuiSelect = styled(Select)(({ theme }) => ({
             '&.Mui-focused fieldset': {
                 border: 'none', // Remover a borda quando estiver focado
             },
-            '& fieldset': {
-                border: 'none', // Remover a borda
-            },
+       
         },
         display: 'flex',
         alignItems: 'center',
