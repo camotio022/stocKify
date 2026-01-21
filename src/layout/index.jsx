@@ -72,9 +72,7 @@ export const MainLayout = ({ childrens }) => {
                     height: '85%',
                     width: '100%',
                 }}>
-                    <LayoutMobile._bigTitle cor>
-                        Stockfy
-                    </LayoutMobile._bigTitle>
+                    <LogoMainLayout/>
                 </Stack>
                 <UserItens />
             </Tag.AppBar>
@@ -95,7 +93,7 @@ export const MainLayout = ({ childrens }) => {
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
                                         </Stack>
-                                        
+
                                         {<Stack sx={{ fontSize: '90%', }}>
                                             {path.name}
                                         </Stack>}
@@ -134,7 +132,7 @@ export const MainLayout = ({ childrens }) => {
                         setSaveExcel={setSaveExcel}
                         saveExcel={saveExcel}
                     />
-                    {notifications&&<NotificationsApp />}
+                    {notifications && <NotificationsApp />}
                     {childrens}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>
