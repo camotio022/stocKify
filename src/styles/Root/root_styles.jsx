@@ -95,8 +95,8 @@ export const Root = {
   breakpointMD: '768px',
   breakpointLG: '992px',
   breakpointXL: '1200px',
-  fontFamilySansSerif:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-  fontFamilyMonospace:
-    'SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace',
+ fontFamilySansSerif: 
+    '"Geist Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontFamilyMonospace: 
+    '"Geist Mono", "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, monospace',
 };
