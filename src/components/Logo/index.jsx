@@ -1,6 +1,6 @@
 import { Link, Stack } from "@mui/material"
-import Image from '../../images/layout/junta2.png'
-import Imag3 from '../../images/layout/junta3.png'
+import Image from '../../images/layout/feture.png'
+import Imag3 from '../../images/layout/feture.png'
 export const LogoMainLayout = ({ image, text, black, top }) => {
     return (
         <Stack sx={{
@@ -14,7 +14,7 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
 
         }}>
             <Link sx={{
-                width: '90px',
+                minWidth: '90px',
                 height: '80px'
             }} href={'/'}>
                 <img
