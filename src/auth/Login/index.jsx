@@ -103,7 +103,7 @@ export const Login = () => {
                 </Tag.MuiGridForm>
             </Tag.MuiCard>
             <Tag.MuiFooterLogin matches={matches}>
-                JUNTA MAIS STOCKIFY @2024
+                STOCKIFY @2024
             </Tag.MuiFooterLogin>
         </Tag.MuiContainer>
     )
