@@ -37,7 +37,17 @@ export const UserItens = ({ }) => {
                 <Notifications />
             </StyleUser.item>
 
-            <Stack sx={{ ...centerRow, width: 'auto', ml: 5 }}>
+            <Stack sx={{
+                ...centerRow,
+                width: 'auto',
+                ml: 5,
+                color: '#3F3D56',
+                cursor: 'default',
+                transition: 'color 0.3s ease',
+                fontWeight: 600, // Semi-bold para destacar o usuário sem ser agressivo
+                letterSpacing: '0.02em',
+            }}
+            >
                 {user.name}
                 <StyleUser.avatar src={user.photoURL}>
                     {firstLatter[0]}

@@ -32,8 +32,8 @@ export const MuiStockNavBar = styled(Stack)(({ }) => ({
     justifyContent: 'space-between',
     flexDirection: 'column',
     width: '50%',
-    height: '100%',
-
+    minHeight: '100%',
+    gap: '12px'
 }))
 export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     display: 'flex',
@@ -45,26 +45,41 @@ export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     gap: '12px'
 }))
 export const MuiStockBotton = styled(Button)(({ }) => ({
-    ":root": {
-        minWidth: 'auto',
-        height: '24px',
-    },
+    // --- 1. BOX MODEL & LAYOUT ---
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    borderRadius: '4px',
+    minWidth: 'auto',
+    height: 'auto', // Ajustado para ser flexível ao padding
+    padding: '8px 16px',
     gap: '8px',
-    fontFamily: Root.fontFamilyMonospace,
-    backgroundColor: Root.color_default,
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    fontFamily: Root.fontFamilySansSerif, 
+    fontSize: '12px',
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    backgroundColor: 'rgba(128, 0, 128, 0.05)', 
     color: Root.color_button,
-    ":hover": {
-        ...Root.hover
+    border: 'none',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    '&:hover': {
+        backgroundColor: Root.color_button,
+        color: '#ffffff',
+        boxShadow: `0 4px 12px ${Root.color_button_opacity2}`, 
+        transform: 'translateY(-1px)',
     },
-    ":focus": {
-        border: '0px'
-    }
 
+    '&:active': {
+        transform: 'translateY(0)',
+    },
+
+    ':focus': {
+        outline: 'none',
+        border: '0px',
+    }
 }))
 export const MuiSearchIconTeep = styled(Stack)(({ }) => ({
     display: 'flex',
@@ -156,7 +171,7 @@ export const MuiSelect = styled(Select)(({ theme }) => ({
             '&.Mui-focused fieldset': {
                 border: 'none', // Remover a borda quando estiver focado
             },
-       
+
         },
         display: 'flex',
         alignItems: 'center',
