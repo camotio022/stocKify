@@ -1,4 +1,4 @@
-import { Box, Stack, TableCell, TableRow, styled,Typography } from "@mui/material";
+import { Box, Stack, TableCell, TableRow, styled, Typography } from "@mui/material";
 import { Root } from "../../../../styles/Root/root_styles";
 export const MuiHeaderTable = styled(Box)(({ }) => ({
     display: 'flex',
@@ -19,16 +19,24 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    gap: '4px',
-    fontWeight: 'bold',
+    gap: '8px',
     flexWrap: 'nowrap',
-    fontSize: '14px',
-    color: Root.black,
     width: '100%',
     height: '100%',
-    color: Root.color_button,
     boxSizing: 'border-box',
-    padding: '10px'
+    padding: '10px',
+    fontFamily: Root.fontFamilySansSerif,
+    fontSize: '13px',
+    fontWeight: 500,
+    letterSpacing: '0.02em',
+    textTransform: 'none',
+    color: '#4A4A68',
+    textShadow: `0px 0px 1px ${Root.color_button_opacity}`,
+    transition: 'all 0.3s ease',
+    '&:hover': {
+        color: Root.color_button, // O roxo do logo
+        transform: 'translateX(2px)', // Pequeno deslocamento elegante
+    }
 }))
 export const MuiTableRow = styled(Box)(({ index }) => ({
     display: 'flex',
@@ -52,11 +60,18 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     gap: '4px',
     width: '100%',
     height: '100%',
-    fontSize: '15px',
     boxSizing: 'border-box',
+    padding: '10px 16px',
+    fontFamily: Root.fontFamilySansSerif,
+    fontSize: '14px', 
+    fontWeight: 500,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    color: Root.color_button,
-    padding: '10px'
+    color: '#4A4A68',
+    transition: 'all 0.2s ease-in-out',
+    '&:hover': {
+        color: Root.color_button,
+        transform: 'translateX(3px)',
+    }
 }))

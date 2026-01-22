@@ -14,7 +14,7 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
     backgroundColor: Root.color_app_bar,
 }))
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
-        position: 'relative',
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -39,23 +39,33 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
 export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'fles-start',
+    justifyContent: 'flex-start',
     gap: '12px',
     flexDirection: 'row',
-    width: '90%',
-    height: '50px',
-    transition: 'all .3s',
-    paddingLeft: '4px',
-    borderTopLeftRadius: '4px',
-    borderBottomLeftRadius: '4px',
+    width: '95%', 
+    height: '48px',
+    transition: 'all .4s cubic-bezier(0.4, 0, 0.2, 1)', 
+    paddingLeft: '16px', 
     fontSize: '14px',
-    color: Root.gray,
+    fontFamily: Root.fontFamilySansSerif,
+    fontWeight: 500,
+    letterSpacing: '0.02em',
+    color: Root.purple,
     textDecoration: 'none',
-    ...Root.hoverReverse,
     ":hover": {
+        color: Root.color_button, // Roxo do logo
+        backgroundColor: 'rgba(128, 0, 128, 0.04)', // Roxo quase invisível em vez de cinza sólido
+        paddingLeft: '22px', // Efeito sutil de "push" ao passar o mouse
+        boxShadow: 'inset 4px 0px 0px ' + Root.color_button, // Barra lateral de destaque interna
+        "& svg": {
+            filter: `drop-shadow(0 0 5px ${Root.color_button_opacity2})`, // Brilho no ícone
+        }
+    },
+    "&.active": {
         color: Root.color_button,
-        height: '50px',
-        backgroundColor: Root.color_app_bar,
+        backgroundColor: 'rgba(128, 0, 128, 0.08)',
+        fontWeight: 'bold',
+        borderLeft: `4px solid ${Root.color_button}`,
     }
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
@@ -93,7 +103,7 @@ export const AppBar = styled(Stack)(({ }) => ({
     height: '10vh',
     backgroundColor: Root.color_default,
 }))
-export const RenderChildrensAndNavBar = styled(Stack)(({})=> ({
+export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
