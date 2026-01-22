@@ -25,17 +25,17 @@ export const NavBarTop = ({
     };
     const isRoutesNow = [
         {
-            label: 'Todos os items do estoque',
+            label: 'Inventário Consolidado',
             route: '/', canBar: true
         },
         {
-            label: 'Todas entradas do estoque',
+            label: 'Fluxo de Entradas',
             route: '/entradas',
             canBar: true
         }
         ,
         {
-            label: 'Todas as saídas do estoque',
+            label: 'Fluxo de Saídas',
             route: '/exits',
             canBar: true
         },
@@ -81,10 +81,16 @@ export const NavBarTop = ({
                 <MuiStockNavBar>
                     <Typography sx={{
                         textTransform: 'uppercase',
-                        fontWeight: 'bold'
-                        , color: Root.gray,
-                        fontFamily: Root.fontFamilyMonospace
-                    }}>{routes.map((r) => r.label)}</Typography>
+                        fontWeight: 800,
+                        fontFamily: Root.fontFamilySansSerif,
+                        letterSpacing: '0.15em',
+                        background: `linear-gradient(90deg, ${Root.color_button}, ${Root.color_button_secondary})`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        filter: `drop-shadow(0px 0px 5px rgba(147, 45, 210, 0.3))`,
+                    }}>
+                        {routes.map((r) => r.label)}
+                    </Typography>
                     <MuiStockNavBarRigth>
                         {buttons.map((botton, index) => {
                             const isContained = botton.variant === 'contained';
@@ -109,7 +115,7 @@ export const NavBarTop = ({
                     </MuiStockNavBarRigth>
                 </MuiStockNavBar>
                 <MuiSearch>
-                    <FormControl style={{maxWidth: '100px'}}>
+                    <FormControl style={{ maxWidth: '100px' }}>
                         <InputLabel>Filtros</InputLabel>
                         <MuiSelect
                             size="small"
