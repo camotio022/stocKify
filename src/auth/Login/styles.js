@@ -29,9 +29,9 @@ export const MuiCardUser = styled(Stack)(({ }) => ({
     top: '38px',
     border: Root.border,
     height: '80px',
-    width: '80px',
-    backgroundColor: Root.color_button_opacity,
-    borderRadius: '50%'
+    minWidth: '80px',
+
+
 }))
 export const MuiGridForm = styled(Stack)(({ matches}) => ({
     display: 'flex',

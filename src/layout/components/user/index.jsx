@@ -48,6 +48,7 @@ export const UserItens = ({ }) => {
                 letterSpacing: '0.02em',
             }}
             >
+
                 {user.name}
                 <StyleUser.avatar src={user.photoURL}>
                     {firstLatter[0]}

@@ -58,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('user');
     };
-
     const loginWithGoogle = async () => {
         signInWithPopup(auth, provider)
             .then(async (result) => {
@@ -121,7 +120,6 @@ export const AuthProvider = ({ children }) => {
         }
         return userData;
     };
-
     const loginWithEmailAndPassword = async (email, password) => {
         if (!email || !password) return;
         try {
@@ -134,7 +132,6 @@ export const AuthProvider = ({ children }) => {
             alert(errorMessage);
         }
     };
-
     return (
         <AuthContext.Provider
             value={{

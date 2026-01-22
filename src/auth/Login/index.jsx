@@ -4,6 +4,7 @@ import { Root } from '../../styles/Root/root_styles'
 import { LockClock, Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../auth_context'
+import { LogoMainLayout } from '../../components/Logo'
 
 export const Login = () => {
     const [open, setOpen] = useState('')
@@ -38,11 +39,7 @@ export const Login = () => {
         <Tag.MuiContainer matches={matches}>
             <Tag.MuiCard matches={matches}>
                 <Tag.MuiCardUser>
-                    <Person sx={{
-                        width: '90%',
-                        height: '90%',
-                        color: Root.color_button
-                    }} />
+                    <LogoMainLayout/>
                 </Tag.MuiCardUser>
                 <Tag.MuiGridForm mt={10} matches={matches}>
                     <Tag.MuiLeftTag>
