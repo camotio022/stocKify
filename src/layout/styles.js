@@ -13,6 +13,7 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
     height: '100vh',
     backgroundColor: Root.color_app_bar,
 }))
+// LATERAL ESQUERDO LAYOUT
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
@@ -20,8 +21,8 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     justifyContent: 'flex-start',
     width: '14vw',
     height: '100%',
-    backgroundColor: Root.color_default,
     color: Root.color_button,
+
 }))
 export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -82,9 +83,8 @@ export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
 export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    gap: '1vw',
     flexDirection: 'row',
     width: '100vw',
     height: '90vh',
@@ -101,8 +101,9 @@ export const AppBar = styled(Stack)(({ }) => ({
     flexDirection: 'row',
     width: '100vw',
     height: '10vh',
-    backgroundColor: Root.color_default,
+
 }))
+// LATERAL DIREIDO
 export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
@@ -110,8 +111,10 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     gap: '12px',
-    width: '100%',
-    paddingInline: '12px',
-    height: '95%',
-    
+    padding: '13px',
+    width: '83.3vw',
+    height: '85vh',
+    boxShadow: Root.boxShadow,
+
+    borderRadius: '8px'
 }))

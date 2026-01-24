@@ -4,7 +4,7 @@ import { Root } from "../../../styles/Root/root_styles";
 export const StylesTableMobile = {
     container: styled(Container)(({ }) => ({
         width: '100%',
-        height: 'auto'
+        height: 'auto',
     })),
     tableRow: styled(Stack)(({ }) => ({
         display: 'flex',

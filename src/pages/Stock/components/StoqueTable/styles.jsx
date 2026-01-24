@@ -27,10 +27,10 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     padding: '10px',
     fontFamily: Root.fontFamilySansSerif,
     fontSize: '13px',
-    fontWeight: 500,
+    fontWeight: 900,
     letterSpacing: '0.02em',
     textTransform: 'none',
-    color: '#4A4A68',
+    color: Root.color_button,
     textShadow: `0px 0px 1px ${Root.color_button_opacity}`,
     transition: 'all 0.3s ease',
     '&:hover': {
@@ -45,6 +45,7 @@ export const MuiTableRow = styled(Box)(({ index }) => ({
     gap: '12px',
     width: '100%',
     height: '40px',
+
     backgroundColor: index % 2 === 1 && Root.tableBg,
     '&:hover': {
         backgroundColor: Root.color_button_opacity,
@@ -68,7 +69,6 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    color: '#4A4A68',
     transition: 'all 0.2s ease-in-out',
     '&:hover': {
         color: Root.color_button,

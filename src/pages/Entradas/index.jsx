@@ -79,7 +79,7 @@ export const Entradas = () => {
 
         <TableContainer sx={{
             ...Root.scrollBar,
-            width: '1oo%',
+            width: '100%',
             boxSizing: 'border-box',
             backgroundColor: Root.color_default,
             borderRadius: '4px',

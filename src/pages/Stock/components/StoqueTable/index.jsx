@@ -55,8 +55,11 @@ export const EstoqueTable = ({
             width: '100%',
             height: '100%',
             overflow: 'scroll',
-            backgroundColor: Root.color_default,
-            borderRadius: '4px',
+            backgroundColor: Root.containTask,
+            borderRadius: '8px',
+            boxShadow: `0 0 3px ${Root.color_button_opacity2}`,
+            overflowX: 'hidden', // Esconde a barra horizontal
+   
             ...Root.scrollBar,
             color: Root.color_button,
         }} ref={tableRef}>
@@ -110,15 +113,14 @@ export const EstoqueTable = ({
                                     ? { opacity: 0.5 } // Estilo para itens desabilitados
                                     : isFocused
                                         ? {
-                                            border: `1px dashed ${Root.color_button}`,
-                                            backgroundColor: Root.color_button_opacity,
-                                            color: Root.color_button,
-                                            fontWeight: 'bold',
+                                            border: `1px dashed ${Root.containTask}`,
+                                            backgroundColor: Root.color_button,
+                                            color: Root.color_default,
+                                            fontWeight: 600,
                                             animation: 'dash 2s infinite',
                                         }
                                         : isItemExpired(item.dataValidade) ? {
-                                            borderLeft: `4px solid ${Root.green}`,
-                                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                                            // backgroundColor: Root.red,
                                         } : {}
                             }
                         >
@@ -168,7 +170,14 @@ export const EstoqueTable = ({
                                 sx={{
                                     width: '50%',
                                     alignItems: 'center',
-                                    ...Root.hoverReverse
+                                    '&:hover': {
+                                        background: `linear-gradient(90deg,  #822e91 30%, #cd3fe6 100%) !important`,
+                                        transform: 'scale(1.02)',
+                                        boxShadow: `0 0 3px ${Root.color_button}`,
+                                        color: Root.color_app_bar,
+                                        borderRadius: '8px',
+                                        mr: 1
+                                    },
                                 }}>
                                 <MoreHoriz />
                             </MuiTableRowCell>
