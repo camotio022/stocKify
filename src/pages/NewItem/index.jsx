@@ -84,7 +84,7 @@ export const NewItem = ({
                     <Close fontSize="10px" />
                 </TagsNewItem.close>
                 <TagsNewItem.typography>
-                    Adicionando novo item
+                    NOVO REGISTRO DE ESTOQUE
                 </TagsNewItem.typography>
                 <TagsNewItem.fromControl
                     sx={!data.categoria && {
@@ -180,7 +180,7 @@ export const NewItem = ({
                         can={data.quantidade}
                     >
                         {!progress ? <>
-                            ADICIONAR {data.quantidade > 1 ? 'OS ITEMS' : 'O ITEM'}
+                            ADICIONAR {data.quantidade > 1 ? 'OS PRODUTOS' : 'O PRODUTO'}
                         </> :
                             <>
                                 loading...
