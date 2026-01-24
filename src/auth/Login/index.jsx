@@ -21,7 +21,7 @@ export const Login = () => {
             [name]: value
         }));
     };
-    document.addEventListener('keydown', (e)=> {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             login()
         }
@@ -38,10 +38,11 @@ export const Login = () => {
     return (
         <Tag.MuiContainer matches={matches}>
             <Tag.MuiCard matches={matches}>
-                <Tag.MuiCardUser>
-                    <LogoMainLayout/>
-                </Tag.MuiCardUser>
-                <Tag.MuiGridForm mt={10} matches={matches}>
+                <LogoMainLayout />
+                <Tag.MuiTitle >
+                    ACESSO - PLATAFORMA STOCKIFY
+                </Tag.MuiTitle>
+                <Tag.MuiGridForm mt={4} matches={matches}>
                     <Tag.MuiLeftTag>
                         <Person />
                     </Tag.MuiLeftTag>
@@ -51,7 +52,7 @@ export const Login = () => {
                             value={data.email}
                             onChange={handleChange}
                             fullWidth
-                            label="Digite seu emai ou ID"
+                            label="IDENTIFICAÇÃO OU E-MAIL"
                             variant="outlined"
                         />
                     </Stack>
@@ -60,15 +61,14 @@ export const Login = () => {
                     <Tag.MuiLeftTag >
                         <LockClock />
                     </Tag.MuiLeftTag>
-                    <Stack sx={{ height: '100%', width: '83%',backgroundColor: Root.color_app_bar }}>
+                    <Stack sx={{ height: '100%', width: '83%', }}>
                         <Tag.MuiTextField
                             matches={matches}
                             type={open ? 'text' : 'password'}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment sx={{
-                                        color: Root.color_button,
-                                        backgroundColor: Root.color_default
+                                        color: Root.color_app_bar,
                                     }}>
                                         {open ? <Visibility onClick={() => setOpen(!open)} /> :
                                             <VisibilityOff onClick={() => setOpen(!open)} />}
@@ -79,7 +79,7 @@ export const Login = () => {
                             value={data.password}
                             onChange={handleChange}
                             fullWidth
-                            label="Digite sua senha"
+                            label="CHAVE DE SEGURANÇA"
                             variant="outlined" />
                     </Stack>
                 </Tag.MuiGridForm>
@@ -88,10 +88,19 @@ export const Login = () => {
                     onClick={login}
                     mt={2.6}
                     sx={{
-                        color: progress && 'white',
-                        bgcolor: progress && Root.color_button,
-                        gap: 2,
-                        ...Root.hover
+                        cursor: 'pointer',
+                        background: `linear-gradient(90deg, #cd3fe6 50%, #822e91 100%) !important`,
+                        border: 'none',
+                        color: '#fff',
+                        fontWeight: '800',
+                        letterSpacing: '0.1em',
+                        boxShadow: `0 0 20px ${Root.color_button_opacity}`,
+                        '&:hover': {
+                            background: `linear-gradient(90deg,  #822e91 30%, #cd3fe6 100%) !important`,
+                            transform: 'scale(1.02)',
+                            boxShadow: `0 0 30px ${Root.color_button}`,
+                        },
+                        gap: 2
                     }}>
                     <Typography sx={{ fontFamily: Root.fontFamilyMonospace }}>
                         {progress ? 'LOGANDO' : 'LOGAR-SE'}

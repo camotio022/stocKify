@@ -42,10 +42,10 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     justifyContent: 'flex-start',
     gap: '12px',
     flexDirection: 'row',
-    width: '95%', 
+    width: '95%',
     height: '48px',
-    transition: 'all .4s cubic-bezier(0.4, 0, 0.2, 1)', 
-    paddingLeft: '16px', 
+    transition: 'all .4s cubic-bezier(0.4, 0, 0.2, 1)',
+    paddingLeft: '16px',
     fontSize: '14px',
     fontFamily: Root.fontFamilySansSerif,
     fontWeight: 500,
@@ -89,7 +89,7 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     width: '100vw',
     height: '90vh',
     paddingInline: '18px',
-    marginTop: '10vh'
+    marginTop: '10vh',
 }))
 export const AppBar = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -113,4 +113,5 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     width: '100%',
     paddingInline: '12px',
     height: '95%',
+    
 }))
