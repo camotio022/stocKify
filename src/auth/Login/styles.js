@@ -87,7 +87,24 @@ export const MuiTextField = styled(TextField)(({ }) => ({
     '& .MuiOutlinedInput-root': {
         border: 'none',
         color: Root.color_button,
-        '& fieldset': { border: 'none' },
+        '& input': {
+          
+            '&:-webkit-autofill': {
+                WebkitBoxShadow: `0 0 0 100px transparent inset`, 
+                WebkitTextFillColor: Root.color_button,
+                transition: 'background-color 5000s ease-in-out 0s',
+            },
+            '&:-webkit-autofill:hover': {
+                WebkitBoxShadow: `0 0 0 100px transparent inset`,
+            },
+            '&:-webkit-autofill:focus': {
+                WebkitBoxShadow: `0 0 0 100px transparent inset`,
+            },
+            '&:-webkit-autofill:active': {
+                WebkitBoxShadow: `0 0 0 100px transparent inset`,
+            }
+        },
+        '& fieldset': { border: 'none', backgroundColor: 'transparent' },
     },
     '& .MuiInputLabel-root': {
         fontFamily: Root.fontFamilySansSerif,

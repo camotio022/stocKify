@@ -68,7 +68,7 @@ export const Login = () => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment sx={{
-                                        color: Root.color_app_bar,
+                                        color: Root.color_button,
                                     }}>
                                         {open ? <Visibility onClick={() => setOpen(!open)} /> :
                                             <VisibilityOff onClick={() => setOpen(!open)} />}
