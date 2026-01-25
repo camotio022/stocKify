@@ -22,7 +22,6 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     width: '14vw',
     height: '100%',
     color: Root.color_button,
-
 }))
 export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -35,7 +34,6 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     marginTop: '36px',
     width: '100%',
     overflow: 'hidden',
-
 }))
 export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',
@@ -54,20 +52,15 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     color: Root.purple,
     textDecoration: 'none',
     ":hover": {
-        color: Root.color_button, // Roxo do logo
-        backgroundColor: 'rgba(128, 0, 128, 0.04)', // Roxo quase invisível em vez de cinza sólido
+        color: Root.containTask, // Roxo do logo
+        backgroundColor: Root.color_button, // Roxo quase invisível em vez de cinza sólido
         paddingLeft: '22px', // Efeito sutil de "push" ao passar o mouse
         boxShadow: 'inset 4px 0px 0px ' + Root.color_button, // Barra lateral de destaque interna
         "& svg": {
             filter: `drop-shadow(0 0 5px ${Root.color_button_opacity2})`, // Brilho no ícone
         }
     },
-    "&.active": {
-        color: Root.color_button,
-        backgroundColor: 'rgba(128, 0, 128, 0.08)',
-        fontWeight: 'bold',
-        borderLeft: `4px solid ${Root.color_button}`,
-    }
+
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
     position: 'absolute',

@@ -72,7 +72,7 @@ export const MainLayout = ({ childrens }) => {
                     height: '85%',
                     width: '100%',
                 }}>
-                    <LogoMainLayout/>
+                    <LogoMainLayout />
                 </Stack>
                 <UserItens />
             </Tag.AppBar>
@@ -85,10 +85,15 @@ export const MainLayout = ({ childrens }) => {
                                     <Tag.MuiMainLayoutLink
                                         to={path.link}
                                         sx={path.link === location.pathname && {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
                                             color: Root.color_button,
                                             backgroundColor: Root.color_app_bar,
                                             fontWeight: 'bold',
-                                            height: '50px'
+                                            height: '50px',
+                                            boxShadow: Root.boxShadow,
+                                            zIndex: 1
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
