@@ -143,7 +143,7 @@ export const NavBarTop = ({
                     </MuiSearchContainer>
                     <MuiStockBotton
                         onClick={() => setNewItem(!NewItem)} sx={{
-                            backgroundColor: Root.color_button,
+                            backgroundColor: Root.green,
                             color: Root.color_default,
                             ...Root.hoverReverse,
                         }}>
