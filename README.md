@@ -1,46 +1,27 @@
-🚀 Estrutura Sugerida para o seu README
-1. Header Impactante
-Coloque o nome do projeto, uma breve descrição e o link do deploy.
+# 📦 Stockify
 
-📦 Stockify - Gestão Inteligente de Inventário
-Link do projeto: stoc-kify.vercel.app
+> Sistema inteligente de gestão de inventário e controle de validade.
 
-2. Sobre o Projeto
-Explique o "porquê" do projeto.
+O **Stockify** foi desenvolvido para resolver o problema de monitoramento de itens perecíveis e doações, oferecendo uma interface intuitiva e futurista para controle de estoque em tempo real.
 
-Problema: O desperdício de alimentos por falta de controle de validade e a dificuldade de visualizar entradas/saídas de doações.
+## 🚀 Demonstração
+Acesse o projeto online: [stoc-kify.vercel.app](https://stoc-kify.vercel.app)
 
-Solução: Uma plataforma centralizada que monitora o tempo de permanência de itens no estoque e alerta sobre prazos de vencimento.
+## ✨ Funcionalidades
+* **Dashboard Consolidado**: Visão geral de produtos, doadores e categorias.
+* **Inteligência de Validade**: Alertas automáticos baseados na data de vencimento.
+* **Rastreabilidade**: Cálculo de "tempo de prateleira" (ex: 616 dias em estoque).
+* **Interface Dinâmica**: Modais para retirada de itens, geração de listas e escaneamento de QR Code.
 
-3. Funcionalidades Principais (Onde você brilha!)
-Destaque o que você já construiu:
+## 🛠️ Tecnologias
+* **Frontend**: React.js com Vite
+* **Estilização**: Tailwind CSS / Custom CSS (Glassmorphism)
+* **Deploy**: Vercel (CI/CD automático)
 
-Dashboard Consolidado: Visualização completa de categorias, doadores e valores.
+## 🔧 Como Rodar Localmente
+1. Clone o repositório: `git clone https://github.com/seu-usuario/stoc-kify`
+2. Instale as dependências: `npm install`
+3. Inicie o servidor: `npm run dev`
 
-Controle Cronológico: Cálculo automático de "Data de Chegada" (ex: 616 dias atrás) para monitorar frescor.
-
-Gestão de Validade: Monitoramento rigoroso de datas de vencimento.
-
-CRUD Completo: Adição, edição, importação e remoção de produtos.
-
-4. Tecnologias Utilizadas (Sua Stack)
-Use ícones ou uma lista limpa:
-
-Frontend: React.js, Tailwind CSS (ou a lib que usou).
-
-Deploy: Vercel.
-
-Ferramentas: Git, GitHub, Lucide React (ícones).
-
-5. Como rodar o projeto localmente
-Isso mostra que você se preocupa com outros desenvolvedores:
-
-Bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/stoc-kify
-
-# Instale as dependências
-npm install
-
-# Inicie o projeto
-npm run dev
+---
+Desenvolvido por **Temotio Luis** 🚀
