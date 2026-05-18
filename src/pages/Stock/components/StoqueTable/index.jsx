@@ -59,7 +59,7 @@ export const EstoqueTable = ({
             borderRadius: '8px',
             boxShadow: `0 0 3px ${Root.color_button_opacity2}`,
             overflowX: 'hidden', // Esconde a barra horizontal
-   
+
             ...Root.scrollBar,
             color: Root.color_button,
         }} ref={tableRef}>
@@ -131,6 +131,16 @@ export const EstoqueTable = ({
                                     (key === 'donation') ||
                                     (key === 'typeItem')) {
                                     return null;
+                                }
+                                if (key === 'price') {
+                                    const valorPreco = item[key];
+                                    const ehDoacao = item.typeItem === 'doacao' || !valorPreco;
+
+                                    return (
+                                        <MuiTableRowCell key={i} sx={ehDoacao && { color: Root.green }}>
+                                            {ehDoacao ? 'Doação' : `R$ ${valorPreco}`}
+                                        </MuiTableRowCell>
+                                    );
                                 }
                                 if (key === 'dataChegada') {
                                     return (
