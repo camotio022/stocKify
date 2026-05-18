@@ -2,6 +2,7 @@ import { Alert, Typography } from "@mui/material"
 import { MuiModalInpExtension, MuiModalInpExtensionChecked, MuiModalInput, MuiModalInputExtension, MuiModalPapper, MuiModalPapperClose, MuiModalSave, MuiModalTitle, MuiModalZindex } from "./styles"
 import { Root } from "../../styles/Root/root_styles"
 import { useContext, useState } from "react"
+import { TagsNewItem } from "../../pages/NewItem/styles"
 import { Check, Close } from "@mui/icons-material"
 import generateExcelFile from "../../saveExcel"
 import { DownloadPDF } from "../../savePdf"
@@ -39,21 +40,19 @@ export const ModalZindex = ({
         }, 6000)
     }
     return (
-        <MuiModalZindex>
-            <MuiModalPapper>
+        <TagsNewItem.container>
+            <TagsNewItem.paper>
                 {open && <Alert sx={{
-                    boxShadow: Root.boxS,
-                    mb: 4
                 }} icon={<Check fontSize="inherit" />} severity="success">
                     O seu arguivo {fillname}.{extension} foi salvo, abra nos downloads do seu dispositivo!
                 </Alert>}
-                <MuiModalPapperClose onClick={() => setSaveExcel(!saveExcel)} >
+                <TagsNewItem.close onClick={() => setSaveExcel(!saveExcel)} >
                     <Close />
-                </MuiModalPapperClose>
-                <MuiModalTitle mb={2}>
-                    Enter the file name to save
-                </MuiModalTitle>
-                <MuiModalInputExtension>
+                </TagsNewItem.close>
+                <TagsNewItem.typography mb={2}>
+                    Digite o nome do arquivo que deseja salvar
+                </TagsNewItem.typography>
+                <TagsNewItem.fromControl>
                     <MuiModalInput
                         value={fillname}
                         onChange={(e) => {
@@ -70,7 +69,7 @@ export const ModalZindex = ({
                         >
                             .{extension}
                         </MuiModalTitle>}
-                </MuiModalInputExtension>
+                </TagsNewItem.fromControl>
                 <MuiModalInpExtension>
                     {[
                         {
@@ -88,13 +87,13 @@ export const ModalZindex = ({
                                 bgcolor: Root.color_button,
                                 boxShadow: Root.boxS,
                             } :
-                                { ...Root.hover }} key={index} onClick={() => setExtension(download.type)}>
+                                { ...Root.hover, backgroundColor: Root.color_button_opacity2 }} key={index} onClick={() => setExtension(download.type)}>
                                 {download.label}
                             </MuiModalInpExtensionChecked>
                         )
                     })}
                 </MuiModalInpExtension>
-                <MuiModalSave sx={{
+                <TagsNewItem.submit sx={{
                     backgroundColor:
                         (!extension ||
                             !fillname ||
@@ -118,7 +117,7 @@ export const ModalZindex = ({
                             setOpen(true)
                             success()
                         }
-                    } else if(extension === 'pdf') {
+                    } else if (extension === 'pdf') {
                         try {
                             DownloadPDF(downloads.estoque, fillname, location.pathname)
                         } catch (error) {
@@ -129,9 +128,9 @@ export const ModalZindex = ({
                         }
                     }
                 }}>
-                    Save
-                </MuiModalSave>
-            </MuiModalPapper>
-        </MuiModalZindex>
+                    Baixar o arguivo
+                </TagsNewItem.submit>
+            </TagsNewItem.paper>
+        </TagsNewItem.container>
     )
 }

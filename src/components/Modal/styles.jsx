@@ -96,8 +96,7 @@ export const MuiModalSave = styled(MenuItem)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '70%',
-    height: '100%',
-    marginTop: '12px',
+    width: '100%',
+    height: 'auto',
     borderRadius: '4px',
 }))
