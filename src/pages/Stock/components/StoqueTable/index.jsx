@@ -22,7 +22,7 @@ export const EstoqueTable = ({
     const headerInfos = [
         'Categoria',
         'Nome do alimento',
-        'Doador & Valor',
+        'Valor',
         'Quantidade',
         'Data de Validade',
         'Data de Chegada',
@@ -128,28 +128,10 @@ export const EstoqueTable = ({
                             {Object.keys(item).map((key, i) => {
                                 if ((key === 'author') ||
                                     (key === 'id') ||
+                                    (key === 'donation') ||
                                     (key === 'typeItem')) {
                                     return null;
                                 }
-                                if (key === 'donation' || key === 'price') {
-                                    if (item.typeItem === 'comprado' && key === 'price') {
-                                        return (
-                                            <MuiTableRowCell key={i}>
-                                                R$ {item.price}
-                                            </MuiTableRowCell>
-                                        );
-                                    }
-                                    if (item.typeItem === 'doação' && key === 'donation') {
-                                        return (
-                                            <MuiTableRowCell key={i}>
-                                                {item.donation}
-                                            </MuiTableRowCell>
-                                        );
-                                    }
-                                    return null;
-                                }
-
-
                                 if (key === 'dataChegada') {
                                     return (
                                         <MuiTableRowCell key={i}>
