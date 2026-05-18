@@ -57,7 +57,7 @@ export const EstoqueTable = ({
             overflow: 'scroll',
             backgroundColor: Root.containTask,
             borderRadius: '8px',
-            boxShadow: `0 0 3px ${Root.color_button_opacity2}`,
+            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
             overflowX: 'hidden', // Esconde a barra horizontal
 
             ...Root.scrollBar,
@@ -141,7 +141,7 @@ export const EstoqueTable = ({
                                             {ehDoacao ? 'Doação' : `R$ ${valorPreco}`}
                                         </MuiTableRowCell>
                                     );
-                                }
+                                }  
                                 if (key === 'dataChegada') {
                                     return (
                                         <MuiTableRowCell key={i}>

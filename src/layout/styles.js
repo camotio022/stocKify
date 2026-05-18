@@ -12,6 +12,7 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
     width: '100vw',
     height: '100vh',
     backgroundColor: Root.color_app_bar,
+
 }))
 // LATERAL ESQUERDO LAYOUT
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
@@ -108,6 +109,5 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     width: '83.3vw',
     height: '85vh',
     boxShadow: Root.boxShadow,
-
     borderRadius: '8px'
 }))

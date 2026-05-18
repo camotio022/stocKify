@@ -10,7 +10,6 @@ export const MuiStock = styled(Stack)(({ }) => ({
     width: '100%',
     height: '98%',
     fontFamily: Root.fontFamilyMonospace,
-
 }))
 export const MuiStockModalTop = styled(Stack)(({ }) => ({
     position: 'absolute',
