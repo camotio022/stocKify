@@ -3,6 +3,7 @@ import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopu
 import { getFirestore, doc, setDoc, collection, getDocs, query, where, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase_config';
 import { useMediaQuery } from '@mui/material';
+import { getTenancies } from '../api/tenancys/get';
 export const AuthContext = createContext();
 const provider = new GoogleAuthProvider();
 export const AuthProvider = ({ children }) => {
@@ -11,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [select, setSelect] = useState('')
     const [search, setSearch] = useState('')
     const [user, setUser] = useState(null);
+    const [tenant, setTenant] = useState({})
     const auth = getAuth();
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
@@ -23,6 +25,16 @@ export const AuthProvider = ({ children }) => {
         entradas: [],
         saidas: []
     })
+    const checkTenant = async (id) => {
+        try {
+            const res = await getTenancies.tenancy(id);
+            setTenant(res)
+                console.log(tenant, 'aquii')
+        } catch (error) {
+            console.error("Erro ao checar inquilino:", error);
+            return false;
+        }
+    }
     const checkUserAuthentication = async () => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
         setIsLoggedIn(loggedInStatus === 'true');
@@ -44,9 +56,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
+        checkTenant(user.tenant)
         checkUserAuthentication();
     }, []);
-
+    console.log(tenant)
     const login = (userData) => {
         setIsLoggedIn(true);
         localStorage.setItem('isLoggedIn', 'true');
