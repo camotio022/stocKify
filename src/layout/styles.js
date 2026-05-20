@@ -11,8 +11,6 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
     flexDirection: 'column',
     width: '100vw',
     height: '100vh',
-    backgroundColor: Root.color_app_bar,
-
 }))
 // LATERAL ESQUERDO LAYOUT
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
@@ -34,7 +32,7 @@ export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     paddingBlock: '4px',
     marginTop: '36px',
     width: '100%',
-    overflow: 'hidden',
+
 }))
 export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',
@@ -84,6 +82,8 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     height: '90vh',
     paddingInline: '18px',
     marginTop: '10vh',
+    overflow: 'hidden',
+
 }))
 export const AppBar = styled(Stack)(({ }) => ({
     position: 'absolute',
@@ -97,6 +97,7 @@ export const AppBar = styled(Stack)(({ }) => ({
     height: '10vh',
 
 }))
+
 // LATERAL DIREIDO
 export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -108,6 +109,7 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     padding: '13px',
     width: '83.3vw',
     height: '85vh',
-    boxShadow: Root.boxShadow,
-    borderRadius: '8px'
+    border: '2px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
+    borderRadius: '8px',
+    borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_opacity}) 1`, // 2. Aplica o
 }))
