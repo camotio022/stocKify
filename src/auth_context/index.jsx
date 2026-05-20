@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [select, setSelect] = useState('')
     const [search, setSearch] = useState('')
     const [user, setUser] = useState(null);
-    const [tenant, setTenant] = useState({})
+    const [tenant, setTenant] = useState(null)
     const auth = getAuth();
     const [newItem, setNewItem] = useState(false)
     const [saveExcel, setSaveExcel] = useState(false)
@@ -25,16 +25,7 @@ export const AuthProvider = ({ children }) => {
         entradas: [],
         saidas: []
     })
-    const checkTenant = async (id) => {
-        try {
-            const res = await getTenancies.tenancy(id);
-            setTenant(res)
-                console.log(tenant, 'aquii')
-        } catch (error) {
-            console.error("Erro ao checar inquilino:", error);
-            return false;
-        }
-    }
+
     const checkUserAuthentication = async () => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
         setIsLoggedIn(loggedInStatus === 'true');
@@ -54,12 +45,25 @@ export const AuthProvider = ({ children }) => {
         });
         return () => unsubscribe();
     };
+    const checkTenant = async (id) => {
+        try {
+            const res = await getTenancies.tenancy(id);
+            setTenant(res)
+            console.log(res, 'aquii')
+        } catch (error) {
+            console.error("Erro ao checar inquilino:", error);
+            return false;
+        }
+    }
 
     useEffect(() => {
-        checkTenant(user.tenant)
+        if (user && user.tenant && !tenant) {
+            checkTenant(user.tenant);
+        }
+    }, [user, tenant]);
+    useEffect(() => {
         checkUserAuthentication();
     }, []);
-    console.log(tenant)
     const login = (userData) => {
         setIsLoggedIn(true);
         localStorage.setItem('isLoggedIn', 'true');
