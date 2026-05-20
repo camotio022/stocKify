@@ -152,7 +152,7 @@ export const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                isLoggedIn, login, logout,
+                isLoggedIn, login, logout, tenant,
                 loginWithGoogle, loginWithEmailAndPassword,
                 user, newItem, setNewItem, saveExcel, setSaveExcel,
                 selectedItems, setSelectedItems, downloads, setDownloads,

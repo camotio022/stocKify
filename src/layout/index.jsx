@@ -20,6 +20,7 @@ export const MainLayout = ({ childrens }) => {
     const location = useLocation()
     const {
         logout,
+        tenant,
         newItem,
         setNewItem,
         saveExcel,
@@ -72,7 +73,7 @@ export const MainLayout = ({ childrens }) => {
                     height: '85%',
                     width: '100%',
                 }}>
-                    <LogoMainLayout />
+                    <LogoMainLayout text={tenant?.name}/>
                 </Stack>
                 <UserItens />
             </Tag.AppBar>
