@@ -25,14 +25,13 @@ export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
 export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    gap: '3px',
+
     paddingBlock: '4px',
     marginTop: '36px',
-    width: '100%',
-
+    width: '98%',
 }))
 export const MuiMainLayoutLink = styled(Link)(({ }) => ({
     display: 'flex',

@@ -1,6 +1,8 @@
 import { Link, Stack, Typography } from "@mui/material"
 import Image from '../../images/layout/captura.png'
 import Imag3 from '../../images/layout/captura.png'
+import FetureImgLogo from '../../images/layout/feture.png'
+import FetureImgLogo1 from '../../images/layout/feture.png'
 import { useContext } from "react"
 import { Root } from "../../styles/Root/root_styles"
 export const LogoMainLayout = ({ image, text, black, top }) => {
@@ -8,17 +10,20 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
     return (
         <Stack sx={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'center',
             flexDirection: 'column',
-            marginTop: top ? '0px' : '12px',
+            paddingLeft: '8px',
+            marginTop: top ? '0px' : '20px',
             width: '100%',
             maxWidth: '180px',
             height: 'auto',
+            borderLeft: '3px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
+            borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_opacity}) 1`,
         }}>
             <Link sx={{
                 width: '90%',
-                height: 'auto',
+                height: '40px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -31,19 +36,22 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
                     style={{
                         width: '100%',
                         height: 'auto',
+                        marginLeft: -20,
                         background: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary})`,
-                        // Usa a própria imagem como máscara para revelar o degradê de fundo
-                        WebkitMaskImage: `url(${(black ? Imag3 : Image) || image})`,
-                        maskImage: `url(${(black ? Imag3 : Image) || image})`,
+                        WebkitMaskImage: `url(${(black ? Imag3 : FetureImgLogo) || image})`,
+                        maskImage: `url(${(black ? Imag3 : FetureImgLogo) || image})`,
                         WebkitMaskSize: 'contain',
                         maskSize: 'contain',
                         WebkitMaskRepeat: 'no-repeat',
                         maskRepeat: 'no-repeat',
                     }}
-                    src={(black ? Imag3 : Image) || image}
+                    src={(black ? Imag3 : FetureImgLogo1) || image}
                     alt="imagem da logo da junta mais!" />
             </Link>
             <Typography sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 textTransform: 'uppercase',
                 fontWeight: 800,
                 fontFamily: Root.fontFamilySansSerif,

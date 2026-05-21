@@ -73,7 +73,7 @@ export const MainLayout = ({ childrens }) => {
                     height: '85%',
                     width: '100%',
                 }}>
-                    <LogoMainLayout text={tenant?.name}/>
+                    <LogoMainLayout text={tenant?.name} />
                 </Stack>
                 <UserItens />
             </Tag.AppBar>
@@ -90,11 +90,8 @@ export const MainLayout = ({ childrens }) => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             color: Root.color_button,
-                                            backgroundColor: Root.color_app_bar,
-                                            fontWeight: 'bold',
-                                            height: '50px',
-                                            boxShadow: Root.boxShadow,
-                                            zIndex: 1
+                                            height: '46px',
+                                            background: `linear-gradient(90deg, ${Root.color_button_opacity2}, ${Root.cyan})`,
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
