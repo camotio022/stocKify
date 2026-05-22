@@ -144,6 +144,7 @@ export const AuthProvider = ({ children }) => {
             const userData = await queryUser(userCredential.user.email, userCredential.user);
             setUser(userData);
             login(userData);
+            checkTenant(user?.tenant)
         } catch (error) {
             const errorMessage = error.message || 'Ocorreu um erro ao fazer login.';
             alert(errorMessage);

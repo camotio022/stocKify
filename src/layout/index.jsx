@@ -30,6 +30,7 @@ export const MainLayout = ({ childrens }) => {
         notifications, setNotifications,
         messages, setMessage
     } = useContext(AuthContext)
+    console.log(tenant)
     const paths = [
         {
             name: 'Estoque',
