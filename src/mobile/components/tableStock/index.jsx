@@ -28,7 +28,7 @@ export const TableStock = ({ item }) => {
             </StylesTableMobile.tableRow>
             <StylesTableMobile.tableRow sx={{
                 flexDirection: 'column',
-                backgroundColor: Root.color_button_opacity,
+                backgroundColor: Root.color_button_secondary,
                 color: Root.color_button,
             }}>
                 {item.map((i, ix) => {

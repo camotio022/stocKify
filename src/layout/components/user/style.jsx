@@ -22,8 +22,8 @@ export const StyleUser = {
         padding: '8px',
         borderRadius: '8px',
         color: Root.color_button,
-        boxShadow: `0 0 3px ${Root.color_button_opacity2}`,
-        border: `1px solid ${Root.color_button_opacity}`,
+        boxShadow: `0 0 3px ${Root.color_button}`,
+        border: `1px solid ${Root.color_button_secondary}`,
         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         cursor: 'pointer',
         "&:hover": {
@@ -66,8 +66,8 @@ export const StyleUser = {
 
         // --- 3. BORDAS E BRILHO (ESTILO LOGO) ---
         // Borda fina que brilha, imitando o contorno do logo
-        border: `1.5px solid ${Root.color_button_opacity}`,
-        boxShadow: `0 0 10px ${Root.color_button_opacity2}`,
+        border: `1.5px solid ${Root.color_button_secondary}`,
+        boxShadow: `0 0 10px ${Root.color_button}`,
 
         // --- 4. INTERAÇÕES E REFINAMENTO ---
         fontFamily: Root.fontFamilySansSerif,

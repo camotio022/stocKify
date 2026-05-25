@@ -29,7 +29,7 @@ export const ModalZindex = ({
         justifyContent: 'center',
         paddingInline: '4px',
         height: '100%',
-        bgcolor: Root.color_button_opacity,
+        bgcolor: Root.color_button_secondary,
         color: Root.color_button
     }
     console.log(downloads.estoque)
@@ -87,7 +87,7 @@ export const ModalZindex = ({
                                 bgcolor: Root.color_button,
                                 boxShadow: Root.boxS,
                             } :
-                                { ...Root.hover, backgroundColor: Root.color_button_opacity2 }} key={index} onClick={() => setExtension(download.type)}>
+                                { ...Root.hover, backgroundColor: Root.color_button }} key={index} onClick={() => setExtension(download.type)}>
                                 {download.label}
                             </MuiModalInpExtensionChecked>
                         )
@@ -98,7 +98,7 @@ export const ModalZindex = ({
                         (!extension ||
                             !fillname ||
                             !naoTemEspacos(fillname)) ?
-                            Root.color_button_opacity : Root.color_button,
+                            Root.color_button_secondary : Root.color_button,
                     color: Root.white,
                     fontFamily: Root.fontFamilyMonospace
                 }} onClick={() => {

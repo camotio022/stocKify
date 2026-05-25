@@ -83,7 +83,7 @@ export const LayoutMobile = {
         border: `1px solid ${Root.c}`,
         fontWeight: 'bold',
         fontFamily: Root.fontFamilyMonospace,
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
         color: Root.color_button,
         cursor: 'pointer',
         marginRight: '4px',

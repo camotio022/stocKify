@@ -19,7 +19,7 @@ export const StylesOptions = {
         left: 0,
         zIndex: 5,
         transition: 'all.3s',
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
         ...Root.scrollBar
     })),
     paper: styled(Stack)(({ moreitems }) => ({
@@ -47,7 +47,7 @@ export const StylesOptions = {
     })),
     divider: styled(Divider)(()=> ({
         width: '90%',
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
     })),
     item: styled(MenuItem)(()=> ({
         display: 'flex',

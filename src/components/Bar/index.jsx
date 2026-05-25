@@ -142,6 +142,9 @@ export const NavBarTop = ({
                         />
                     </MuiSearchContainer>
                     <MuiStockBotton
+                        style={{
+                            background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
+                        }}
                         onClick={() => setNewItem(!NewItem)} sx={{
                             backgroundColor: Root.green,
                             color: Root.color_default,

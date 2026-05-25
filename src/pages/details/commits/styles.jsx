@@ -20,6 +20,6 @@ export const StyleCommits = {
         height: 'auto',
         backgroundColor: Root.white,
         color: Root.color_button,
-        borderBottom: `1px solid ${Root.color_button_opacity}`,
+        borderBottom: `1px solid ${Root.color_button_secondary}`,
     })), 
 }

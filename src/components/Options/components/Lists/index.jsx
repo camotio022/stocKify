@@ -87,7 +87,7 @@ export const MyLists = ({ item }) => {
                     const description = descriptionsTypeLists[list.type]
                     return (
                         <StylesLists.listContain key={index} sx={{
-                            backgroundColor: (openDs === list.listName) && Root.color_button_opacity,
+                            backgroundColor: (openDs === list.listName) && Root.color_button_secondary,
                             borderLeft: `5px solid ${Root.color_button}`,
                             boxSizing: 'border-box'
 

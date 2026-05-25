@@ -31,7 +31,7 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     letterSpacing: '0.02em',
     textTransform: 'none',
     color: Root.color_button,
-    textShadow: `0px 0px 1px ${Root.color_button_opacity}`,
+    textShadow: `0px 0px 1px ${Root.color_button_secondary}`,
     transition: 'all 0.3s ease',
     '&:hover': {
         color: Root.color_button, // O roxo do logo
@@ -48,7 +48,7 @@ export const MuiTableRow = styled(Box)(({ index }) => ({
 
     backgroundColor: index % 2 === 1 && Root.tableBg,
     '&:hover': {
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
         transition: 'all .3s',
         boxShadow: Root.boxS
     },

@@ -28,7 +28,7 @@ export const StylesDetailsItems = {
         width: "100%",
         paddingBlock: '8px',
         height: "50px",
-        borderBottom: `1px solid ${Root.color_button_opacity}`,
+        borderBottom: `1px solid ${Root.color_button_secondary}`,
         boxSizing: 'border-box'
     })),
     container2: styled(Stack)(({ }) => ({
@@ -41,7 +41,7 @@ export const StylesDetailsItems = {
         width: '100%',
         minHeight: '300px',
         borderRadius: '8px',
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
         ...Root.boxShadow
     })),
     title: styled(Typography)(() => ({
@@ -116,7 +116,7 @@ export const StylesDetailsItems = {
         right: 0,
         borderTopLeftRadius: '50%',
         borderBottomRightRadius: '50%',
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
     })),
     image: styled(Stack)(({ }) => ({
         position: 'absolute',
@@ -138,7 +138,7 @@ export const StylesDetailsItems = {
         width: '100%',
         height: '60px',
         backgroundColor: Root.color_default,
-        borderBottom: `1px solid ${Root.color_button_opacity}`,
+        borderBottom: `1px solid ${Root.color_button_secondary}`,
         color: Root.color_button,
         fontWeight: 'bold',
         fontFamily: Root.fontFamilyMonospace,

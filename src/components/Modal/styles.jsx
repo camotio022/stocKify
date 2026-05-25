@@ -14,7 +14,7 @@ export const MuiModalZindex = styled(Stack)(({ }) => ({
     left: 0,
     zIndex: 5,
     transition: 'all .3s',
-    backgroundColor: Root.color_button_opacity,
+    backgroundColor: Root.color_button_secondary,
 }))
 export const MuiModalPapper = styled(Stack)(({ }) => ({
     position: 'relative',
@@ -25,7 +25,7 @@ export const MuiModalPapper = styled(Stack)(({ }) => ({
     width: '30%',
     minHeight: '10%',
     backgroundColor: Root.color_app_bar,
-    border: `1px solid ${Root.color_button_opacity}`,
+    border: `1px solid ${Root.color_button_secondary}`,
     boxShadow: Root.boxS,
     borderRadius: '4px',
     padding: '5%',

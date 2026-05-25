@@ -67,7 +67,7 @@ export const MuiStockBotton = styled(Button)(({ }) => ({
     '&:hover': {
         backgroundColor: Root.color_button,
         color: '#ffffff',
-        boxShadow: `0 4px 12px ${Root.color_button_opacity2}`, 
+        boxShadow: `0 4px 12px ${Root.color_button}`, 
         transform: 'translateY(-1px)',
     },
 
@@ -147,7 +147,7 @@ export const MuiInputNative = styled('input')(({ }) => ({
     height: '75%',
     width: '100%',
     borderRadius: '4px',
-    border: `1px solid ${Root.color_button_opacity}`,
+    border: `1px solid ${Root.color_button_secondary}`,
     backgroundColor: Root.color_app_bar,
     color: Root.color_button,
     fontWeight: 'bold',

@@ -16,8 +16,8 @@ export const MuiContainer = styled(Stack)(({ }) => ({
         position: 'absolute',
         width: '200%',
         height: '200%',
-        backgroundImage: `linear-gradient(${Root.color_button_opacity} 1px, transparent 1px), 
-                          linear-gradient(90deg, ${Root.color_button_opacity} 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(${Root.color_button_secondary} 1px, transparent 1px), 
+                          linear-gradient(90deg, ${Root.color_button_secondary} 1px, transparent 1px)`,
         backgroundSize: '50px 50px',
         opacity: 0.05,
         animation: 'move 60s linear infinite',
@@ -35,8 +35,8 @@ export const MuiCard = styled(Stack)(({ matches }) => ({
     backgroundColor: Root.color_app_bar,
     backdropFilter: 'blur(15px)',
     borderRadius: '24px',
-    border: `3px solid ${Root.color_button_opacity2}`,
-    boxShadow: `0 0 40px ${Root.color_button}, inset 0 0 20px ${Root.color_button_opacity2}`,
+    border: `3px solid ${Root.color_button}`,
+    boxShadow: `0 0 40px ${Root.color_button}, inset 0 0 20px ${Root.color_button}`,
 }));
 export const MuiTitle = styled(Typography)(({
     textAlign: 'center',
@@ -46,7 +46,7 @@ export const MuiTitle = styled(Typography)(({
     textTransform: 'uppercase',
     letterSpacing: '0.2em',
     color: Root.color_button,
-    textShadow: `0 0 12px ${Root.color_button_opacity2}`,
+    textShadow: `0 0 12px ${Root.color_button}`,
     opacity: 0.9,
     transition: 'all 0.3s ease',
     '&:hover': {
@@ -67,7 +67,7 @@ export const MuiGridForm = styled(Stack)(({ matches }) => ({
     transition: '0.3s all ease',
     '&:focus-within': {
         border: `1px solid ${Root.color_button}`,
-        boxShadow: `0 0 15px ${Root.color_button_opacity2}`,
+        boxShadow: `0 0 15px ${Root.color_button}`,
     }
 }))
 export const MuiLeftTag = styled(Stack)(({ }) => ({

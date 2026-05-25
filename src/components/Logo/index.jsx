@@ -19,7 +19,7 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
             maxWidth: '180px',
             height: 'auto',
             borderLeft: '3px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
-            borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_opacity}) 1`,
+            borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary}) 1`,
         }}>
             <Link sx={{
                 width: '90%',

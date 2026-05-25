@@ -55,7 +55,7 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
         paddingLeft: '22px', // Efeito sutil de "push" ao passar o mouse
         boxShadow: 'inset 4px 0px 0px ' + Root.color_button, // Barra lateral de destaque interna
         "& svg": {
-            filter: `drop-shadow(0 0 5px ${Root.color_button_opacity2})`, // Brilho no ícone
+            filter: `drop-shadow(0 0 5px ${Root.color_button})`, // Brilho no ícone
         }
     },
 
@@ -110,5 +110,5 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     height: '85vh',
     border: '2px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
     borderRadius: '8px',
-    borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_opacity}) 1`, // 2. Aplica o
+    borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary}) 1`, // 2. Aplica o
 }))

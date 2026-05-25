@@ -84,7 +84,7 @@ export const ExitsItems = () => {
 
     const selectSx = {
         border: `1px dashed ${Root.color_button}`,
-        backgroundColor: Root.color_button_opacity,
+        backgroundColor: Root.color_button_secondary,
         color: Root.color_button,
         fontWeight: 'bold',
         fontFamily: Root.fontFamilyMonospace,

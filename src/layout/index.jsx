@@ -16,8 +16,10 @@ import { Mobile } from "../mobile/layout/index.jsx"
 import { LayoutMobile } from "../mobile/styles/layout.jsx"
 import { UserItens } from "./components/user/index.jsx"
 import { NotificationsApp } from "../pages/Notifications/index.jsx"
+import { LogoutConfirmationModal } from "../components/Alertas/LogoutUser.jsx"
 export const MainLayout = ({ childrens }) => {
     const location = useLocation()
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const {
         logout,
         tenant,
@@ -30,7 +32,6 @@ export const MainLayout = ({ childrens }) => {
         notifications, setNotifications,
         messages, setMessage
     } = useContext(AuthContext)
-    console.log(tenant)
     const paths = [
         {
             name: 'Estoque',
@@ -58,6 +59,10 @@ export const MainLayout = ({ childrens }) => {
             icon: <History />
         },
     ]
+    const handleFinalLogout = () => {
+        logout();
+        setShowLogoutModal(false);
+    };
     if (matches) {
         return (
             <Mobile childrens={childrens} />
@@ -92,7 +97,7 @@ export const MainLayout = ({ childrens }) => {
                                             justifyContent: 'center',
                                             color: Root.color_button,
                                             height: '46px',
-                                            background: `linear-gradient(90deg, ${Root.color_button_opacity2}, ${Root.cyan})`,
+                                            background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
@@ -113,7 +118,7 @@ export const MainLayout = ({ childrens }) => {
                         <Tag.MuiMainLayoutLink>
                             <Settings /> {'Configurações'}
                         </Tag.MuiMainLayoutLink>
-                        <Tag.MuiMainLayoutLink onClick={() => logout()} >
+                        <Tag.MuiMainLayoutLink onClick={() => setShowLogoutModal(true)} >
                             <Logout /> {'Saír'}
                         </Tag.MuiMainLayoutLink>
                     </Tag.MuiMainLayoutSettingsUser>
@@ -140,6 +145,11 @@ export const MainLayout = ({ childrens }) => {
                     {childrens}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>
+            <LogoutConfirmationModal
+                open={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleFinalLogout}
+                tenantData={tenant} />
         </Tag.MuiMainLayout>
     )
 }

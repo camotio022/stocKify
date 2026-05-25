@@ -16,7 +16,7 @@ export const StylesTableMobile = {
         minHeight: '40px',
         backgroundColor: Root.color_button,
         color: Root.color_default,
-        border: `1px solid ${Root.color_button_opacity}`
+        border: `1px solid ${Root.color_button_secondary}`
     })),
     tableRowItem: styled(Stack)(({}) => ({
         display: 'flex',

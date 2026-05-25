@@ -14,7 +14,7 @@
 //         left: 0,
 //         zIndex: 5,
 //         transition: 'all .3s',
-//         backgroundColor: Root.color_button_opacity,
+//         backgroundColor: Root.color_button_secondary,
 //     })),
 //     paper: styled(Stack)(({ moreitems }) => ({
 //         position: 'relative',
@@ -28,7 +28,7 @@
 //         width: '30%',
 //         minHeight: '10%',
 //         backgroundColor: Root.color_app_bar,
-//         border: `1px solid ${Root.color_button_opacity}`,
+//         border: `1px solid ${Root.color_button_secondary}`,
 //         boxShadow: Root.boxS,
 //         borderRadius: '4px',
 //         padding: '5% 5% 2% 5%',
@@ -61,7 +61,7 @@
 //         color: Root.color_button,
 //         fontWeight: 'bold',
 //         fontFamily: Root.fontFamilyMonospace,
-//         border: `1px solid ${Root.color_button_opacity}`,
+//         border: `1px solid ${Root.color_button_secondary}`,
 //         borderRadius: '4px',
 //         ...Root.boxS,
 //         height: '54px',
@@ -82,7 +82,7 @@
 //         color: Root.color_button,
 //         fontWeight: 'bold',
 //         fontFamily: Root.fontFamilyMonospace,
-//         border: `1px solid ${Root.color_button_opacity}`,
+//         border: `1px solid ${Root.color_button_secondary}`,
 //         borderRadius: '4px',
 //         ...Root.boxS,
 //         height: '54px',
@@ -198,7 +198,7 @@ export const TagsNewItem = {
             '&:before, &:after': { display: 'none' }, // Remove linha padrão do MUI
         },
         '&:hover': {
-            boxShadow: `0 0 0 2px ${Root.color_button_opacity}`,
+            boxShadow: `0 0 0 2px ${Root.color_button_secondary}`,
         }
     })),
 
@@ -215,7 +215,7 @@ export const TagsNewItem = {
             fontSize: '14px',
         },
         '&:hover': {
-            boxShadow: `0 0 0 2px ${Root.color_button_opacity}`,
+            boxShadow: `0 0 0 2px ${Root.color_button_secondary}`,
         }
     })),
 
@@ -231,13 +231,13 @@ export const TagsNewItem = {
         borderRadius: '8px',
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
-        boxShadow: `0 8px 16px ${Root.color_button_opacity2}`,
+        boxShadow: `0 8px 16px ${Root.color_button}`,
         transition: 'all 0.3s',
 
         '&:hover': {
             backgroundColor: Root.color_button,
             transform: 'translateY(-2px)',
-            boxShadow: `0 12px 20px ${Root.color_button_opacity}`,
+            boxShadow: `0 12px 20px ${Root.color_button_secondary}`,
         },
         '&:disabled': {
             backgroundColor: '#E9ECEF',

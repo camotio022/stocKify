@@ -80,7 +80,7 @@ export const RemoveItems = ({ item, setRemove }) => {
                             flexDirection: 'row',
                             height: '100%',
                             paddingInline: '18px',
-                            bgcolor: Root.color_button_opacity,
+                            bgcolor: Root.color_button_secondary,
                             borderRadius: '10px',
                             ...Root.hover
                         }} key={index} onClick={() => {

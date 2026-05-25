@@ -6,7 +6,7 @@ import { Root } from '../../styles/Root/root_styles';
 export const SimpleAlert = ({ quantidade, item }) => {
     return (
         <Alert sx={{
-            border: `1px solid ${Root.color_button_opacity}`,
+            border: `1px solid ${Root.color_button_secondary}`,
             height: '50-px',
             width: '90%',
             mb: 1

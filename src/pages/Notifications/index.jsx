@@ -103,7 +103,7 @@ export const NotificationsApp = ({ }) => {
                                 gap: 2,
                                 color: Root.color_button,
                                 right: 0,
-                                border: `1px solid ${Root.color_button_opacity}`
+                                border: `1px solid ${Root.color_button_secondary}`
                             }}>
                                 <MoreHoriz />
                             </Stack>

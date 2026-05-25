@@ -29,32 +29,61 @@ export const AuthProvider = ({ children }) => {
     const checkUserAuthentication = async () => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
         setIsLoggedIn(loggedInStatus === 'true');
+
         if (loggedInStatus === 'true') {
             const userDataFromLocalStorage = JSON.parse(localStorage.getItem('user'));
             if (userDataFromLocalStorage) {
                 setUser(userDataFromLocalStorage);
             }
+
+            // 🔥 1. Recupera o Tenant do LocalStorage para carregar o tema e o nome na hora do F5!
+            const tenantDataFromLocalStorage = JSON.parse(localStorage.getItem('tenant'));
+            if (tenantDataFromLocalStorage) {
+                setTenant(tenantDataFromLocalStorage);
+            }
         }
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userData = await queryUser(user.email);
                 setUser(userData);
+
+                // Se o usuário vindo do banco tiver a propriedade tenant, já dispara o checkTenant
+                if (userData && userData.tenant) {
+                    checkTenant(userData.tenant);
+                }
             } else {
                 setUser(null);
+                setTenant(null); // Limpa o estado se deslogar
+
+                // 🔐 Segurança: Limpa o LocalStorage no logout
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                localStorage.removeItem('tenant');
             }
         });
+
         return () => unsubscribe();
     };
+
     const checkTenant = async (id) => {
+        if (!id) return;
         try {
             const res = await getTenancies.tenancy(id);
-            setTenant(res)
-            console.log(res, 'aquii')
+
+            if (res) {
+                setTenant(res);
+
+                // 🔥 2. Salva as informações atualizadas do tenant separadamente no LocalStorage
+                localStorage.setItem('tenant', JSON.stringify(res));
+
+                console.log(res, 'Inquilino salvo e cacheado!');
+            }
         } catch (error) {
             console.error("Erro ao checar inquilino:", error);
             return false;
         }
-    }
+    };
 
     useEffect(() => {
         checkUserAuthentication();
@@ -74,6 +103,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('user');
+        localStorage.removeItem('tenant');
     };
     const loginWithGoogle = async () => {
         signInWithPopup(auth, provider)

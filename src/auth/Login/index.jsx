@@ -8,9 +8,9 @@ import { LogoMainLayout } from '../../components/Logo'
 import { LoginAuthMessage } from '../../components/Alertas/LoginAuthMessage'
 
 export const Login = () => {
-    const[open, setOpen] = useState(false); // Mudado de '' para false (booleano)
-    const [openAlert, setAlert] = useState(false); // Corrigido erro de digitação de setAleter e inicializado como false
-    const [alertContent, setAlertContent] = useState({ title: '', message: '' }); // Guarda os textos dinâmicos do erro
+    const[open, setOpen] = useState(false); 
+    const [openAlert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState({ title: '', message: '' });
     const [progress, setProgress] = useState(false);
     const { loginWithEmailAndPassword, matches } = useContext(AuthContext);
 
@@ -27,7 +27,7 @@ export const Login = () => {
         }));
     };
 
-    // 🔐 Validação e Função de Login robusta
+    // Validação e Função de Login robusta
     const login = async () => {
         // Se já estiver processando, bloqueia cliques repetidos (evita ataques de brute-force manual)
         if (progress) return;
@@ -173,7 +173,7 @@ export const Login = () => {
                         color: '#fff',
                         fontWeight: '800',
                         letterSpacing: '0.1em',
-                        boxShadow: `0 0 20px ${Root.color_button_opacity}`,
+                        boxShadow: `0 0 20px ${Root.color_button_secondary}`,
                         '&:hover': {
                             background: `linear-gradient(90deg,  #822e91 30%, #cd3fe6 100%) !important`,
                             transform: 'scale(1.02)',
