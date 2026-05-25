@@ -26,6 +26,7 @@ export const NewItem = ({
     const [progress, setProgress] = useState(false)
     const [success, setSuccess] = useState(false)
     const [data, setData] = useState({
+        tenant: user.tenant,
         nome: "",
         categoria: "",
         quantidade: "",

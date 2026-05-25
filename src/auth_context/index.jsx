@@ -57,13 +57,13 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
+        checkUserAuthentication();
+    }, []);
+    useEffect(() => {
         if (user && user.tenant && !tenant) {
             checkTenant(user.tenant);
         }
     }, [user, tenant]);
-    useEffect(() => {
-        checkUserAuthentication();
-    }, []);
     const login = (userData) => {
         setIsLoggedIn(true);
         localStorage.setItem('isLoggedIn', 'true');
