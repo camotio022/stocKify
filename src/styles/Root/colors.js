@@ -5,7 +5,7 @@ export const colors = {
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
   color_button: '#800080',
-  color_button_secondary: '#932dd2',
+  color_button_secondary: '#63278b',
   colorBorderOpacity: 'none',
   color_link: '#932dd2',
   subButton: 'rgba(169, 169, 169, 0.5)',
@@ -28,7 +28,8 @@ export const colors = {
   success: '#28a745',
   info: '#17a2b8',
   warning: '#ffc107',
-  danger: '#dc3545',
+  danger:'#9b0000',
   light: '#f8f9fa',
-  dark: '#343a40'
+  dark: '#343a40',
+  doacao: '#1E293B'
 };

@@ -137,7 +137,7 @@ export const EstoqueTable = ({
                                     const ehDoacao = item.typeItem === 'doacao' || !valorPreco;
 
                                     return (
-                                        <MuiTableRowCell key={i} sx={ehDoacao && { color: Root.green }}>
+                                        <MuiTableRowCell key={i} sx={ehDoacao && { color: Root.doacao }}>
                                             {ehDoacao ? 'Doação' : `R$ ${valorPreco}`}
                                         </MuiTableRowCell>
                                     );

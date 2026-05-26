@@ -1,5 +1,6 @@
 import { Box, Stack, TableCell, TableRow, styled, Typography } from "@mui/material";
 import { Root } from "../../../../styles/Root/root_styles";
+
 export const MuiHeaderTable = styled(Box)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -50,7 +51,8 @@ export const MuiTableRow = styled(Box)(({ index }) => ({
     '&:hover': {
         backgroundColor: Root.color_button_secondary,
         transition: 'all .3s',
-        boxShadow: Root.boxS
+        boxShadow: Root.boxS,
+        color: Root.color_default,
     },
     boxSizing: 'border-box'
 }))
@@ -70,8 +72,4 @@ export const MuiTableRowCell = styled(Stack)(({ }) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     transition: 'all 0.2s ease-in-out',
-    '&:hover': {
-        color: Root.color_button,
-        transform: 'translateX(3px)',
-    }
 }))

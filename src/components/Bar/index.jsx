@@ -97,7 +97,7 @@ export const NavBarTop = ({
                             return (
                                 <MuiStockBotton
                                     sx={isContained && {
-                                        backgroundColor: Root.red,
+                                        backgroundColor: Root.danger,
                                         color: Root.white,
                                         ...Root.hoverReverse,
 

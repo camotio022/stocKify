@@ -32,7 +32,8 @@ export const Root = {  containTask: colors.containTask,
   danger: colors.danger,
   light: colors.light,
   dark: colors.dark,
-
+  danger: colors.danger,
+  doacao: colors.doacao,
   // Estilos compostos utilizando as referências do objeto colors
   hover: {
     ':hover': {
