@@ -95,7 +95,8 @@ export const MainLayout = ({ childrens }) => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            color: Root.color_button,
+                                            color: Root.white,
+                                            textTransform: 'uppercase',
                                             height: '46px',
                                             background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
                                         }} key={index}>
