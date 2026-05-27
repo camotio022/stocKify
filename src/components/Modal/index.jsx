@@ -18,7 +18,6 @@ export const ModalZindex = ({
     saveExcel
 }) => {
     const { downloads } = useContext(AuthContext)
-    console.log("detalhes", downloads)
     const location = useLocation()
     const [extension, setExtension] = useState(null)
     const [open, setOpen] = useState(false)
