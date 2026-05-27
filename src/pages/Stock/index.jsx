@@ -18,21 +18,15 @@ export const Stock = () => {
         tenant,
     } = useContext(AuthContext)
     useEffect(() => {
-        // 🔐 GATILHO DE SEGURANÇA: Se o usuário ou o ID do tenant não estiverem carregados, não faz nada
         if (!user || !user.tenant) return;
-
-        // 1. Criamos uma consulta filtrada que só traz os itens pertencentes a este Tenant específico
         const stockQuery = query(
             collection(db, 'stock'),
-            where('id', '==', user.tenant) // Filtra direto no servidor do Firebase
+            where('tenant', '==', user.tenant)
         );
-console.log("Escutando estoque do tenant:", stockQuery)
-        // 2. Escutamos apenas a query filtrada, protegendo os dados
+        console.log("Escutando estoque do tenant:", stockQuery)
         const unsubscribe = onSnapshot(stockQuery, (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
                 const data = doc.data();
-
-                // 💡 DICA: Removendo a duplicidade de código limpando a lógica do map
                 const itemFormatado = {
                     id: doc.id,
                     categoria: data.categoria || "",
@@ -49,8 +43,6 @@ console.log("Escutando estoque do tenant:", stockQuery)
                         userId: data.author?.userId || user.id,
                     }
                 };
-
-                // 3. Aplica a sua filtragem local de busca (Search / Select) se houver
                 if (!search && !select) {
                     return itemFormatado;
                 } else {
@@ -65,8 +57,6 @@ console.log("Escutando estoque do tenant:", stockQuery)
                     }
                 }
             }).filter(item => item !== null);
-
-            // 4. Atualiza os estados sincronizados
             setStock(stockItems);
             setDownloads(prevState => ({
                 ...prevState,

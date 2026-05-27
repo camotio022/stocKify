@@ -1,83 +1,132 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+import { 
+    GoogleAuthProvider, 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    onAuthStateChanged,
+    setPersistence,
+    browserSessionPersistence 
+} from 'firebase/auth';
 import { getFirestore, doc, setDoc, collection, getDocs, query, where, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase_config';
 import { useMediaQuery } from '@mui/material';
 import { getTenancies } from '../api/tenancys/get';
+
 export const AuthContext = createContext();
 const provider = new GoogleAuthProvider();
+
 export const AuthProvider = ({ children }) => {
     const matches = useMediaQuery('(max-width:600px)');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [select, setSelect] = useState('')
-    const [search, setSearch] = useState('')
+    const [loading, setLoading] = useState(true); // 🚀 ATIVADO: Controla a "piscada" da tela
+    const [select, setSelect] = useState('');
+    const [search, setSearch] = useState('');
     const [user, setUser] = useState(null);
-    const [tenant, setTenant] = useState(null)
+    const [tenant, setTenant] = useState(null);
     const auth = getAuth();
-    const [newItem, setNewItem] = useState(false)
-    const [saveExcel, setSaveExcel] = useState(false)
+    const [newItem, setNewItem] = useState(false);
+    const [saveExcel, setSaveExcel] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
-    const [notifications, setNotifications] = useState(false)
-    const [messages, setMessage] = useState(false)
-    const [enablingDeleteButtom, setEnablingDeleteButtom] = useState(false)
+    const [notifications, setNotifications] = useState(false);
+    const [messages, setMessage] = useState(false);
+    const [enablingDeleteButtom, setEnablingDeleteButtom] = useState(false);
     const [downloads, setDownloads] = useState({
         estoque: [],
         entradas: [],
         saidas: []
-    })
+    });
 
-    const checkUserAuthentication = async () => {
-        const loggedInStatus = localStorage.getItem('isLoggedIn');
-        setIsLoggedIn(loggedInStatus === 'true');
+    // 1. Sincronização Inicial e Escuta em Tempo Real do Firebase
+    useEffect(() => {
+        const checkUserAuthentication = async () => {
+            try {
+                // ⚡ Lê estritamente o sessionStorage da aba atual
+                const loggedInStatus = sessionStorage.getItem('isLoggedIn');
+                setIsLoggedIn(loggedInStatus === 'true');
 
-        if (loggedInStatus === 'true') {
-            const userDataFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-            if (userDataFromLocalStorage) {
-                setUser(userDataFromLocalStorage);
-            }
-
-            // 🔥 1. Recupera o Tenant do LocalStorage para carregar o tema e o nome na hora do F5!
-            const tenantDataFromLocalStorage = JSON.parse(localStorage.getItem('tenant'));
-            if (tenantDataFromLocalStorage) {
-                setTenant(tenantDataFromLocalStorage);
-            }
-        }
-
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userData = await queryUser(user.email);
-                setUser(userData);
-
-                // Se o usuário vindo do banco tiver a propriedade tenant, já dispara o checkTenant
-                if (userData && userData.tenant) {
-                    checkTenant(userData.tenant);
+                if (loggedInStatus === 'true') {
+                    const userDataFromSessionStorage = JSON.parse(sessionStorage.getItem('user'));
+                    if (userDataFromSessionStorage) {
+                        setUser(userDataFromSessionStorage);
+                    }
+                    const tenantDataFromSessionStorage = JSON.parse(sessionStorage.getItem('tenant'));
+                    if (tenantDataFromSessionStorage) {
+                        setTenant(tenantDataFromSessionStorage);
+                    }
+                } else {
+                    setUser(null);
+                    setTenant(null);
+                    sessionStorage.removeItem('isLoggedIn');
+                    sessionStorage.removeItem('user');
+                    sessionStorage.removeItem('tenant');
                 }
-            } else {
-                setUser(null);
-                setTenant(null); // Limpa o estado se deslogar
 
-                // 🔐 Segurança: Limpa o LocalStorage no logout
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('user');
-                localStorage.removeItem('tenant');
+                // ⚡ Escuta o Firebase vinculando o estado à sessão da aba
+                const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+                    if (firebaseUser) {
+                        const userData = await queryUser(firebaseUser.email);
+                        setUser(userData);
+
+                        if (userData && userData.tenant) {
+                            const res = await getTenancies.tenancy(userData.tenant);
+                            if (res) {
+                                setTenant(res);
+                                sessionStorage.setItem('tenant', JSON.stringify(res));
+                            }
+                        }
+                    } else {
+                        setUser(null);
+                        setTenant(null);
+                        sessionStorage.removeItem('isLoggedIn');
+                        sessionStorage.removeItem('user');
+                        sessionStorage.removeItem('tenant');
+                    }
+
+                    // Finaliza o loading para destravar a renderização do layout sem flash visual
+                    setLoading(false);
+                });
+
+                return unsubscribe;
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                setLoading(false);
             }
+        };
+
+        let unsubscribeFromAuth;
+        checkUserAuthentication().then(unsub => {
+            unsubscribeFromAuth = unsub;
         });
 
-        return () => unsubscribe();
+        return () => {
+            if (unsubscribeFromAuth) unsubscribeFromAuth();
+        };
+    }, []);
+
+    // 2. Funções Auxiliares de Login e Logout atualizadas para sessionStorage
+    const login = (userData) => {
+        setIsLoggedIn(true);
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('user', JSON.stringify(userData));
+    };
+
+    const logout = () => {
+        setIsLoggedIn(false);
+        setUser(null);
+        setTenant(null);
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('tenant');
     };
 
     const checkTenant = async (id) => {
         if (!id) return;
         try {
             const res = await getTenancies.tenancy(id);
-
             if (res) {
                 setTenant(res);
-
-                // 🔥 2. Salva as informações atualizadas do tenant separadamente no LocalStorage
-                localStorage.setItem('tenant', JSON.stringify(res));
-
-                console.log(res, 'Inquilino salvo e cacheado!');
+                sessionStorage.setItem('tenant', JSON.stringify(res));
             }
         } catch (error) {
             console.error("Erro ao checar inquilino:", error);
@@ -85,72 +134,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        checkUserAuthentication();
-    }, []);
-    useEffect(() => {
-        if (user && user.tenant && !tenant) {
-            checkTenant(user.tenant);
-        }
-    }, [user, tenant]);
-    const login = (userData) => {
-        setIsLoggedIn(true);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify(userData));
-    };
-
-    const logout = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('user');
-        localStorage.removeItem('tenant');
-    };
-    const loginWithGoogle = async () => {
-        signInWithPopup(auth, provider)
-            .then(async (result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const { user } = result;
-                const firestore = getFirestore();
-                const usersRef = collection(firestore, 'users');
-                const querySnapshot = await getDocs(query(usersRef, where('email', '==', user.email)));
-                const existingUser = querySnapshot.docs[0];
-                const newUser = {
-                    id: user.uid,
-                    name: user.displayName,
-                    email: user.email,
-                    photoURL: user?.photoURL || null,
-                };
-                if (existingUser) {
-                    const userData = {
-                        name: user.displayName,
-                        idGoogle: user.uid,
-                        photoURL: user?.photoURL || null,
-                    };
-                    await updateDoc(doc(usersRef, existingUser.id), userData);
-                    setUser(existingUser.data());
-                } else {
-                    await setDoc(doc(usersRef, user.uid), newUser);
-                    setUser(newUser);
-                }
-
-                login(newUser);
-            })
-            .catch((error) => {
-
-                const errorMessage = error.message || 'Ocorreu um erro ao fazer login.';
-                setMessage(errorMessage);
-            });
-    };
-
     const queryUser = async (id, newUser) => {
         let userData;
         const usersRef = collection(db, 'users');
         const querySnapshot = await getDocs(query(usersRef, where('email', '==', id)));
+        
         if (!querySnapshot.empty) {
             querySnapshot.forEach(doc => {
                 userData = doc.data();
             });
-        } else {
+        } else if (newUser) {
             const creatingUser = {
                 id: newUser.uid,
                 name: newUser.name || 'none',
@@ -161,29 +154,93 @@ export const AuthProvider = ({ children }) => {
                 updatedAt: new Date(),
                 isActive: true,
                 photoURL: newUser?.photoURL || null,
-            }
-            console.log(newUser)
+            };
             await addDoc(usersRef, creatingUser);
+            userData = creatingUser;
         }
         return userData;
     };
+
+    // 3. Login com o Google (Isolando a Sessão por Aba)
+    const loginWithGoogle = async () => {
+        try {
+            // Garante isolamento da aba no Firebase Auth antes do popup
+            await setPersistence(auth, browserSessionPersistence);
+            
+            const result = await signInWithPopup(auth, provider);
+            const { user: googleUser } = result;
+            const firestore = getFirestore();
+            const usersRef = collection(firestore, 'users');
+            const querySnapshot = await getDocs(query(usersRef, where('email', '==', googleUser.email)));
+            const existingUser = querySnapshot.docs[0];
+            
+            const userDataStructure = {
+                id: googleUser.uid,
+                name: googleUser.displayName,
+                email: googleUser.email,
+                photoURL: googleUser?.photoURL || null,
+            };
+
+            if (existingUser) {
+                const updatedData = {
+                    name: googleUser.displayName,
+                    idGoogle: googleUser.uid,
+                    photoURL: googleUser?.photoURL || null,
+                };
+                await updateDoc(doc(usersRef, existingUser.id), updatedData);
+                const completeData = { ...existingUser.data(), ...updatedData };
+                setUser(completeData);
+                login(completeData);
+                if (completeData.tenant) await checkTenant(completeData.tenant);
+            } else {
+                await setDoc(doc(usersRef, googleUser.uid), userDataStructure);
+                setUser(userDataStructure);
+                login(userDataStructure);
+            }
+        } catch (error) {
+            console.error("Erro no login com Google:", error);
+            const errorMessage = error.message || 'Ocorreu um erro ao fazer login.';
+            setMessage(errorMessage);
+        }
+    };
+
+    // 4. Login com E-mail e Senha (Isolando a Sessão por Aba)
     const loginWithEmailAndPassword = async (email, password) => {
         if (!email || !password) return;
+
         try {
+            // 🔥 CRUCIAL: Trava o Firebase Auth estritamente nesta guia do navegador
+            await setPersistence(auth, browserSessionPersistence);
+
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const userData = await queryUser(userCredential.user.email, userCredential.user);
-            setUser(userData);
-            login(userData);
-            checkTenant(user?.tenant)
+
+            if (userData) {
+                setUser(userData);
+                login(userData); // Dispara gravação no sessionStorage
+
+                if (userData.tenant) {
+                    await checkTenant(userData.tenant);
+                }
+            } else {
+                alert("Usuário autenticado, mas perfil não encontrado no sistema.");
+            }
         } catch (error) {
-            const errorMessage = error.message || 'Ocorreu um erro ao fazer login.';
+            console.error("Erro no fluxo de login:", error);
+            let errorMessage = 'Ocorreu um erro ao fazer login.';
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                errorMessage = 'E-mail ou senha incorretos.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = 'O formato do e-mail digitado é inválido.';
+            }
             alert(errorMessage);
         }
     };
+
     return (
         <AuthContext.Provider
             value={{
-                isLoggedIn, login, logout, tenant,
+                isLoggedIn, login, logout, tenant, loading, // 🚀 Exportado para travar layouts externos
                 loginWithGoogle, loginWithEmailAndPassword,
                 user, newItem, setNewItem, saveExcel, setSaveExcel,
                 selectedItems, setSelectedItems, downloads, setDownloads,
