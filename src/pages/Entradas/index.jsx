@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { TagsExits } from "../ExitsItems/styles"
 import { TableContainer } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
 import { ArrowDropDown, CheckBox } from "@mui/icons-material";
 import { db } from "../../../firebase_config";
@@ -27,11 +27,23 @@ export const Entradas = () => {
         'Data de Chegada',
         'Quem adicionou'
     ]
+
     useEffect(() => {
-        const c = collection(db, 'entradas');
-        const unsubscribe = onSnapshot(c, (querySnapshot) => {
+        // 1. Segurança: Se o usuário não estiver carregado ou não tiver uma empresa vinculada, não faz nada
+        if (!user || !user.tenant) return;
+
+        // 2. Cria a Query filtrando direto no Firestore pelo tenantId da empresa do usuário
+        const q = query(
+            collection(db, 'entradas'),
+            where('tenant', '==', user.tenant) // 🔥 Trava de segurança: impede o vazamento de dados
+        );
+        console.log(q, 'wui')
+        // 3. O listener em tempo real agora só escuta o que pertence a esta empresa
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const stockItems = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
+
+                // Renderização padrão se não houver filtros de busca na UI
                 if (!search && !select) {
                     return {
                         id: doc.id,
@@ -47,6 +59,7 @@ export const Entradas = () => {
                         }
                     };
                 } else {
+                    // Filtros de busca aplicados localmente na tela
                     if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
                         return {
                             id: doc.id,
@@ -66,14 +79,17 @@ export const Entradas = () => {
                     }
                 }
             }).filter(item => item !== null);
+
             setEntradas(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
                 entradas: stockItems,
             }));
         });
+
         return () => unsubscribe();
-    }, [search, select]);
+        // 💡 IMPORTANTE: Adicionei user.tenantId nas dependências para refazer o listener se mudar de empresa
+    }, [search, select, user?.tenant]);
 
     return (
 

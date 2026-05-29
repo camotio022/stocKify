@@ -35,7 +35,7 @@ export const NavBarTop = ({
         }
         ,
         {
-            label: 'Fluxo de Saídas',
+            label: '',
             route: '/exits',
             canBar: true
         },

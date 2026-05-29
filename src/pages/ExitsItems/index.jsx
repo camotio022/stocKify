@@ -3,14 +3,14 @@ import { Root } from "../../styles/Root/root_styles";
 import { Checkbox, TableContainer } from "@mui/material";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
 import { ArrowDropDown } from "@mui/icons-material";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
 import { LoadingTable } from "../../components/LoadingSkeletonCard";
 export const ExitsItems = () => {
     const [loading, setLoading] = useState(false)
-    const { setDownloads, search, select } = useContext(AuthContext)
+    const { setDownloads, search, select, user } = useContext(AuthContext)
     const [saidas, setSaidas] = useState([])
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
@@ -32,23 +32,37 @@ export const ExitsItems = () => {
             setSelectedItems([...selectedItems, id]);
         }
     };
-    const fetchData = async () => {
+    useEffect(() => {
+        // 1. Segurança: Só ativa o listener se o usuário estiver logado e tiver uma empresa mapeada
+        if (!user || !user.tenant) return;
+
         setLoading(true);
-        const c = collection(db, 'saidas');
-        const unsubscribe = onSnapshot(c, (querySnapshot) => {
+
+        // 2. Cria a Query amarrada ao tenantId da empresa atual
+        const q = query(
+            collection(db, 'saidas'),
+            where('tenant', '==', user.tenant) // 🔥 Trava multi-tenant: isola as saídas por empresa
+        );
+        console.log(q)
+        // 3. Executa o listener em tempo real diretamente na Query filtrada
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const stockItems = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
+
+                // Renderização padrão sem filtros de pesquisa na UI
                 if (!search && !select) {
                     return {
+                        tenant: user.tenant,
                         id: doc.id,
                         nome: data.nomeItem || "",
                         quantidade: data.quantidade || "",
                         dataValidade: data.dataValidade || "",
                         dataRetirada: data.dataRetirada || "",
                         horaRetirada: data.horaRetirada || "",
-                        author: data.author.userName || "",
+                        author: data.author?.userName || "", // 💡 Modificado para evitar quebras se o author sumir
                     };
                 } else {
+                    // Filtros aplicados localmente na tabela de saídas
                     if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
                         return {
                             id: doc.id,
@@ -57,29 +71,31 @@ export const ExitsItems = () => {
                             dataValidade: data.dataValidade || "",
                             dataRetirada: data.dataRetirada || "",
                             horaRetirada: data.horaRetirada || "",
-                            author: data.author.userName || "",
+                            author: data.author?.userName || "",
                         };
                     } else {
                         return null;
                     }
                 }
             }).filter(item => item !== null);
+
             setSaidas(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
                 saidas: stockItems,
             }));
             setLoading(false);
-            console.log('passou');
+            console.log('Saídas atualizadas com sucesso para o tenant:', user.tenant);
+        }, (error) => {
+            console.error("Erro ao buscar saídas:", error);
+            setLoading(false); // Garante que desliga o loading mesmo se o Firebase der erro de permissão
         });
+
+        // 4. Limpeza correta: o useEffect agora recebe diretamente a função de desmontagem
         return () => unsubscribe();
 
-    };
-
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+        // 💡 Adicionado as dependências necessárias para re-executar a busca se os filtros ou o tenant mudarem
+    }, [search, select, user?.tenant]);
 
 
     const selectSx = {

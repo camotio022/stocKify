@@ -121,7 +121,7 @@ export const addProduct = {
             throw error;
         }
     },
-    registerSaida: async (item, author, quantidade) => {
+    registerSaida: async (item, author, quantidade, userTenant) => {
         try {
             const date = new Date()
             function getHoraExata() {
@@ -140,7 +140,8 @@ export const addProduct = {
                 nomeItem: item.nome,
                 dataValidade: item.dataValidade,
                 dataRetirada: formatDate(date),
-                horaRetirada: getHoraExata()
+                horaRetirada: getHoraExata(),
+                tenant: userTenant,
             };
 
             await addDoc(saidaCollectionRef, newSaida);
