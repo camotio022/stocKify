@@ -12,6 +12,9 @@ export const LoadingTable = () => {
             <Skeleton sx={sx} />
             <Skeleton sx={sx} animation="wave" />
             <Skeleton sx={sx} animation={false} />
+                    <Skeleton sx={sx} />
+            <Skeleton sx={sx} animation="wave" />
+            <Skeleton sx={sx} animation={false} />
         </Box>
     );
 }
