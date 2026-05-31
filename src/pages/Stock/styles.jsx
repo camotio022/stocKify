@@ -1,6 +1,7 @@
-import { Box, Button, InputBase, Select, Stack, styled } from "@mui/material";
+import { Box, Button, InputBase, Select, Stack } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
 import { BorderColor, Search } from "@mui/icons-material";
+import { styled } from "@mui/material/node/styles";
 
 export const MuiStock = styled(Stack)(({ }) => ({
     position: 'relative',

@@ -1,5 +1,6 @@
-import { Stack, TextField, Typography, styled } from "@mui/material";
+import { Stack, TextField, Typography,  } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 
 export const MuiContainer = styled(Stack)(({ }) => ({
     display: 'flex',

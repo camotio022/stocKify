@@ -1,6 +1,7 @@
-import { Stack, styled } from "@mui/system";
+import { Stack } from "@mui/system";
 import { Root } from "../../styles/Root/root_styles";
 import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/material/node/styles";
 
 export const StylesDetailsItems = {
     container: styled(Stack)(({ }) => ({

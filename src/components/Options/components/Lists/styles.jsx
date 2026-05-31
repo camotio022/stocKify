@@ -1,5 +1,6 @@
-import { MenuItem, Stack, styled } from "@mui/material";
+import { MenuItem, Stack } from "@mui/material";
 import { Root } from "../../../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 
 export const StylesLists = {
     button: styled(Stack)(({ }) => ({

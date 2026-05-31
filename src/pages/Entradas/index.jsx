@@ -7,6 +7,7 @@ import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCe
 import { ArrowDropDown, CheckBox } from "@mui/icons-material";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
+import { ContainerTableStock } from "../../components/Table/ShowItens";
 export const Entradas = () => {
     const [entradas, setEntradas] = useState([])
     const {
@@ -92,19 +93,7 @@ export const Entradas = () => {
 
     return (
 
-        <TableContainer sx={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            overflow: 'scroll',
-            backgroundColor: Root.containTask,
-            borderRadius: '8px',
-            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
-            overflowX: 'hidden', // Esconde a barra horizontal
-
-            ...Root.scrollBar,
-            color: Root.color_button,
-        }} ref={tableRef}>
+        <ContainerTableStock children={(<>
             {(entradas.length > 0) &&
                 <MuiHeaderTable>
                     <MuiTableClhild sx={{
@@ -163,6 +152,7 @@ export const Entradas = () => {
                     </MuiTableRow>
                 ))}
             </MuiRowTable>
-        </TableContainer>
+        </>)} />
+
     )
 }

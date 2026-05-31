@@ -1,5 +1,6 @@
-import { Stack, styled } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Root } from "../../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 export const StyleCommits = {
     container: styled(Stack)(({})=> ({
         display: "flex",

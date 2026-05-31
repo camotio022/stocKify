@@ -1,5 +1,6 @@
-import { Stack, Typography, styled, MenuItem} from "@mui/material";
+import { Stack, Typography, MenuItem} from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 
 export const MuiModalZindex = styled(Stack)(({ }) => ({
     position: 'fixed',

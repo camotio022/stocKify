@@ -1,6 +1,7 @@
-import { Divider, MenuItem, Stack, styled } from "@mui/material";
+import { Divider, MenuItem, Stack } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
 import { Link } from "react-router-dom";
+import { styled } from "@mui/material/node/styles";
 
 export const StylesOptions = {
     container: styled(Stack)(() => ({

@@ -8,6 +8,7 @@ import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
 import { LoadingTable } from "../../components/LoadingSkeletonCard";
+import { ContainerTableStock } from "../../components/Table/ShowItens";
 export const ExitsItems = () => {
     const [loading, setLoading] = useState(false)
     const { setDownloads, search, select, user } = useContext(AuthContext)
@@ -107,20 +108,7 @@ export const ExitsItems = () => {
         animation: 'dash 2s infinite'
     }
     return (
-
-        <TableContainer sx={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            overflow: 'scroll',
-            backgroundColor: Root.containTask,
-            borderRadius: '8px',
-            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
-            overflowX: 'hidden', // Esconde a barra horizontal
-
-            ...Root.scrollBar,
-            color: Root.color_button,
-        }} ref={tableRef}>
+        <ContainerTableStock children={(<>
             {(saidas.length > 0) &&
                 <MuiHeaderTable>
                     <MuiTableClhild sx={{
@@ -194,7 +182,6 @@ export const ExitsItems = () => {
                     </Fragment>
                 }
             </MuiRowTable>
-        </TableContainer>
-
+        </>)} />
     )
 }

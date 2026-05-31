@@ -1,4 +1,5 @@
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import { styled } from "@mui/material/node/styles";
 
 export const StylesBar = {
 

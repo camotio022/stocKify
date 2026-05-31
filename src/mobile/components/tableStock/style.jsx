@@ -1,5 +1,6 @@
-import { styled, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import { Root } from "../../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 
 export const StylesTableMobile = {
     container: styled(Container)(({ }) => ({

@@ -1,5 +1,6 @@
-import { Avatar, Box, Stack, styled } from "@mui/material";
+import { Avatar, Box, Stack } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 
 export const LayoutMobile = {
     _containerMobile: styled(Stack)(({ }) => ({

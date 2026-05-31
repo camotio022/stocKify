@@ -7,6 +7,7 @@ import { ArrowDropDown, More, MoreHoriz } from '@mui/icons-material';
 import { FormatRelativeTime } from '../../../../components/dateCalcs';
 import { Options } from '../../../../components/Options';
 import { AuthContext } from '../../../../auth_context';
+import { ContainerTableStock } from '../../../../components/Table/ShowItens';
 
 export const EstoqueTable = ({
     selectedItems,
@@ -50,19 +51,7 @@ export const EstoqueTable = ({
         return itemDate < currentDate;
     }
     return (
-        <TableContainer sx={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            overflow: 'scroll',
-            backgroundColor: Root.containTask,
-            borderRadius: '8px',
-            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
-            overflowX: 'hidden', // Esconde a barra horizontal
-
-            ...Root.scrollBar,
-            color: Root.color_button,
-        }} ref={tableRef}>
+        <ContainerTableStock children={(<>
             {!stock &&
                 <Stack sx={{
                     position: 'absolute',
@@ -178,6 +167,6 @@ export const EstoqueTable = ({
                     )
                 })}
             </MuiRowTable>
-        </TableContainer>
+        </>)} />
     );
 };

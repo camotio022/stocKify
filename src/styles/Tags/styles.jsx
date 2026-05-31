@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
 import { Box, Button, Link, Stack, useMediaQuery } from "@mui/material";
 import { Root } from "../Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 export const ContainerGlobal = styled(Box)(({ theme }) => ({
     position: 'relative',
     display: "flex",

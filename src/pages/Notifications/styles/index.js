@@ -1,7 +1,8 @@
-import { Box, Drawer, MenuItem, Stack, Typography, styled } from "@mui/material";
+import { Box, Drawer, MenuItem, Stack, Typography } from "@mui/material";
 
 import { Settings } from "@mui/icons-material";
 import { Root } from "../../../styles/Root/root_styles";
+import { styled } from "@mui/material/node/styles";
 export const ContainAbsolute = styled(Stack)(({})=> ({
     zIndex: 4,
     position: 'absolute',

@@ -1,6 +1,7 @@
-import { Box, Stack, TableCell, TableRow, styled, Typography } from "@mui/material";
+import { Box, Stack, TableCell, TableRow, Typography } from "@mui/material";
 import { Root } from "../../../../styles/Root/root_styles";
 import { BorderRight } from "@mui/icons-material";
+import { styled } from "@mui/material/node/styles";
 
 export const MuiHeaderTable = styled(Box)(({ }) => ({
     display: 'flex',
