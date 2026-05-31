@@ -2,6 +2,7 @@ export const colors = {
   containTask: 'white',
   gray_desfius: '#A8ADB3',
   tableBg: 'rgba(128, 128, 128, 0.1)',
+  blurred_background: 'rgba(144, 0, 255, 0.3)',
   color_app_bar: '#F5F5F5',
   color_default: '#ffffff',
   color_button: '#800080',
@@ -28,8 +29,17 @@ export const colors = {
   success: '#28a745',
   info: '#17a2b8',
   warning: '#ffc107',
-  danger:'#9b0000',
+  danger: '#9b0000',
   light: '#f8f9fa',
   dark: '#343a40',
-  doacao: '#1E293B'
+  doacao: '#1E293B',
+  text: '#ffffff',
+  borderImage: {
+    border: '2px solid transparent',
+    backgroundImage: 'linear-gradient(rgba(176, 73, 224, 0.32), rgba(204, 214, 236, 0.85)), linear-gradient(90deg, #00d6f7, #63278b)',
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
+  },
+  boxShadowBorderImage: `0 0 12px rgba(99, 39, 139, 0.4)`,
+  backgroundCyan: `linear-gradient(90deg, #800080, #17a2b8)`,
 };

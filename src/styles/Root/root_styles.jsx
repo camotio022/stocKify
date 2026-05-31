@@ -1,15 +1,18 @@
 import { grey } from "@mui/material/colors";
 import { colors } from "./colors";
 
-export const Root = {  containTask: colors.containTask,
+export const Root = {
+  containTask: colors.containTask,
   gray_desfius: colors.gray_desfius,
   tableBg: colors.tableBg,
+  blurred_background: colors.blurred_background,
   color_app_bar: colors.color_app_bar,
   color_default: colors.color_default,
   color_button: colors.color_button,
   color_button_secondary: colors.color_button_secondary,
   color_link: colors.color_link,
   subButton: colors.subButton,
+  borderImage: colors.borderImage,
   blue: colors.blue,
   black: colors.black,
   indigo: colors.indigo,
@@ -34,6 +37,7 @@ export const Root = {  containTask: colors.containTask,
   dark: colors.dark,
   danger: colors.danger,
   doacao: colors.doacao,
+  backgroundCyan: colors.backgroundCyan,
   // Estilos compostos utilizando as referências do objeto colors
   hover: {
     ':hover': {
@@ -92,14 +96,14 @@ export const Root = {  containTask: colors.containTask,
   boxS: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px',
   boxShadowOrange: `0 0 10px ${colors.orange}`,
   border: `1px solid ${colors.color_app_bar}`, // Usando a cor de fundo do app bar para a borda leve
-  
+
   // Breakpoints
   breakpointXS: '0',
   breakpointSM: '576px',
   breakpointMD: '768px',
   breakpointLG: '992px',
   breakpointXL: '1200px',
-  
+
   // Tipografia
   fontFamilySansSerif:
     '"Geist Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',

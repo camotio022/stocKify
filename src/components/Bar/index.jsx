@@ -6,6 +6,7 @@ import { StylesBar } from "./styles";
 import { useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../auth_context";
+import { ButtonNeon } from "../../styles/Tags/styles";
 export const NavBarTop = ({
     saveExcel,
     setSaveExcel,
@@ -84,10 +85,7 @@ export const NavBarTop = ({
                         fontWeight: 800,
                         fontFamily: Root.fontFamilySansSerif,
                         letterSpacing: '0.15em',
-                        background: `linear-gradient(90deg, ${Root.color_button}, ${Root.color_button_secondary})`,
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        filter: `drop-shadow(0px 0px 5px rgba(147, 45, 210, 0.3))`,
+                        color: Root.white,
                     }}>
                         {routes.map((r) => r.label)}
                     </Typography>
@@ -141,17 +139,14 @@ export const NavBarTop = ({
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </MuiSearchContainer>
-                    <MuiStockBotton
-                        style={{
-                            background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
-                        }}
+                    <ButtonNeon
                         onClick={() => setNewItem(!NewItem)} sx={{
                             backgroundColor: Root.green,
                             color: Root.color_default,
                             ...Root.hoverReverse,
                         }}>
                         <Add /> Novo produto
-                    </MuiStockBotton>
+                    </ButtonNeon>
                 </MuiSearch>
             </StylesBar.conatiner>
         )

@@ -109,7 +109,6 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     padding: '13px',
     width: '83.3vw',
     height: '85vh',
-    border: '2px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
     borderRadius: '8px',
-    borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary}) 1`, // 2. Aplica o
+    ...Root.borderImage,
 }))

@@ -8,6 +8,7 @@ import { TableStock } from "../../mobile/components/tableStock";
 
 export const Stock = () => {
     const [stock, setStock] = useState([])
+    const [loading, setLoading] = useState(false)
     const {
         user,
         setDownloads,
@@ -19,6 +20,7 @@ export const Stock = () => {
     } = useContext(AuthContext)
     useEffect(() => {
         if (!user || !user.tenant) return;
+        setLoading(false)
         const stockQuery = query(
             collection(db, 'stock'),
             where('tenant', '==', user.tenant)
@@ -62,6 +64,7 @@ export const Stock = () => {
                 ...prevState,
                 estoque: stockItems,
             }));
+            setLoading(true)
         }, (error) => {
             console.error("Erro ao escutar estoque do tenant:", error);
         });
@@ -75,6 +78,7 @@ export const Stock = () => {
     }
     return (
         <EstoqueTable
+            loading={loading}
             setStock={setStock}
             stock={stock}
             selectedItems={selectedItems}

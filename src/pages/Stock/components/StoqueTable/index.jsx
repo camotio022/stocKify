@@ -8,13 +8,15 @@ import { FormatRelativeTime } from '../../../../components/dateCalcs';
 import { Options } from '../../../../components/Options';
 import { AuthContext } from '../../../../auth_context';
 import { ContainerTableStock } from '../../../../components/Table/ShowItens';
+import { LoadingModal } from '../../../../components/Loadings/loadingStocks';
 
 export const EstoqueTable = ({
     selectedItems,
     setSelectedItems,
     stock,
-
+    loading
 }) => {
+
     const { enablingDeleteButtom, setEnablingDeleteButtom } = useContext(AuthContext)
     const [options, setOptions] = useState('')
     const [focus, setFocus] = useState(null); // Índice do item focado
@@ -52,41 +54,23 @@ export const EstoqueTable = ({
     }
     return (
         <ContainerTableStock children={(<>
-            {!stock &&
-                <Stack sx={{
-                    position: 'absolute',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '12px',
-                    minWidth: '100%',
-                    height: '100%',
-                }}>
-                    <Typography sx={{
-                        color: Root.color_button,
-                        fontWeight: 'bold',
-                        fontFamily: Root.fontFamilyMonospace,
-                    }}>
-                        Loading data, please wait...
-                    </Typography>
-                    <CircularProgress sx={{
-                        color: Root.color_button,
-                    }} />
-                </Stack>}
+            <LoadingModal open={loading} message="Sincronizando estoque em tempo real..." />
             {options && <Options
                 optionItem={options}
                 name={options.nome}
                 setOptions={setOptions}
             />}
-            <MuiHeaderTable>
-                {headerInfos.map((header, index) => (
-                    <MuiTableClhild sx={header === 'Opções' && {
-                        fontWeight: 'bold',
-                        width: '50%',
-                    }} key={index}>{header}</MuiTableClhild>
-                ))}
-            </MuiHeaderTable>
+            {
+                loading &&
+                <MuiHeaderTable>
+                    {headerInfos.map((header, index) => (
+                        <MuiTableClhild sx={header === 'Opções' && {
+                            fontWeight: 'bold',
+                            width: '50%',
+                        }} key={index}>{header}</MuiTableClhild>
+                    ))}
+                </MuiHeaderTable>
+            }
             <MuiRowTable>
                 {stock.map((item, index) => {
                     const { typeItem, price, donation, ...otherKeys } = item;

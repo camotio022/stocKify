@@ -20,8 +20,7 @@ export const StylesOptions = {
         left: 0,
         zIndex: 5,
         transition: 'all.3s',
-        backgroundColor: Root.color_button_secondary,
-        ...Root.scrollBar
+        backgroundColor: Root.blurred_background
     })),
     paper: styled(Stack)(({ moreitems }) => ({
         position: 'relative',
