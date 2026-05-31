@@ -16,7 +16,7 @@ export const ExitsItems = () => {
     const [focus, setFocus] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
     const headerInfos = [
-        'Item',
+        'Nome dos items',
         'Quantidade Retirada',
         'Validade do Pacote',
         'Data/Horas',
@@ -99,9 +99,9 @@ export const ExitsItems = () => {
 
 
     const selectSx = {
-        border: `1px dashed ${Root.color_button}`,
-        backgroundColor: Root.color_button_secondary,
-        color: Root.color_button,
+        backgroundColor: Root.cyan,
+        color: Root.white,
+        textTransform: 'uppercase',
         fontWeight: 'bold',
         fontFamily: Root.fontFamilyMonospace,
         animation: 'dash 2s infinite'
@@ -109,32 +109,39 @@ export const ExitsItems = () => {
     return (
 
         <TableContainer sx={{
-            backgroundColor: Root.color_default,
-            ...Root.scrollBar,
+            position: 'relative',
             width: '100%',
-            boxSizing: 'border-box',
-            border: '2px solid white'
-        }} ref={tableRef}>
-            <MuiHeaderTable>
-                <MuiTableClhild sx={{
-                    width: '50%',
+            height: '100%',
+            overflow: 'scroll',
+            backgroundColor: Root.containTask,
+            borderRadius: '8px',
+            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
+            overflowX: 'hidden', // Esconde a barra horizontal
 
-                }}>
-                    <Checkbox
-                        sx={{
-                            color: Root.color_button
-                        }}
-                        onChange={(e) => {
-                            const isChecked = e.target.checked;
-                            const newSelectedItems = isChecked ? saidas.map(item => item.item) : [];
-                            setSelectedItems(newSelectedItems);
-                        }}
-                    />
-                </MuiTableClhild>
-                {headerInfos.map((header, index) => (
-                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
-                ))}
-            </MuiHeaderTable>
+            ...Root.scrollBar,
+            color: Root.color_button,
+        }} ref={tableRef}>
+            {(saidas.length > 0) &&
+                <MuiHeaderTable>
+                    <MuiTableClhild sx={{
+                        width: '50%',
+                    }}>
+                        <Checkbox
+                            sx={{
+                                ml: 0.7,
+                                color: Root.color_button
+                            }}
+                            onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                const newSelectedItems = isChecked ? saidas.map(item => item.item) : [];
+                                setSelectedItems(newSelectedItems);
+                            }}
+                        />
+                    </MuiTableClhild>
+                    {headerInfos.map((header, index) => (
+                        <MuiTableClhild key={index}>{header}</MuiTableClhild>
+                    ))}
+                </MuiHeaderTable>}
             <MuiRowTable>
                 {loading ?
                     <LoadingTable />
@@ -159,6 +166,9 @@ export const ExitsItems = () => {
                                     />
                                 </MuiTableRowCell>
                                 {Object.entries(item).map(([key, value], i) => {
+                                    if ((key === 'tenant')) {
+                                        return null
+                                    }
                                     if (key === 'dataRetirada') {
                                         return (
                                             <MuiTableRowCell key={i}>
