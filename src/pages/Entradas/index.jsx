@@ -19,9 +19,8 @@ export const Entradas = () => {
     const [focus, setFocus] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
     const headerkeys = [
-        'ID',
-        'Catégoria',
-        'Nome',
+        'Catégoria dos Items',
+        'Nome dos Produtos',
         'Quantidade',
         'Data de Validade',
         'Data de Chegada',
@@ -94,28 +93,34 @@ export const Entradas = () => {
     return (
 
         <TableContainer sx={{
-            ...Root.scrollBar,
+            position: 'relative',
             width: '100%',
-            boxSizing: 'border-box',
-            backgroundColor: Root.color_default,
-            borderRadius: '4px',
-            border: '2px solid white'
+            height: '100%',
+            overflow: 'scroll',
+            backgroundColor: Root.containTask,
+            borderRadius: '8px',
+            boxShadow: `0 0 3px ${Root.color_button_secondary}`,
+            overflowX: 'hidden', // Esconde a barra horizontal
+
+            ...Root.scrollBar,
+            color: Root.color_button,
         }} ref={tableRef}>
-            <MuiHeaderTable>
-                <MuiTableClhild sx={{
-                    width: '50%',
-                    ml: '12px'
-                }}>
-                    <CheckBox
-                        sx={{
-                            color: Root.color_button
-                        }}
-                    />
-                </MuiTableClhild>
-                {headerkeys.map((header, index) => (
-                    <MuiTableClhild key={index}>{header} <ArrowDropDown /></MuiTableClhild>
-                ))}
-            </MuiHeaderTable>
+            {(entradas.length > 0) &&
+                <MuiHeaderTable>
+                    <MuiTableClhild sx={{
+                        width: '50%',
+                        ml: '12px'
+                    }}>
+                        <CheckBox
+                            sx={{
+                                color: Root.color_button
+                            }}
+                        />
+                    </MuiTableClhild>
+                    {headerkeys.map((header, index) => (
+                        <MuiTableClhild key={index}>{header}</MuiTableClhild>
+                    ))}
+                </MuiHeaderTable>}
             <MuiRowTable>
                 {entradas.map((item, index) => (
                     <MuiTableRow
@@ -134,6 +139,9 @@ export const Entradas = () => {
                             />
                         </MuiTableClhild>
                         {Object.entries(item).map(([key, value], i) => {
+                            if ((key === 'id')) {
+                                return null
+                            }
                             if (key === 'author') {
                                 return (
                                     <MuiTableRowCell key={i}>
