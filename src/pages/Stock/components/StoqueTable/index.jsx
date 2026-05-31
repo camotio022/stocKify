@@ -22,7 +22,7 @@ export const EstoqueTable = ({
     const headerInfos = [
         'Categoria',
         'Nome do alimento',
-        'Valor',
+        'Valor dos Produtos',
         'Quantidade',
         'Data de Validade',
         'Data de Chegada',
@@ -113,11 +113,12 @@ export const EstoqueTable = ({
                                     ? { opacity: 0.5 } // Estilo para itens desabilitados
                                     : isFocused
                                         ? {
-                                            border: `1px dashed ${Root.containTask}`,
-                                            backgroundColor: Root.color_button,
-                                            color: Root.color_default,
-                                            fontWeight: 600,
-                                            animation: 'dash 2s infinite',
+                                            backgroundColor: Root.cyan,
+                                            color: Root.white,
+                                            textTransform: 'uppercase',
+                                            fontWeight: 'bold',
+                                            fontFamily: Root.fontFamilyMonospace,
+                                            animation: 'dash 2s infinite'
                                         }
                                         : isItemExpired(item.dataValidade) ? {
                                             // backgroundColor: Root.red,
@@ -141,7 +142,7 @@ export const EstoqueTable = ({
                                             {ehDoacao ? 'Doação' : `R$ ${valorPreco}`}
                                         </MuiTableRowCell>
                                     );
-                                }  
+                                }
                                 if (key === 'dataChegada') {
                                     return (
                                         <MuiTableRowCell key={i}>
