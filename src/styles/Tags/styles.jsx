@@ -14,7 +14,7 @@ export const ContainerGlobal = styled(Box)(({ theme }) => ({
     backgroundColor: Root.containTask,
 }));
 export const ButtonNeon = styled(Button)(({ theme}) => ({
-    height: '38px',
+    height: '36px',
     borderRadius: '4px',
     fontSize: '1rem',
     fontWeight: '700',
@@ -24,14 +24,9 @@ export const ButtonNeon = styled(Button)(({ theme}) => ({
     position: 'relative',
     transition: 'all 0.3s ease-in-out',
     cursor: 'pointer',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    border: '2px solid #9000ff',
-    boxShadow: `
-        0 0 15px rgba(144, 0, 255, 0.5), 
-        inset 0 0 10px rgba(144, 0, 255, 0.3),
-        0 15px 25px rgba(144, 0, 255, 0.2) // Reflexo roxo embaixo
-    `,
+
+     border: `1px solid #17a2b8`,
+        boxShadow: `0 0 15px rgba(23, 162, 184, 0.25)`,
     '& .MuiTypography-root, &': {
         textShadow: '0 0 8px rgba(255, 255, 255, 0.6), 0 0 15px #9000ff',
     },

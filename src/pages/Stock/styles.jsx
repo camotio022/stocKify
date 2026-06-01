@@ -29,11 +29,11 @@ export const MuiStockModalTop = styled(Stack)(({ }) => ({
 export const MuiStockNavBar = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     flexDirection: 'column',
     width: '50%',
-    minHeight: '100%',
-    gap: '12px'
+    height: '74px',
+
 }))
 export const MuiStockNavBarRigth = styled(Stack)(({ }) => ({
     display: 'flex',
@@ -51,24 +51,23 @@ export const MuiStockBotton = styled(Button)(({ }) => ({
     justifyContent: 'center',
     flexDirection: 'row',
     minWidth: 'auto',
-    height: '38px', // Ajustado para ser flexível ao padding
+    height: '36px', // Ajustado para ser flexível ao padding
     padding: '8px 16px',
     gap: '8px',
     borderRadius: '4px',
     boxSizing: 'border-box',
-    fontFamily: Root.fontFamilySansSerif, 
+    fontFamily: Root.fontFamilySansSerif,
     fontSize: '12px',
     fontWeight: 700,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
     color: Root.white,
-     boxShadow: `0 4px 12px ${Root.color_button}`, 
-    border: 'none',
+    border: '1px solid rgba(0, 13, 15, 0.2)',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
         backgroundColor: Root.color_button,
         color: Root.white,
-        boxShadow: `0 4px 12px ${Root.color_button}`, 
+        boxShadow: `0 4px 12px ${Root.color_button}`,
         transform: 'translateY(-1px)',
     },
 
@@ -102,34 +101,52 @@ export const MuiSearchContainerFather = styled('div')({
     height: '100%',
 });
 export const MuiSearchContainer = styled(Stack)({
-    position: 'relative',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     flexDirection: 'row',
-    borderRadius: '4px',
-    backgroundColor: Root.color_default,
-    color: Root.color_button,
-    gap: '4px',
+    alignItems: 'center',       // 🔥 Força o ícone e o input a viajarem exatamente na mesma linha do horizonte
+    justifyContent: 'flex-start', // Começa alinhando tudo da esquerda para a direita
+    position: 'relative',
+    borderRadius: '4px',       // Formato de cápsula que combina com o novo padrão da barra
+    border: '1px solid rgba(23, 162, 184, 0.2)', // Borda ciano sutil para o foco
+    backgroundColor: 'rgba(15, 23, 42, 0.4)',  // Nosso Dark Glass de fundo
     width: '50%',
-    height: '38px',
+    height: '36px',             // Altura sincronizada com os 38px dos botões da barra!
+    padding: '0 14px',          // Padding interno para os filhos não colarem na borda do container
+    boxSizing: 'border-box',
+   
+    gap: '8px',                 // ⬅️ O flexbox usa esse gap para afastar o ícone do texto automaticamente
+    transition: '0.3s all ease-in-out',
+
+    '&:focus-within': {         // Acende a cápsula quando o usuário for digitar
+        border: `1px solid #17a2b8`,
+        boxShadow: `0 0 15px rgba(23, 162, 184, 0.25)`,
+        backgroundColor: 'rgba(23, 162, 184, 0.02)',
+    }
 });
 
 export const SearchIconWrapper = styled(Stack)({
-    position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: '#17a2b8',           // Ícone ciano futurista integrado
     height: '100%',
-    pointerEvents: 'none',
-    marginLeft: '12px'
+    // ❌ Removido o position absolute e o marginLeft brutos que desalinhava o fluxo
 });
 
-export const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    width: '100%',
-    color: Root.color_button,
-    marginRight: '12px'
-}));
+export const StyledInputBase = styled(InputBase)({
+    flex: 1,                    // 🔥 Faz o input ocupar TODO o espaço restante da linha de forma elástica
+    height: '100%',
+    color: '#E2E8F0',           // Texto Branco Gelo legível
+    fontFamily: Root.fontFamilySansSerif,
+    fontSize: '14px',
+
+    '& .MuiInputBase-input': {
+        padding: '0px',         // Zera os paddings nativos do MUI que causam trancos verticais
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+    }
+});
 export const MuiSearch = styled(Stack)(({ theme }) => ({
     display: 'flex',
     alignItems: 'flex-end',
@@ -145,7 +162,7 @@ export const MuiInputNative = styled('input')(({ }) => ({
     paddingInline: '6px',
     outline: 'none',
     border: 'none',
-    height: '75%',
+    height: '36px',
     width: '100%',
     borderRadius: '4px',
     border: `1px solid ${Root.color_button_secondary}`,

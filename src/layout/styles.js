@@ -12,7 +12,7 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
     flexDirection: 'column',
     width: '100vw',
     height: '100vh',
-    backgroundColor: 'rgb(0, 0, 0)'
+    backgroundColor: '#07040d'
 }))
 // LATERAL ESQUERDO LAYOUT
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
@@ -110,7 +110,7 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     gap: '12px',
     padding: '13px',
     width: '83.3vw',
-    height: '84vh',
+    height: '85vh',
     borderRadius: '8px',
     ...Root.borderImage,
 }))

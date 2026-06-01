@@ -5,11 +5,13 @@ export const StylesBar = {
 
     conatiner: styled(Box)(({})=> ({
         display: 'flex',
+        flexDirection: 'row',
         justifyContent:'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         flexDirection: 'row',
         width: '100%',
-        height: '80px',
-  
+        minHeight: '80px',
+        height: 'auto',
+        padding: '0 24px',
     }))
 }

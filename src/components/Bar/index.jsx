@@ -123,24 +123,8 @@ export const NavBarTop = ({
                         }}>
                         <Add /> Novo produto
                     </ButtonNeon>
-                    {/* <FormControl style={{ maxWidth: '100px' }}>
-                        <InputLabel>Filtros</InputLabel>
-                        <MuiSelect
-                            size="small"
-                            labelId="outlined-select-currency-label"
-                            id="outlined-select-currency"
-                            value={select}
-                            onChange={handleSelectChange}
-                        >
-                            {filtres.map((item, index) => (
-                                <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
-                            ))}
-                        </MuiSelect>
-                    </FormControl> */}
+
                     <MuiSearchContainer>
-                        <Search sx={{
-                            ml: '12px'
-                        }} />
                         <StyledInputBase
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
@@ -148,6 +132,9 @@ export const NavBarTop = ({
                                 `Filtrar por ${filtro.label}` : 'Filtrar por nome'}
                             inputProps={{ 'aria-label': 'search' }}
                         />
+                        <Search sx={{
+                            ml: '12px'
+                        }} />
                     </MuiSearchContainer>
                 </MuiSearch>
             </StylesBar.conatiner>
