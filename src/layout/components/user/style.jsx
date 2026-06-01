@@ -8,7 +8,6 @@ export const StyleUser = {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        gap: '12px',
         marginRight: '12px',
         justifyContent: 'flex-end',
         width: '50%',
@@ -20,21 +19,14 @@ export const StyleUser = {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        padding: '8px',
+        padding: '4px',
         borderRadius: '8px',
         color: Root.color_button,
-        boxShadow: `0 0 3px ${Root.color_button}`,
-        border: `1px solid ${Root.color_button_secondary}`,
         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         cursor: 'pointer',
         "&:hover": {
-            backgroundColor: Root.color_button,
+            ...Root.borderImage,
             color: '#fff',
-            transform: 'scale(1.02)',
-            boxShadow: `0 0 20px ${Root.color_button}`,
-            "& svg": {
-                filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))',
-            }
         }
     })),
     isRead: styled(Stack)(({ }) => ({
@@ -46,9 +38,8 @@ export const StyleUser = {
         padding: '5px',
         height: '10px',
         width: '10px',
-        backgroundColor: Root.red,
+        ...Root.borderImage,
         color: Root.white,
-        ...Root.hover,
         top: -10,
         right: -10,
         borderRadius: '50%',
@@ -57,20 +48,9 @@ export const StyleUser = {
         // --- 1. DIMENSÕES E FORMA ---
         width: '38px',
         height: '38px',
-        borderRadius: '10px', // Estilo "Squircle" (quadrado arredondado) é mais moderno que o círculo total
-
-        // --- 2. CORES E IDENTIDADE NEON ---
-        // Fundo translúcido para criar o efeito de vidro
-        backgroundColor: 'rgba(128, 0, 128, 0.08)',
-        // O roxo vibrante para as iniciais do usuário
-        color: Root.color_button,
-
-        // --- 3. BORDAS E BRILHO (ESTILO LOGO) ---
-        // Borda fina que brilha, imitando o contorno do logo
         border: `1.5px solid ${Root.color_button_secondary}`,
-        boxShadow: `0 0 10px ${Root.color_button}`,
 
-        // --- 4. INTERAÇÕES E REFINAMENTO ---
+        ...Root.borderImage,
         fontFamily: Root.fontFamilySansSerif,
         fontSize: '14px',
         fontWeight: 700,
@@ -84,5 +64,14 @@ export const StyleUser = {
             boxShadow: `0 0 18px ${Root.color_button}`, // Brilho intenso no hover
             zIndex: 10,
         }
+    })),
+    stackNameArrow: styled(Stack)(({ }) => ({
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        color: Root.white,
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif',
     }))
 }

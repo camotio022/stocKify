@@ -51,7 +51,7 @@ export const MuiStockBotton = styled(Button)(({ }) => ({
     justifyContent: 'center',
     flexDirection: 'row',
     minWidth: 'auto',
-    height: 'auto', // Ajustado para ser flexível ao padding
+    height: '38px', // Ajustado para ser flexível ao padding
     padding: '8px 16px',
     gap: '8px',
     borderRadius: '4px',
@@ -61,8 +61,8 @@ export const MuiStockBotton = styled(Button)(({ }) => ({
     fontWeight: 700,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    background:Root.backgroundCyan, 
     color: Root.white,
+     boxShadow: `0 4px 12px ${Root.color_button}`, 
     border: 'none',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
@@ -112,7 +112,7 @@ export const MuiSearchContainer = styled(Stack)({
     color: Root.color_button,
     gap: '4px',
     width: '50%',
-    height: '40px',
+    height: '38px',
 });
 
 export const SearchIconWrapper = styled(Stack)({

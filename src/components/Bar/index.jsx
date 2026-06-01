@@ -36,7 +36,7 @@ export const NavBarTop = ({
         }
         ,
         {
-            label: '',
+            label: 'Saídas Registradas',
             route: '/exits',
             canBar: true
         },
@@ -89,6 +89,8 @@ export const NavBarTop = ({
                     }}>
                         {routes.map((r) => r.label)}
                     </Typography>
+
+
                     <MuiStockNavBarRigth>
                         {buttons.map((botton, index) => {
                             const isContained = botton.variant === 'contained';
@@ -113,7 +115,15 @@ export const NavBarTop = ({
                     </MuiStockNavBarRigth>
                 </MuiStockNavBar>
                 <MuiSearch>
-                    <FormControl style={{ maxWidth: '100px' }}>
+                    <ButtonNeon
+                        onClick={() => setNewItem(!NewItem)} sx={{
+                            backgroundColor: Root.green,
+                            color: Root.color_default,
+                            ...Root.hoverReverse,
+                        }}>
+                        <Add /> Novo produto
+                    </ButtonNeon>
+                    {/* <FormControl style={{ maxWidth: '100px' }}>
                         <InputLabel>Filtros</InputLabel>
                         <MuiSelect
                             size="small"
@@ -126,7 +136,7 @@ export const NavBarTop = ({
                                 <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
                             ))}
                         </MuiSelect>
-                    </FormControl>
+                    </FormControl> */}
                     <MuiSearchContainer>
                         <Search sx={{
                             ml: '12px'
@@ -139,14 +149,6 @@ export const NavBarTop = ({
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </MuiSearchContainer>
-                    <ButtonNeon
-                        onClick={() => setNewItem(!NewItem)} sx={{
-                            backgroundColor: Root.green,
-                            color: Root.color_default,
-                            ...Root.hoverReverse,
-                        }}>
-                        <Add /> Novo produto
-                    </ButtonNeon>
                 </MuiSearch>
             </StylesBar.conatiner>
         )

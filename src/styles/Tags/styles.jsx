@@ -14,7 +14,8 @@ export const ContainerGlobal = styled(Box)(({ theme }) => ({
     backgroundColor: Root.containTask,
 }));
 export const ButtonNeon = styled(Button)(({ theme}) => ({
-    borderRadius: '12px',
+    height: '38px',
+    borderRadius: '4px',
     fontSize: '1rem',
     fontWeight: '700',
     letterSpacing: '1.5px',
@@ -34,22 +35,6 @@ export const ButtonNeon = styled(Button)(({ theme}) => ({
     '& .MuiTypography-root, &': {
         textShadow: '0 0 8px rgba(255, 255, 255, 0.6), 0 0 15px #9000ff',
     },
-
-    // ✨ 4. Halo Externo Oculto (O anel Ciano #17a2b8 que "escapa" pelas bordas)
-    '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: '-5px',
-        left: '-5px',
-        right: '-5px',
-        bottom: '-5px',
-        borderRadius: '12px',
-        border: '2px solid #17a2b8', // Sua cor ciano utilitária
-        opacity: 0.7,
-        boxShadow: '0 0 20px rgba(23, 162, 184, 0.6)',
-        transition: 'all 0.3s ease-in-out',
-        pointerEvents: 'none',
-    }
 }))
 export const ContainerGlobalChildrens = styled(Box)(({ theme }) => ({
     display: "flex",

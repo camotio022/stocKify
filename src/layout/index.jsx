@@ -3,7 +3,7 @@ import * as Tag from './styles.js'
 import { Stack } from "@mui/material"
 import { Root } from "../styles/Root/root_styles.jsx"
 import Image from '../images/layout/junta1.png'
-import { DeleteOutline, ExitToApp, History, Home, InsertInvitation, Insights, Inventory, Logout, Person2, Settings, ShoppingCartCheckout } from "@mui/icons-material"
+import { DeleteOutline, DetailsOutlined, ExitToApp, History, Home, HomeOutlined, InsertInvitation, Insights, Inventory, Inventory2Outlined, LoginOutlined, Logout, LogoutOutlined, Person2, Person2Outlined, Settings, SettingsOutlined, ShoppingCartCheckout } from "@mui/icons-material"
 import { AuthContext } from "../auth_context/index.jsx"
 import { useLocation } from "react-router-dom"
 import { LogoMainLayout } from "../components/Logo/index.jsx"
@@ -34,30 +34,35 @@ export const MainLayout = ({ childrens }) => {
     } = useContext(AuthContext)
     const paths = [
         {
+            name: 'Dashboard',
+            link: '/Dashboard',
+            icon: <HomeOutlined />
+        },
+        {
             name: 'Estoque',
             link: '/',
-            icon: <Home />
+            icon: <Inventory2Outlined />
         },
         {
             name: 'Entradas',
             link: '/entradas',
-            icon: <Inventory />
+            icon: <LoginOutlined />
         },
         {
             name: 'Saídas',
             link: '/exits',
-            icon: <ExitToApp />
+            icon: <LogoutOutlined />
         },
         {
-            name: 'Percepções',
-            link: '/insights',
-            icon: <Insights />
+            name: 'Detalhes',
+            link: '/details',
+            icon: <DetailsOutlined />
         },
-        {
-            name: 'Históricos',
-            link: '/history',
-            icon: <History />
-        },
+        // {
+        //     name: 'Históricos',
+        //     link: '/history',
+        //     icon: <History />
+        // },
     ]
     const handleFinalLogout = () => {
         logout();
@@ -94,10 +99,10 @@ export const MainLayout = ({ childrens }) => {
                                         sx={path.link === location.pathname && {
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center',
+                                            justifyContent: 'flex-start',
                                             color: Root.white,
                                             textTransform: 'uppercase',
-                                            height: '46px',
+                                            height: '38px',
                                             background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
@@ -114,10 +119,10 @@ export const MainLayout = ({ childrens }) => {
                     </Tag.MuiMainLayoutLinks>
                     <Tag.MuiMainLayoutSettingsUser>
                         <Tag.MuiMainLayoutLink>
-                            <Person2 /> {'Minha conta'}
+                            <Person2Outlined /> {'Minha conta'}
                         </Tag.MuiMainLayoutLink>
                         <Tag.MuiMainLayoutLink>
-                            <Settings /> {'Configurações'}
+                            <SettingsOutlined /> {'Configurações'}
                         </Tag.MuiMainLayoutLink>
                         <Tag.MuiMainLayoutLink onClick={() => setShowLogoutModal(true)} >
                             <Logout /> {'Saír'}
@@ -146,6 +151,7 @@ export const MainLayout = ({ childrens }) => {
                     {childrens}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>
+
             <LogoutConfirmationModal
                 open={showLogoutModal}
                 onClose={() => setShowLogoutModal(false)}

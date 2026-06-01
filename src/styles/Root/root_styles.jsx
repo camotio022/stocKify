@@ -37,6 +37,7 @@ export const Root = {
   dark: colors.dark,
   danger: colors.danger,
   doacao: colors.doacao,
+  text: colors.text,
   backgroundCyan: colors.backgroundCyan,
   // Estilos compostos utilizando as referências do objeto colors
   hover: {
@@ -73,21 +74,32 @@ export const Root = {
     borderRadius: '4px',
   },
   scrollBar: {
+    // 1. Configuração da barra como um todo (Largura na vertical e altura na horizontal)
     '&::-webkit-scrollbar': {
-      width: '5px',
-      height: '3px',
-      borderRadius: '6px',
-      backgroundColor: colors.orange,
+      width: '6px',   // Um tiquinho mais largo para o usuário conseguir clicar se precisar
+      height: '4px',  // Para rolagem horizontal (caso apareça)
     },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: colors.orange,
-      borderRadius: '6px',
-    },
+
+    // 2. O Fundo da barra de rolagem (A "pista" por onde o indicador corre)
     '&::-webkit-scrollbar-track': {
-      backgroundColor: colors.orange,
+      backgroundColor: 'transparent', // Mantém transparente para não quebrar o efeito Glassmorphism
     },
+
+    // 3. O Indicador de rolagem (O bloquinho que se move)
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(144, 0, 255, 0.3)', // 🔥 Seu roxo principal com bastante transparência
+      borderRadius: '10px',
+      border: '1px solid rgba(255, 255, 255, 0.05)', // Borda micro sutil para dar acabamento
+
+      // Efeito de Hover: Quando o usuário passa o mouse, a barra "acende" um pouco mais
+      '&:hover': {
+        backgroundColor: 'rgba(144, 0, 255, 0.6)', // Fica mais visível no foco
+      },
+    },
+
+    // Suporte para navegadores baseados em Firefox
     scrollbarWidth: 'thin',
-    scrollbarColor: colors.orange,
+    scrollbarColor: 'rgba(144, 0, 255, 0.3) transparent', // (Cor do indicador) (Cor do fundo)
   },
 
   // Sombras, Bordas e Layout

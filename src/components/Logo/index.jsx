@@ -18,7 +18,6 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
             width: '100%',
             maxWidth: '180px',
             height: 'auto',
-            borderLeft: '3px solid transparent', // 1. Define o tamanho e deixa a borda padrão transparente
             borderImage: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary}) 1`,
         }}>
             <Link sx={{
@@ -46,7 +45,7 @@ export const LogoMainLayout = ({ image, text, black, top }) => {
                         maskRepeat: 'no-repeat',
                     }}
                     src={(black ? Imag3 : FetureImgLogo1) || image}
-                    alt="imagem da logo da junta mais!" />
+                    alt="imagem da logo da stockify!" />
             </Link>
             <Typography sx={{
                 display: 'flex',
