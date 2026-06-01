@@ -8,7 +8,7 @@ import { LogoMainLayout } from '../../components/Logo'
 import { LoginAuthMessage } from '../../components/Alertas/LoginAuthMessage'
 
 export const Login = () => {
-    const[open, setOpen] = useState(false); 
+    const [open, setOpen] = useState(false);
     const [openAlert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState({ title: '', message: '' });
     const [progress, setProgress] = useState(false);
@@ -147,7 +147,7 @@ export const Login = () => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment sx={{
-                                        color: Root.color_button,
+                                        color: '#17a2b8',
                                     }}>
                                         {open ? <Visibility onClick={() => setOpen(!open)} /> :
                                             <VisibilityOff onClick={() => setOpen(!open)} />}
