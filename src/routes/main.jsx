@@ -10,8 +10,10 @@ import { Entradas } from "../pages/Entradas";
 import { ItemQrCode } from "../pages/Qr_Code";
 import { Percepcoes } from "../pages/percepcoes";
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { ComponentCompanies } from "../auth/companies/ComponentCompanies";
+
 export const MainRoutes = () => {
-    const { isLoggedIn, loading } = useContext(AuthContext);
+    const { isLoggedIn, loading, tenant } = useContext(AuthContext);
 
     // Trava de segurança para não piscar a tela
     if (loading) {
@@ -118,6 +120,16 @@ export const MainRoutes = () => {
         );
     }
 
+    // 2. 🏢 USUÁRIO LOGADO, MAS SEM EMPRESA SELECIONADA: Força a tela de escolha
+    if (isLoggedIn && !tenant) {
+        return (
+            <Routes>
+                <Route path="/mult_companies" element={<ComponentCompanies />} />
+                {/* Qualquer rota digitada aqui vai empurrar ele de volta para a seleção */}
+                <Route path="*" element={<Navigate to="/mult_companies" replace />} />
+            </Routes>
+        );
+    }
     // 🔐 Se estiver logado, envelopa o bloco de rotas passando para a sua propriedade 'childrens'
     return (
         <MainLayout childrens={
