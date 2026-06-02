@@ -217,78 +217,78 @@ export const AuthProvider = ({ children }) => {
             setMessage(errorMessage);
         }
     };
+    const loginWithEmailAndPassword = async (email, password) => {
+        if (!email || !password) return;
 
-    // 🔥 ATUALIZADO: Query ajustada de 'userId' para '__name__' para ler o ID do documento
- const loginWithEmailAndPassword = async (email, password) => {
-    if (!email || !password) return;
+        try {
+            await setPersistence(auth, browserSessionPersistence);
 
-    try {
-        await setPersistence(auth, browserSessionPersistence);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userData = await queryUser(userCredential.user.email, userCredential.user);
 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const userData = await queryUser(userCredential.user.email, userCredential.user);
+            if (!userData) {
+                alert("Usuário autenticado, mas perfil não encontrado no sistema.");
+                return;
+            }
 
-        if (!userData) {
-            alert("Usuário autenticado, mas perfil não encontrado no sistema.");
-            return;
+            // 🔍 MUDANÇA AQUI: Capturamos o e-mail autenticado em minúsculo
+            const emailAutenticado = userCredential.user.email.toLowerCase();
+            console.log("📧 E-mail sendo verificado no banco:", emailAutenticado);
+
+            // 🔍 MUDANÇA AQUI: Filtramos pelo campo 'userEmail' em vez de 'userId'
+            const q = query(
+                collectionGroup(db, 'associated_users'),
+                where('userEmail', '==', emailAutenticado)
+            );
+            const querySnapshot = await getDocs(q);
+
+            const empresasAssociadas = [];
+            querySnapshot.forEach((doc) => {
+                const tenantId = doc.ref.parent.parent.id;
+                empresasAssociadas.push(tenantId);
+                console.log(`📌 Empresa encontrada para o e-mail! ID da Tenant: ${tenantId}`);
+            });
+
+            console.log("📊 Total de empresas mapeadas pelo e-mail:", empresasAssociadas.length);
+
+            if (empresasAssociadas.length === 0) {
+                alert("Este e-mail não está vinculado a nenhuma empresa ativa no banco de dados.");
+                return;
+            }
+
+            // 🔀 O restante do fluxo permanece idêntico e seguro
+            if (empresasAssociadas.length === 1) {
+                const únicoTenant = empresasAssociadas[0];
+                sessionStorage.setItem("activeTenantId", únicoTenant);
+
+                await checkTenant(únicoTenant);
+                console.log("📊 Total de empresas mapeadas pelo e-mail:", empresasAssociadas.length);
+                console.log("unico tenant id:", únicoTenant);
+                setUser(userData);
+                login(userData);
+
+                navigate("/");
+            } else {
+                sessionStorage.setItem("empresasDisponiveis", JSON.stringify(empresasAssociadas));
+                setMult_tenants(empresasAssociadas);
+
+                setUser(userData);
+                login(userData);
+
+                navigate("/mult_companies");
+            }
+
+        } catch (error) {
+            console.error("Erro no fluxo de login:", error);
+            let errorMessage = 'Ocorreu um erro ao fazer login.';
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                errorMessage = 'E-mail ou senha incorretos.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = 'O formato do e-mail digitado é inválido.';
+            }
+            alert(errorMessage);
         }
-
-        // 🔍 Busca as empresas associadas filtrando pelo campo interno 'userId'
-        const uid = userCredential.user.uid;
-        console.log(uid, 'Usuario sendo verificado')
-        const q = query(collectionGroup(db, 'associated_users'), where('userId', '==', uid));
-        const querySnapshot = await getDocs(q);
-
-        const empresasAssociadas = [];
-        querySnapshot.forEach((doc) => {
-            const tenantId = doc.ref.parent.parent.id;
-            empresasAssociadas.push(tenantId);
-        });
-        
-        console.log(empresasAssociadas, 'empressas associados')
-        
-        if (empresasAssociadas.length === 0) {
-            alert("Este usuário não está vinculado a nenhuma empresa ativa.");
-            return;
-        }
-
-        // 🔀 FLUXO DE DIRECIONAMENTO DEFINITIVO
-        if (empresasAssociadas.length === 1) {
-            const únicoTenant = empresasAssociadas[0];
-            sessionStorage.setItem("activeTenantId", únicoTenant);
-            
-            // 1º: Sincroniza o ambiente e carrega as configurações da empresa
-            await checkTenant(únicoTenant);
-            
-            // 2º: Atualiza os estados de usuário e dispara o login global com segurança
-            setUser(userData);
-            login(userData); 
-            
-            // 3º: Redireciona para o estoque limpo
-            navigate("/");
-        } else {
-            sessionStorage.setItem("empresasDisponiveis", JSON.stringify(empresasAssociadas));
-            setMult_tenants(empresasAssociadas);
-            
-            // Ativa o usuário e a sessão, o MainRoutes vai segurar ele na tela de seleção porque o tenant ainda é null
-            setUser(userData);
-            login(userData);
-            
-            navigate("/mult_companies");
-        }
-
-    } catch (error) {
-        console.error("Erro no fluxo de login:", error);
-        let errorMessage = 'Ocorreu um erro ao fazer login.';
-        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-            errorMessage = 'E-mail ou senha incorretos.';
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = 'O formato do e-mail digitado é inválido.';
-        }
-        alert(errorMessage);
-    }
-};
-
+    };
     return (
         <AuthContext.Provider
             value={{
