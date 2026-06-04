@@ -13,19 +13,22 @@ export const Stock = () => {
         user,
         setDownloads,
         selectedItems,
-        setSelectedItems, matches,
+        setSelectedItems,
+        matches,
         search,
         select,
-        tenant,
+        tenant, // 🟢 Esse é o ID da empresa ativa que veio da escolha das telas!
     } = useContext(AuthContext)
+
     useEffect(() => {
-        if (!user || !user.tenant) return;
+        if (!user || !tenant) return;
+
         setLoading(false)
+        const tenantIdPuro = tenant.id;
         const stockQuery = query(
             collection(db, 'stock'),
-            where('tenant', '==', user.tenant)
+            where('tenant', '==', tenantIdPuro)
         );
-        console.log("Escutando estoque do tenant:", stockQuery)
         const unsubscribe = onSnapshot(stockQuery, (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
                 const data = doc.data();
@@ -59,6 +62,7 @@ export const Stock = () => {
                     }
                 }
             }).filter(item => item !== null);
+            console.log(stockItems)
             setStock(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
@@ -70,7 +74,9 @@ export const Stock = () => {
         });
 
         return () => unsubscribe();
-    }, [search, select, user?.tenant]); // 🔥 Adicionado o tenant nas dependências para refazer a busca se o inquilino mudar
+
+    }, [search, select, user, tenant]); // 🔍 CORREÇÃO 3: Dependência alterada de user?.tenant para tenant puro
+
     if (matches) {
         return (
             <TableStock item={stock} />

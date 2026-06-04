@@ -40,49 +40,65 @@ export const AuthProvider = ({ children }) => {
         saidas: []
     });
 
-    // 1. Sincronização Inicial e Escuta em Tempo Real do Firebase
-    useEffect(() => {
-        const loggedInStatus = sessionStorage.getItem('isLoggedIn');
-        setIsLoggedIn(loggedInStatus === 'true');
+// 1. Sincronização Inicial e Escuta em Tempo Real do Firebase
+useEffect(() => {
+    const loggedInStatus = sessionStorage.getItem('isLoggedIn');
+    setIsLoggedIn(loggedInStatus === 'true');
 
-        if (loggedInStatus === 'true') {
-            const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
-            const tenantDataFromSession = JSON.parse(sessionStorage.getItem('tenant'));
+    if (loggedInStatus === 'true') {
+        const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
+        const tenantDataFromSession = JSON.parse(sessionStorage.getItem('tenant'));
 
-            if (userDataFromSession) setUser(userDataFromSession);
-            if (tenantDataFromSession) setTenant(tenantDataFromSession);
+        // 🟢 ADICIONADO: Recupera a lista de múltiplas empresas se ela existir na sessão
+        const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
+        if (empresasSalvas) {
+            // Supondo que o seu estado no contexto se chame setMult_tenants
+            setMult_tenants(JSON.parse(empresasSalvas)); 
         }
 
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            try {
-                if (firebaseUser) {
-                    const userData = await queryUser(firebaseUser.email);
-                    setUser(userData);
+        if (userDataFromSession) setUser(userDataFromSession);
+        if (tenantDataFromSession) setTenant(tenantDataFromSession);
+    }
 
-                    const activeTenantId = sessionStorage.getItem('activeTenantId');
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        try {
+            if (firebaseUser) {
+                const userData = await queryUser(firebaseUser.email);
+                setUser(userData);
 
-                    if (activeTenantId) {
-                        const res = await getTenancies.tenancy(activeTenantId);
-                        if (res) {
-                            setTenant(res);
-                            sessionStorage.setItem('tenant', JSON.stringify(res));
-                        }
+                const activeTenantId = sessionStorage.getItem('activeTenantId');
+
+                if (activeTenantId) {
+                    const res = await getTenancies.tenancy(activeTenantId);
+                    if (res) {
+                        setTenant(res);
+                        sessionStorage.setItem('tenant', JSON.stringify(res));
                     }
                 } else {
-                    setUser(null);
-                    setTenant(null);
-                    setIsLoggedIn(false);
-                    sessionStorage.clear();
+                    // 🟢 CASO MULTI-COMPANY (Ex: Timo no F5 na tela de seleção):
+                    // Se não há tenant ativo, mas há uma lista guardada, garante que o estado do contexto permaneça cheio!
+                    const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
+                    if (empresasSalvas) {
+                        setMult_tenants(JSON.parse(empresasSalvas));
+                    }
                 }
-            } catch (error) {
-                console.error("Erro no monitoramento de autenticação:", error);
-            } finally {
-                setLoading(false);
+            } else {
+                setUser(null);
+                setTenant(null);
+                setIsLoggedIn(false);
+                // Se o seu contexto usar o setMult_tenants, limpa ele no logout:
+                setMult_tenants([]); 
+                sessionStorage.clear();
             }
-        });
+        } catch (error) {
+            console.error("Erro no monitoramento de autenticação:", error);
+        } finally {
+            setLoading(false);
+        }
+    });
 
-        return () => unsubscribe();
-    }, []);
+    return () => unsubscribe();
+}, []);
 
     // 2. Funções Auxiliares de Login e Logout
     const login = (userData) => {

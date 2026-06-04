@@ -15,6 +15,7 @@ export const Entradas = () => {
         setDownloads,
         search,
         select,
+        tenant
     } = useContext(AuthContext)
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
@@ -29,21 +30,21 @@ export const Entradas = () => {
     ]
 
     useEffect(() => {
-        // 1. Segurança: Se o usuário não estiver carregado ou não tiver uma empresa vinculada, não faz nada
-        if (!user || !user.tenant) return;
+        // 1. Segurança: Se o usuário não estiver carregado ou se o tenant global não existir, não faz nada
+        if (!user || !tenant) return;
 
-        // 2. Cria a Query filtrando direto no Firestore pelo tenantId da empresa do usuário
+        // 🟢 ACESSO CORRIGIDO: Entrando dentro do objeto tenant global para pegar o ID puro (string)
+        const tenantIdPuro = tenant.id;
+
+        // 2. Cria a Query filtrando direto no Firestore pelo ID real da empresa
         const q = query(
             collection(db, 'entradas'),
-            where('tenant', '==', user.tenant) // 🔥 Trava de segurança: impede o vazamento de dados
+            where('tenant', '==', tenantIdPuro) // 🔥 Agora sim passando a string correta (ex: "2F10WS4zV...")
         );
-        console.log(q, 'wui')
-        // 3. O listener em tempo real agora só escuta o que pertence a esta empresa
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const stockItems = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
 
-                // Renderização padrão se não houver filtros de busca na UI
                 if (!search && !select) {
                     return {
                         id: doc.id,
@@ -88,9 +89,9 @@ export const Entradas = () => {
         });
 
         return () => unsubscribe();
-        // 💡 IMPORTANTE: Adicionei user.tenantId nas dependências para refazer o listener se mudar de empresa
-    }, [search, select, user?.tenant]);
 
+        // 💡 REPARADO: Vigiando as variáveis certas (incluindo o objeto 'tenant' global) para mudar o listener dinamicamente
+    }, [search, select, user, tenant]);
     return (
 
         <ContainerTableStock children={(<>

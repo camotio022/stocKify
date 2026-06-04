@@ -11,7 +11,7 @@ import { LoadingTable } from "../../components/LoadingSkeletonCard";
 import { ContainerTableStock } from "../../components/Table/ShowItens";
 export const ExitsItems = () => {
     const [loading, setLoading] = useState(false)
-    const { setDownloads, search, select, user } = useContext(AuthContext)
+    const { setDownloads, search, select, user, tenant } = useContext(AuthContext)
     const [saidas, setSaidas] = useState([])
     const tableRef = useRef(null);
     const [focus, setFocus] = useState(null)
@@ -33,71 +33,75 @@ export const ExitsItems = () => {
             setSelectedItems([...selectedItems, id]);
         }
     };
-    useEffect(() => {
-        // 1. Segurança: Só ativa o listener se o usuário estiver logado e tiver uma empresa mapeada
-        if (!user || !user.tenant) return;
+   useEffect(() => {
+    // 1. Segurança: Só ativa o listener se o usuário estiver logado e tiver o tenant global mapeado
+    if (!user || !tenant) return;
 
-        setLoading(true);
+    setLoading(true);
 
-        // 2. Cria a Query amarrada ao tenantId da empresa atual
-        const q = query(
-            collection(db, 'saidas'),
-            where('tenant', '==', user.tenant) // 🔥 Trava multi-tenant: isola as saídas por empresa
-        );
-        console.log(q)
-        // 3. Executa o listener em tempo real diretamente na Query filtrada
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const stockItems = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
+    // 🟢 ACESSO CORRIGIDO: Extraindo o ID do texto puro de dentro do objeto tenant
+    const tenantIdPuro = tenant.id;
 
-                // Renderização padrão sem filtros de pesquisa na UI
-                if (!search && !select) {
+    // 2. Cria a Query amarrada ao ID real da empresa atual
+    const q = query(
+        collection(db, 'saidas'),
+        where('tenant', '==', tenantIdPuro) // 🔥 Agora sim isolando as saídas usando a string correta
+    );
+    
+    console.log("🟢 Escutando saídas do tenant ativo:", tenantIdPuro);
+
+    // 3. Executa o listener em tempo real diretamente na Query filtrada
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const stockItems = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+
+            // Renderização padrão sem filtros de pesquisa na UI
+            if (!search && !select) {
+                return {
+                    tenant: tenantIdPuro, // Atualizado para usar o ID limpo
+                    id: doc.id,
+                    nome: data.nomeItem || "",
+                    quantidade: data.quantidade || "",
+                    dataValidade: data.dataValidade || "",
+                    dataRetirada: data.dataRetirada || "",
+                    horaRetirada: data.horaRetirada || "",
+                    author: data.author?.userName || "", 
+                };
+            } else {
+                // Filtros aplicados localmente na tabela de saídas
+                if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
                     return {
-                        tenant: user.tenant,
                         id: doc.id,
                         nome: data.nomeItem || "",
                         quantidade: data.quantidade || "",
                         dataValidade: data.dataValidade || "",
                         dataRetirada: data.dataRetirada || "",
                         horaRetirada: data.horaRetirada || "",
-                        author: data.author?.userName || "", // 💡 Modificado para evitar quebras se o author sumir
+                        author: data.author?.userName || "",
                     };
                 } else {
-                    // Filtros aplicados localmente na tabela de saídas
-                    if ((!search || (data[select] && data[select].toLowerCase().includes(search.toLowerCase()))) && (!select || select === "" || data[select])) {
-                        return {
-                            id: doc.id,
-                            nome: data.nomeItem || "",
-                            quantidade: data.quantidade || "",
-                            dataValidade: data.dataValidade || "",
-                            dataRetirada: data.dataRetirada || "",
-                            horaRetirada: data.horaRetirada || "",
-                            author: data.author?.userName || "",
-                        };
-                    } else {
-                        return null;
-                    }
+                    return null;
                 }
-            }).filter(item => item !== null);
+            }
+        }).filter(item => item !== null);
 
-            setSaidas(stockItems);
-            setDownloads(prevState => ({
-                ...prevState,
-                saidas: stockItems,
-            }));
-            setLoading(false);
-            console.log('Saídas atualizadas com sucesso para o tenant:', user.tenant);
-        }, (error) => {
-            console.error("Erro ao buscar saídas:", error);
-            setLoading(false); // Garante que desliga o loading mesmo se o Firebase der erro de permissão
-        });
+        setSaidas(stockItems);
+        setDownloads(prevState => ({
+            ...prevState,
+            saidas: stockItems,
+        }));
+        setLoading(false);
+        console.log('Saídas atualizadas com sucesso para o tenant:', tenantIdPuro);
+    }, (error) => {
+        console.error("Erro ao buscar saídas:", error);
+        setLoading(false); 
+    });
 
-        // 4. Limpeza correta: o useEffect agora recebe diretamente a função de desmontagem
-        return () => unsubscribe();
+    // 4. Limpeza correta do listener ao desmontar o componente
+    return () => unsubscribe();
 
-        // 💡 Adicionado as dependências necessárias para re-executar a busca se os filtros ou o tenant mudarem
-    }, [search, select, user?.tenant]);
-
+    // 💡 REPARADO: Vigiando as dependências corretas, trocando user?.tenant por tenant puro
+}, [search, select, user, tenant]);
 
     const selectSx = {
         backgroundColor: Root.cyan,
