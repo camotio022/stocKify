@@ -1,5 +1,6 @@
 import { Stack, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/material/node/styles';
+
 
 // 🟢 Mantendo o padrão MuiLeftTag com a função de retorno para o container
 export const BrandContainer = styled('div')(({ }) => ({

@@ -109,7 +109,7 @@ export const Login = () => {
         };
     }, [data, progress]); // Fica de olho nos dados atualizados
     return (
-        
+
         <Tag.MuiContainer matches={matches}>
             <LoginAuthMessage open={openAlert}
                 onClose={() => setAlert(false)}

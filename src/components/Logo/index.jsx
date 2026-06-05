@@ -5,7 +5,7 @@ import Imag3 from '../../images/layout/captura.png'
 import FetureImgLogo from '../../images/layout/feture.png'
 import FetureImgLogo1 from '../../images/layout/feture.png'
 import { Root } from "../../styles/Root/root_styles"
-import * as Tag from './index'
+import * as Tag from './index.js'
 export const LogoMainLayout = ({ image, text, black, top, tenant }) => {
     const navigate = useNavigate() // 🟢 Função para redirecionar o usuário
 
