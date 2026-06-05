@@ -4,7 +4,7 @@ import { Root } from '../../styles/Root/root_styles'
 import { LockClock, Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../auth_context'
-import { LogoMainLayout } from '../../components/Logo'
+import { LogoMainLayout } from '../../components/Logo/index.jsx'
 import { LoginAuthMessage } from '../../components/Alertas/LoginAuthMessage'
 
 export const Login = () => {

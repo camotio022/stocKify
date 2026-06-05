@@ -76,16 +76,7 @@ export const MainLayout = ({ childrens }) => {
     return (
         <Tag.MuiMainLayout>
             <Tag.AppBar>
-                <Stack sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'center',
-                    ml: '12px',
-                    height: '85%',
-                    width: '100%',
-                }}>
-                    <LogoMainLayout text={tenant?.name} />
-                </Stack>
+                <LogoMainLayout text={tenant?.name} />
                 <UserItens />
             </Tag.AppBar>
             <Tag.MuiMainLayoutRitghStep>

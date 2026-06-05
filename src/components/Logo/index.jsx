@@ -18,7 +18,7 @@ export const LogoMainLayout = ({ image, text, black, top, tenant }) => {
 
             {/* Nome da empresa ativa vindo dinamicamente do seu contexto */}
             <Tag.CompanyText variant="subtitle2">
-                {text || "Carregando..."}
+                {text && text}
             </Tag.CompanyText>
         </Tag.BrandContainer>
     )
