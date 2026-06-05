@@ -17,20 +17,17 @@ export const EstoqueTable = ({
     loading
 }) => {
 
-    const { enablingDeleteButtom, setEnablingDeleteButtom } = useContext(AuthContext)
+    const { 
+        enablingDeleteButtom, 
+        setEnablingDeleteButtom,
+        tenant // 🟢 Puxamos o tenant completo aqui de dentro do seu contexto global!
+    } = useContext(AuthContext)
+    
     const [options, setOptions] = useState('')
     const [focus, setFocus] = useState(null); // Índice do item focado
     const [disabledItems, setDisabledItems] = useState([]); // Lista de itens desabilitados
     const tableRef = useRef(null);
-    const headerInfos = [
-        'Categoria',
-        'Nome do alimento',
-        'Valor dos Produtos',
-        'Quantidade',
-        'Data de Validade',
-        'Data de Chegada',
-        'Opções'
-    ];
+
     const focusItem = (index, item) => {
         if (focus === index) {
             setEnablingDeleteButtom(false)
@@ -44,14 +41,17 @@ export const EstoqueTable = ({
             setFocus(index);
         }
     }
+    
     const handleOptions = (item) => {
         setOptions(item)
     }
     function isItemExpired(expiryDate) {
+        if (!expiryDate) return false;
         const itemDate = new Date(expiryDate);
         const currentDate = new Date();
         return itemDate < currentDate;
     }
+    console.log()
     return (
         <ContainerTableStock children={(<>
             <LoadingModal open={loading} message="Sincronizando estoque em tempo real..." />
@@ -60,22 +60,28 @@ export const EstoqueTable = ({
                 name={options.nome}
                 setOptions={setOptions}
             />}
+            
+            {/* 🌟 CABEÇALHOS CAMALEÃO: Muta baseado nas colunas que você configurou no Tenant */}
             {
                 loading &&
                 <MuiHeaderTable>
-                    {headerInfos.map((header, index) => (
-                        <MuiTableClhild sx={header === 'Opções' && {
-                            fontWeight: 'bold',
-                            width: '50%',
-                        }} key={index}>{header}</MuiTableClhild>
+                    {tenant?.colunasEstoque?.map((coluna, index) => (
+                        <MuiTableClhild key={index}>
+                            {coluna.label}
+                        </MuiTableClhild>
                     ))}
+                    {/* Mantém a coluna fixa de ações no final */}
+                    <MuiTableClhild sx={{ fontWeight: 'bold', width: '50%' }}>
+                        Opções
+                    </MuiTableClhild>
                 </MuiHeaderTable>
             }
+            
             <MuiRowTable>
                 {stock.map((item, index) => {
-                    const { typeItem, price, donation, ...otherKeys } = item;
                     const isFocused = focus === index; // Verifica se o item está focado
                     const isDisabled = disabledItems.includes(item.id); // Verifica se o item está desabilitado
+                    
                     return (
                         <MuiTableRow
                             key={item.id}
@@ -99,38 +105,39 @@ export const EstoqueTable = ({
                             }
                         >
 
-                            {Object.keys(item).map((key, i) => {
-                                if ((key === 'author') ||
-                                    (key === 'id') ||
-                                    (key === 'donation') ||
-                                    (key === 'typeItem')) {
-                                    return null;
-                                }
-                                if (key === 'price') {
-                                    const valorPreco = item[key];
-                                    const ehDoacao = item.typeItem === 'doacao' || !valorPreco;
-
-                                    return (
-                                        <MuiTableRowCell key={i} sx={ehDoacao && { color: Root.doacao }}>
-                                            {ehDoacao ? 'Doação' : `R$ ${valorPreco}`}
-                                        </MuiTableRowCell>
-                                    );
-                                }
-                                if (key === 'dataChegada') {
+                            {tenant?.colunasEstoque?.map((coluna, i) => {
+                                const valorCampo = item[coluna.campo];
+                                if (coluna.campo === 'preco') {
                                     return (
                                         <MuiTableRowCell key={i}>
-                                            <FormatRelativeTime dateTimeString={item.dataChegada} />
+                                            R$ {valorCampo}
                                         </MuiTableRowCell>
                                     );
                                 }
+
+                                // 2. Tratamento específico para o campo de Data de Chegada (Garante o cálculo relativo)
+                                if (coluna.campo === 'dataChegada') {
+                                    return (
+                                        <MuiTableRowCell key={i}>
+                                            <FormatRelativeTime dateTimeString={valorCampo} />
+                                        </MuiTableRowCell>
+                                    );
+                                }
+
+                                // 3. Renderização padrão para os outros campos genéricos (Nome, Categoria, Cor, Tamanho, etc.)
                                 return (
                                     <MuiTableRowCell key={i}>
-                                        {item[key]} {key === 'quantidade' && 'unidades'}
+                                        {valorCampo !== undefined && valorCampo !== "" ? String(valorCampo) : "---"}
+                                        {/* Insere o sulfixo 'unidades' de forma inteligente se for o campo de quantidade */}
+                                        {coluna.campo === 'quantidade' && valorCampo && !String(valorCampo).includes('unidades') && ' unidades'}
                                     </MuiTableRowCell>
                                 );
                             })}
+
+                            {/* Coluna fixa de Opções (...) mantendo seus hovers e degradês de CSS */}
                             <MuiTableRowCell
                                 onClick={(e) => {
+                                    e.stopPropagation(); // Evita disparar o foco da linha ao clicar nos três pontinhos
                                     handleOptions(item)
                                 }}
                                 sx={{

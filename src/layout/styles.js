@@ -18,16 +18,15 @@ export const MuiMainLayout = styled(Stack)(({ }) => ({
 export const MuiMainLayoutLogo = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     width: '14vw',
     height: '100%',
-    color: Root.color_button,
 }))
 export const MuiMainLayoutLinks = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     flexDirection: 'column',
     paddingBlock: '4px',
@@ -61,19 +60,31 @@ export const MuiMainLayoutLink = styled(Link)(({ }) => ({
 
 }))
 export const MuiMainLayoutSettingsUser = styled(Stack)(({ }) => ({
-    position: 'absolute',
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '8px',
     width: '90%',
-    height: '50%',
-    bottom: '1vh',
+    height: 'auto',
     gap: '3px',
-    color: Root.gray,
     cursor: 'pointer',
     ...Root.borderImage
 }))
+
+export const AppBar = styled(Stack)(({ }) => ({
+    position: 'absolute',
+    top: '1vh',
+    left: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '100vw',
+    height: '11vh',
+}))
+
+// LATERAL DIREIDO
 export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
@@ -81,26 +92,20 @@ export const MuiMainLayoutRitghStep = styled(Stack)(({ }) => ({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     width: '100vw',
-    height: '90vh',
+    
+    /* 📐 MATEMÁTICA DO LAYOUT: 
+       12vh (topo) + 87vh (altura útil) + 1vh (respiro baixo) = 100vh cravados! */
+    height: '87vh', 
+    marginTop: '12vh',
+    
+    /* 🟢 O RESPIRO QUE VOCÊ PEDIU: 1vh de folga na parte inferior */
+    paddingBottom: '1vh', 
+    
     paddingInline: '18px',
-    marginTop: '10vh',
     overflow: 'hidden',
+    boxSizing: 'border-box',
+}));
 
-}))
-export const AppBar = styled(Stack)(({ }) => ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    width: '100vw',
-    height: '10vh',
-
-}))
-
-// LATERAL DIREIDO
 export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     position: 'relative',
     display: 'flex',
@@ -110,7 +115,10 @@ export const RenderChildrensAndNavBar = styled(Stack)(({ }) => ({
     gap: '12px',
     padding: '13px',
     width: '83.3vw',
-    height: '85vh',
+    
+    /* Mantém 100% para respeitar o limite novo do pai com o respiro */
+    height: '100%', 
     borderRadius: '8px',
+    boxSizing: 'border-box',
     ...Root.borderImage,
-}))
+}));

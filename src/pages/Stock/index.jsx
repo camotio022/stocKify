@@ -1,7 +1,7 @@
 import React from 'react';
 import { EstoqueTable } from './components/StoqueTable/index'
 import { useContext, useEffect, useState } from "react"
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore"; // 🟢 Removemos a query e o where antigos
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
 import { TableStock } from "../../mobile/components/tableStock";
@@ -17,37 +17,31 @@ export const Stock = () => {
         matches,
         search,
         select,
-        tenant, // 🟢 Esse é o ID da empresa ativa que veio da escolha das telas!
+        tenant, // 🟢 Objeto completo da empresa vindo do Contexto
     } = useContext(AuthContext)
 
     useEffect(() => {
-        if (!user || !tenant) return;
+        // Se o usuário ou o tenant (ou o id dele) não existirem, não roda a busca
+        if (!user || !tenant?.id) return;
 
         setLoading(false)
         const tenantIdPuro = tenant.id;
-        const stockQuery = query(
-            collection(db, 'stock'),
-            where('tenant', '==', tenantIdPuro)
-        );
-        const unsubscribe = onSnapshot(stockQuery, (snapshot) => {
+        // 🎯 A NOVA ROTA ISOLADA: Aponta direto para tenants/{tenantId}/stock
+        const subcolecaoRef = collection(db, 'tenants', tenantIdPuro, 'produtos');
+    
+        const unsubscribe = onSnapshot(subcolecaoRef, (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
                 const data = doc.data();
                 const itemFormatado = {
                     id: doc.id,
-                    categoria: data.categoria || "",
-                    nome: data.nome || "",
-                    donation: data.donation || "",
-                    price: data.price || "",
-                    typeItem: data.typeItem || "",
-                    quantidade: data.quantidade || "",
-                    dataValidade: data.dataValidade || "",
-                    dataChegada: data.dataChegada || "",
+                    ...data, 
                     author: {
                         userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
                         userEmail: data.author?.userEmail || user.email,
                         userId: data.author?.userId || user.id,
                     }
                 };
+
                 if (!search && !select) {
                     return itemFormatado;
                 } else {
@@ -62,7 +56,6 @@ export const Stock = () => {
                     }
                 }
             }).filter(item => item !== null);
-            console.log(stockItems)
             setStock(stockItems);
             setDownloads(prevState => ({
                 ...prevState,
@@ -70,13 +63,12 @@ export const Stock = () => {
             }));
             setLoading(true)
         }, (error) => {
-            console.error("Erro ao escutar estoque do tenant:", error);
+            console.error("Erro ao escutar subcoleção de estoque do tenant:", error);
         });
 
         return () => unsubscribe();
 
-    }, [search, select, user, tenant]); // 🔍 CORREÇÃO 3: Dependência alterada de user?.tenant para tenant puro
-
+    }, [search, select, user, tenant?.id]);
     if (matches) {
         return (
             <TableStock item={stock} />
