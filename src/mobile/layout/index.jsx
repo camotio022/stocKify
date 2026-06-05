@@ -1,6 +1,6 @@
 
 import { ExitToApp, History, Home, Insights, Inventory, Menu } from "@mui/icons-material"
-import { LogoMainLayout } from "../../components/Logo"
+import { LogoMainLayout } from "../../components/Logo/index.jsx"
 import { LayoutMobile } from "../styles/layout"
 import { Root } from "../../styles/Root/root_styles"
 import { Box, Stack } from "@mui/material"
