@@ -77,8 +77,6 @@ export const MuiTableRowCell = styled(Typography)(({ }) => ({
     fontFamily: Root.fontFamilySansSerif,
     fontSize: '14px',
     fontWeight: 500,
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     transition: 'all 0.2s ease-in-out',
     backgroundColor: 'rgba(15, 23, 42, 0.4)', // Fundo escuro semitransparente
@@ -86,7 +84,6 @@ export const MuiTableRowCell = styled(Typography)(({ }) => ({
     color: Root.text, // 🔥 O Branco Gelo que dá o contraste perfeito sobre o vidro escuro
     whiteSpace: 'nowrap',     // Impede o texto de quebrar para a linha de baixo
     overflow: 'hidden',       // Corta o que passar do limite da largura
-    textOverflow: 'ellipsis',
     '&:hover': {
         color: '#ffffff', // Clarea para branco puro
         textShadow: '0 0 8px rgba(255, 255, 255, 0.5)', // Brilho sutil de tela de luxo

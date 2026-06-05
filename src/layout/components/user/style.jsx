@@ -6,7 +6,6 @@ export const StyleUser = {
     contain: styled(Stack)(({ }) => ({
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
         flexDirection: 'row',
         marginRight: '12px',
         justifyContent: 'flex-end',

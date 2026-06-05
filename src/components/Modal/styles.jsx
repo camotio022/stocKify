@@ -27,7 +27,6 @@ export const MuiModalPapper = styled(Stack)(({ }) => ({
     minHeight: '10%',
     backgroundColor: Root.color_app_bar,
     border: `1px solid ${Root.color_button_secondary}`,
-    boxShadow: Root.boxS,
     borderRadius: '4px',
     padding: '5%',
     fontFamily: Root.fontFamilyMonospace

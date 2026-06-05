@@ -9,7 +9,6 @@ export const StylesTableMobile = {
     })),
     tableRow: styled(Stack)(({ }) => ({
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',

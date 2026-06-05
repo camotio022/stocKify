@@ -8,7 +8,6 @@ export const StylesBar = {
         flexDirection: 'row',
         justifyContent:'center',
         alignItems: 'flex-end',
-        flexDirection: 'row',
         width: '100%',
         minHeight: '80px',
         height: 'auto',

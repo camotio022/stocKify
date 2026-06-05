@@ -32,7 +32,6 @@ export const Root = {
   success: colors.success,
   info: colors.info,
   warning: colors.warning,
-  danger: colors.danger,
   light: colors.light,
   dark: colors.dark,
   danger: colors.danger,

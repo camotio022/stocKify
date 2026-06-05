@@ -161,7 +161,6 @@ export const MuiSearchIcon = styled(Search)(({ theme }) => ({}));
 export const MuiInputNative = styled('input')(({ }) => ({
     paddingInline: '6px',
     outline: 'none',
-    border: 'none',
     height: '36px',
     width: '100%',
     borderRadius: '4px',
