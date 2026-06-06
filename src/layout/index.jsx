@@ -17,7 +17,7 @@ import { LayoutMobile } from "../mobile/styles/layout.jsx"
 import { UserItens } from "./components/user/index.jsx"
 import { NotificationsApp } from "../pages/Notifications/index.jsx"
 import { LogoutConfirmationModal } from "../components/Alertas/LogoutUser.jsx"
-export const MainLayout = ({ childrens }) => {
+export const MainLayout = ({ children }) => {
     const location = useLocation()
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const {
@@ -79,6 +79,7 @@ export const MainLayout = ({ childrens }) => {
                 <LogoMainLayout text={tenant?.name} />
                 <UserItens />
             </Tag.AppBar>
+            
             <Tag.MuiMainLayoutRitghStep>
                 <Tag.MuiMainLayoutLogo>
                     <Tag.MuiMainLayoutLinks>
@@ -139,7 +140,7 @@ export const MainLayout = ({ childrens }) => {
                         saveExcel={saveExcel}
                     />
                     {notifications && <NotificationsApp />}
-                    {childrens}
+                    {children}
                 </Tag.RenderChildrensAndNavBar>
             </Tag.MuiMainLayoutRitghStep>
 

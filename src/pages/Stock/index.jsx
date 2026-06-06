@@ -19,55 +19,53 @@ export const Stock = () => {
         select,
         tenant, // 🟢 Objeto completo da empresa vindo do Contexto
     } = useContext(AuthContext)
-
     useEffect(() => {
-        // Se o usuário ou o tenant (ou o id dele) não existirem, não roda a busca
-        if (!user || !tenant?.id) return;
+        // 🟢 PEGA A STRING PURA: Sem JSON.parse para não estourar erro de sintaxe!
+        const idDoStorage = sessionStorage.getItem("activeTenantId");
 
-        setLoading(false)
-        const tenantIdPuro = tenant.id;
-        // 🎯 A NOVA ROTA ISOLADA: Aponta direto para tenants/{tenantId}/stock
-        const subcolecaoRef = collection(db, 'tenants', tenantIdPuro, 'produtos');
-    
+        // Define o ID final: Prioriza o estado do contexto (se já estiver pronto), 
+        // se não, usa a String pura do storage como plano B imediato.
+        const tenantIdEfetivo = tenant?.id && tenant.id !== "none" ? tenant.id : idDoStorage;
+
+        // 🔴 Se mesmo olhando o storage o ID for nulo, indefinido ou "none", aí sim barra
+        if (!user || !tenantIdEfetivo || tenantIdEfetivo === "none") return;
+
+        setLoading(false);
+
+        // 🎯 Conecta na subcoleção usando a String pura do ID garantido
+        const subcolecaoRef = collection(db, 'tenants', tenantIdEfetivo, 'produtos');
+
         const unsubscribe = onSnapshot(subcolecaoRef, (snapshot) => {
             const stockItems = snapshot.docs.map((doc) => {
                 const data = doc.data();
-                const itemFormatado = {
+                return {
                     id: doc.id,
-                    ...data, 
+                    ...data,
                     author: {
                         userName: data.author?.userName || (user.name === 'none' ? 'Junta Mais' : user.name),
                         userEmail: data.author?.userEmail || user.email,
                         userId: data.author?.userId || user.id,
                     }
                 };
+            });
 
-                if (!search && !select) {
-                    return itemFormatado;
-                } else {
-                    const valorCampo = data[select];
-                    const atendeBusca = !search || (valorCampo && String(valorCampo).toLowerCase().includes(search.toLowerCase()));
-                    const atendeSelect = !select || select === "" || valorCampo;
+            const filteredItems = stockItems.filter(item => {
+                if (!search && !select) return true;
+                const valorCampo = item[select];
+                return (!search || (valorCampo && String(valorCampo).toLowerCase().includes(search.toLowerCase()))) &&
+                    (!select || select === "" || valorCampo);
+            });
 
-                    if (atendeBusca && atendeSelect) {
-                        return itemFormatado;
-                    } else {
-                        return null;
-                    }
-                }
-            }).filter(item => item !== null);
-            setStock(stockItems);
-            setDownloads(prevState => ({
-                ...prevState,
-                estoque: stockItems,
-            }));
-            setLoading(true)
+            setStock(filteredItems);
+            setDownloads(prevState => ({ ...prevState, estoque: filteredItems }));
+            setLoading(true);
         }, (error) => {
             console.error("Erro ao escutar subcoleção de estoque do tenant:", error);
         });
 
         return () => unsubscribe();
 
+        // Monitora o tenant?.id para refazer a inscrição caso o estado do contexto mude depois
     }, [search, select, user, tenant?.id]);
     if (matches) {
         return (

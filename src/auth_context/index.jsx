@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
     const [search, setSearch] = useState('');
     const [user, setUser] = useState(null);
     const [mult_tanants, setMult_tenants] = useState([]);
-    const [tenant, setTenant] = useState(null);
     const auth = getAuth();
     const [newItem, setNewItem] = useState(false);
     const [saveExcel, setSaveExcel] = useState(false);
@@ -39,66 +38,83 @@ export const AuthProvider = ({ children }) => {
         entradas: [],
         saidas: []
     });
+    // 🟢 Substitua o seu useState(null) por esta inicialização inteligente:
+    const [tenant, setTenant] = useState(() => {
+        const salvoRaw = sessionStorage.getItem('activeTenantId') || sessionStorage.getItem('tenant');
+        if (salvoRaw) {
+            try {
+                const deSerialized = JSON.parse(salvoRaw);
+                if (deSerialized === "none" || (deSerialized && !deSerialized.id)) {
+                    return { id: "none", name: "none", status: "none" };
+                }
+                return deSerialized;
+            } catch (e) {
+                if (salvoRaw !== "none") {
+                    return { id: salvoRaw, name: "Carregando...", status: "active" };
+                }
+            }
+        }
+        return { id: "none", name: "none", status: "none" };
+    });
+    // 1. Sincronização Inicial e Escuta em Tempo Real do Firebase
+    useEffect(() => {
+        const loggedInStatus = sessionStorage.getItem('isLoggedIn');
+        setIsLoggedIn(loggedInStatus === 'true');
 
-// 1. Sincronização Inicial e Escuta em Tempo Real do Firebase
-useEffect(() => {
-    const loggedInStatus = sessionStorage.getItem('isLoggedIn');
-    setIsLoggedIn(loggedInStatus === 'true');
+        if (loggedInStatus === 'true') {
+            const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
+            const tenantDataFromSession = JSON.parse(sessionStorage.getItem('tenant'));
 
-    if (loggedInStatus === 'true') {
-        const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
-        const tenantDataFromSession = JSON.parse(sessionStorage.getItem('tenant'));
+            // 🟢 ADICIONADO: Recupera a lista de múltiplas empresas se ela existir na sessão
+            const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
+            if (empresasSalvas) {
+                // Supondo que o seu estado no contexto se chame setMult_tenants
+                setMult_tenants(JSON.parse(empresasSalvas));
+            }
 
-        // 🟢 ADICIONADO: Recupera a lista de múltiplas empresas se ela existir na sessão
-        const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
-        if (empresasSalvas) {
-            // Supondo que o seu estado no contexto se chame setMult_tenants
-            setMult_tenants(JSON.parse(empresasSalvas)); 
+            if (userDataFromSession) setUser(userDataFromSession);
+            if (tenantDataFromSession) setTenant(tenantDataFromSession);
         }
 
-        if (userDataFromSession) setUser(userDataFromSession);
-        if (tenantDataFromSession) setTenant(tenantDataFromSession);
-    }
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            try {
+                if (firebaseUser) {
+                    const userData = await queryUser(firebaseUser.email);
+                    setUser(userData);
 
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        try {
-            if (firebaseUser) {
-                const userData = await queryUser(firebaseUser.email);
-                setUser(userData);
+                    const activeTenantId = sessionStorage.getItem('activeTenantId');
 
-                const activeTenantId = sessionStorage.getItem('activeTenantId');
-
-                if (activeTenantId) {
-                    const res = await getTenancies.tenancy(activeTenantId);
-                    if (res) {
-                        setTenant(res);
-                        sessionStorage.setItem('tenant', JSON.stringify(res));
+                    if (activeTenantId) {
+                        const res = await getTenancies.tenancy(activeTenantId);
+                        if (res) {
+                            setTenant(res);
+                            sessionStorage.setItem('tenant', JSON.stringify(res));
+                        }
+                    } else {
+                        // 🟢 CASO MULTI-COMPANY (Ex: Timo no F5 na tela de seleção):
+                        // Se não há tenant ativo, mas há uma lista guardada, garante que o estado do contexto permaneça cheio!
+                        const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
+                        if (empresasSalvas) {
+                            setMult_tenants(JSON.parse(empresasSalvas));
+                        }
                     }
                 } else {
-                    // 🟢 CASO MULTI-COMPANY (Ex: Timo no F5 na tela de seleção):
-                    // Se não há tenant ativo, mas há uma lista guardada, garante que o estado do contexto permaneça cheio!
-                    const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
-                    if (empresasSalvas) {
-                        setMult_tenants(JSON.parse(empresasSalvas));
-                    }
+                    setUser(null);
+                    setTenant(null);
+                    setIsLoggedIn(false);
+                    // Se o seu contexto usar o setMult_tenants, limpa ele no logout:
+                    setMult_tenants([]);
+                    sessionStorage.clear();
                 }
-            } else {
-                setUser(null);
-                setTenant(null);
-                setIsLoggedIn(false);
-                // Se o seu contexto usar o setMult_tenants, limpa ele no logout:
-                setMult_tenants([]); 
-                sessionStorage.clear();
+            } catch (error) {
+                console.error("Erro no monitoramento de autenticação:", error);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error("Erro no monitoramento de autenticação:", error);
-        } finally {
-            setLoading(false);
-        }
-    });
+        });
 
-    return () => unsubscribe();
-}, []);
+        return () => unsubscribe();
+    }, []);
 
     // 2. Funções Auxiliares de Login e Logout
     const login = (userData) => {
@@ -249,7 +265,7 @@ useEffect(() => {
 
             // 🔍 MUDANÇA AQUI: Capturamos o e-mail autenticado em minúsculo
             const emailAutenticado = userCredential.user.email.toLowerCase();
-            console.log("📧 E-mail sendo verificado no banco:", emailAutenticado);
+
 
             // 🔍 MUDANÇA AQUI: Filtramos pelo campo 'userEmail' em vez de 'userId'
             const q = query(
@@ -276,7 +292,6 @@ useEffect(() => {
             if (empresasAssociadas.length === 1) {
                 const únicoTenant = empresasAssociadas[0];
                 sessionStorage.setItem("activeTenantId", únicoTenant);
-
                 await checkTenant(únicoTenant);
                 console.log("📊 Total de empresas mapeadas pelo e-mail:", empresasAssociadas.length);
                 console.log("unico tenant id:", únicoTenant);
@@ -308,7 +323,7 @@ useEffect(() => {
     return (
         <AuthContext.Provider
             value={{
-                isLoggedIn, login, logout, tenant, loading,
+                isLoggedIn, login, logout, tenant, setTenant, loading,
                 loginWithGoogle, loginWithEmailAndPassword,
                 user, newItem, setNewItem, saveExcel, setSaveExcel,
                 selectedItems, setSelectedItems, downloads, setDownloads, setMult_tenants, mult_tanants,

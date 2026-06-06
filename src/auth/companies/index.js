@@ -10,12 +10,12 @@ export const MuiContainerCompanies = styled(Box)(({ }) => ({
     justifyContent: 'center',
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#07040d', // Fundo escuro base do Stockify
     position: 'relative',
     overflow: 'hidden',
     padding: '40px',
     boxSizing: 'border-box',
-
+    
+    backgroundColor: '#07040d', // Fundo escuro base do Stockify
     // Halo Neon Roxo (Superior Esquerdo)
     '&::before': {
         content: '""',

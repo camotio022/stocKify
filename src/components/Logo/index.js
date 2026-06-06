@@ -8,7 +8,7 @@ export const BrandContainer = styled('div')(({ }) => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginLeft: '1vw',
+    marginLeft: '2vw',
     width: '20%',
     boxSizing: 'border-box',
     /* 🔑 Efeito visual de clique e link */

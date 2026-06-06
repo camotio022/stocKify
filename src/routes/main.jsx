@@ -130,18 +130,27 @@ export const MainRoutes = () => {
             </Routes>
         );
     }
+    const idChaveEfetivo = tenant?.id && tenant.id !== "none"
+        ? tenant.id
+        : (sessionStorage.getItem("activeTenantId") || "default");
+
     // 🔐 Se estiver logado, envelopa o bloco de rotas passando para a sua propriedade 'childrens'
     return (
-        <MainLayout childrens={
-            <Routes>
-                <Route path="/" element={<Stock />} />
-                <Route path="/entradas" element={<Entradas />} />
-                <Route path="/exits" element={<ExitsItems />} />
-                <Route path="/details/:id" element={<DetailsItems />} />
-                <Route path="/detailsItem/:id" element={<ItemQrCode />} />
-                <Route path="/insights" element={<Percepcoes />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-        } />
+        /* 🟢 A MÁGICA ESTÁ AQUI: Passando a key atrelada ao ID da empresa, o React desfaz 
+           o layout antigo engessado e monta o novo na hora do clique, eliminando o limbo do F5! */
+        <MainLayout
+            key={idChaveEfetivo}
+            children={
+                <Routes>
+                    <Route path="/" element={<Stock />} />
+                    <Route path="/entradas" element={<Entradas />} />
+                    <Route path="/exits" element={<ExitsItems />} />
+                    <Route path="/details/:id" element={<DetailsItems />} />
+                    <Route path="/detailsItem/:id" element={<ItemQrCode />} />
+                    <Route path="/insights" element={<Percepcoes />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            }
+        />
     );
 };

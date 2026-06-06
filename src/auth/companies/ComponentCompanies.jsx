@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 🚀 Importado para navegar direto daqui
 import * as Tag from './index';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-import CircularProgress from '@mui/material/CircularProgress'; // Para um loading elegante se quiser
+import CircularProgress from '@mui/material/CircularProgress';
 import { AuthContext } from "../../auth_context";
 import { getTenancies } from "../../api/tenancys/get";
 
-export const ComponentCompanies = ({ onSelectCompany }) => {
-    // 1. Pegamos a lista de IDs crus e as funções globais do Contexto
-    const { mult_tanants, user } = useContext(AuthContext);
+// 💡 Removemos a prop 'onSelectCompany', ele agora resolve tudo sozinho
+export const ComponentCompanies = () => {
+    // 1. Puxamos o setTenant direto do contexto global do Stockify
+    const { mult_tanants, user, setTenant } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    // 2. Estados locais para controlar os dados reais carregados do banco e o loading
     const [empresasReais, setEmpresasReais] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -19,8 +21,6 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
         const carregarWorkspaces = async () => {
             try {
                 setLoading(true);
-
-                // Prioriza os IDs do contexto, se der F5 busca a salvaguarda no sessionStorage
                 const idsParaBuscar = mult_tanants?.length > 0
                     ? mult_tanants
                     : JSON.parse(sessionStorage.getItem('empresasDisponiveis') || '[]');
@@ -30,15 +30,13 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
                     return;
                 }
 
-                // Faz a varredura assíncrona no Firestore para buscar os dados de cada ID
                 const promises = idsParaBuscar.map(async (id) => {
                     const dadosDoBanco = await getTenancies.tenancy(id);
                     return {
                         id: id,
-                        // Mapeia os dados do seu banco para bater com o layout:
                         nome: dadosDoBanco?.nomeFantasia || dadosDoBanco?.name || "Unidade Sem Nome",
-                        cargo: dadosDoBanco?.cargo || "Colaborador", // Adapte se tiver o cargo no doc
-                        tipo: dadosDoBanco?.segmento || dadosDoBanco?.tipo || "default" // ex: 'cozinha', 'loja'
+                        cargo: dadosDoBanco?.cargo || "Colaborador",
+                        tipo: dadosDoBanco?.segmento || dadosDoBanco?.tipo || "default"
                     };
                 });
 
@@ -55,7 +53,31 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
         carregarWorkspaces();
     }, [mult_tanants, getTenancies]);
 
-    // Função auxiliar para renderizar o ícone certo com base no tipo de empresa
+    // 🎯 A FUNÇÃO CENTRALIZADA DIRETO NO COMPONENTE
+    const handleWorkspaceClick = (empresaSelecionada) => {
+        // 🟢 Padroniza o objeto garantindo que ele tenha tanto 'nome' quanto 'name' 
+        // para nenhuma outra tela do Stockify ler 'undefined'
+        const tenantData = {
+            id: empresaSelecionada.id,
+            name: empresaSelecionada.nome || empresaSelecionada.name || "Unidade Sem Nome",
+            nome: empresaSelecionada.nome || empresaSelecionada.name || "Unidade Sem Nome",
+            tipo: empresaSelecionada.tipo || empresaSelecionada.segmento || "default"
+        };
+
+        // 1. Alimenta o contexto global com o objeto perfeito
+        setTenant(tenantData);
+
+        // 2. Grava as salvaguardas síncronas usando rigorosamente o MESMO objeto estruturado
+        sessionStorage.setItem("activeTenantId", tenantData.id); // String pura do ID
+        sessionStorage.setItem('tenant', JSON.stringify(tenantData)); // Objeto JSON limpo e padronizado
+
+        // Limpa a lista temporária
+        sessionStorage.removeItem('empresasDisponiveis');
+
+        // 3. Navega de cabeça erguida para a Home
+        navigate('/');
+    };
+
     const renderIcon = (tipo) => {
         switch (tipo?.toLowerCase()) {
             case 'cozinha':
@@ -69,7 +91,6 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
         }
     };
 
-    // Render de carregamento mantendo a estrutura visual limpa
     if (loading) {
         return (
             <Tag.MuiContainerCompanies style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -80,8 +101,6 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
 
     return (
         <Tag.MuiContainerCompanies>
-
-            {/* Título e Subtítulo Centralizados */}
             <Tag.MuiCompanyHeader>
                 <Tag.MuiCompanyTitle variant="h1">
                     {user?.name && user.name !== 'none' ? `Olá, ${user.name}! ` : 'Olá! '}
@@ -93,23 +112,20 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
                 </Tag.MuiCompanySubtitle>
             </Tag.MuiCompanyHeader>
 
-            {/* Grid Elástico dos Cards Dinâmicos */}
             <Tag.MuiCompanyGrid>
                 {empresasReais.map((empresa) => (
                     <Tag.MuiCompanyCard
                         key={empresa.id}
-                        onClick={() => onSelectCompany?.(empresa.id)} // Dispara a função do pai passando o ID correto string
+                        /* 🟢 Dispara a função interna direto no clique do Card */
+                        onClick={() => handleWorkspaceClick(empresa)}
                     >
-                        {/* Círculo do Ícone */}
                         <Tag.MuiCompanyIconCircle className="icon-circle">
                             {renderIcon(empresa.tipo)}
                         </Tag.MuiCompanyIconCircle>
 
-                        {/* Textos Informativos Reais do Firestore */}
                         <Tag.MuiCompanyName>{empresa.nome}</Tag.MuiCompanyName>
                         <Tag.MuiCompanyRole>{empresa.cargo}</Tag.MuiCompanyRole>
 
-                        {/* O Seu Botão Padrão de 36px Reativo */}
                         <Tag.MuiStockButtonBase className="mui-stock-button">
                             Acessar Painel
                         </Tag.MuiStockButtonBase>
@@ -117,12 +133,10 @@ export const ComponentCompanies = ({ onSelectCompany }) => {
                 ))}
             </Tag.MuiCompanyGrid>
 
-            {/* Rodapé de Segurança Dinâmico */}
             <Tag.MuiCompanyFooter>
                 <i className="fa-solid fa-shield-halved" style={{ marginRight: '8px' }}></i>
                 Conectado como <strong>{user?.email || "usuario@stockify.com.br"}</strong>
             </Tag.MuiCompanyFooter>
-
         </Tag.MuiContainerCompanies>
     );
 };

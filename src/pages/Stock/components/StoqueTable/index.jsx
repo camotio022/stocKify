@@ -51,7 +51,7 @@ export const EstoqueTable = ({
         const currentDate = new Date();
         return itemDate < currentDate;
     }
-    console.log()
+    console.log('vendo se os produtos chegam vazios em algum momento:',stock)
     return (
         <ContainerTableStock children={(<>
             <LoadingModal open={loading} message="Sincronizando estoque em tempo real..." />
@@ -65,7 +65,7 @@ export const EstoqueTable = ({
             {
                 loading &&
                 <MuiHeaderTable>
-                    {tenant?.colunasEstoque?.map((coluna, index) => (
+                    {tenant.colunasEstoque?.map((coluna, index) => (
                         <MuiTableClhild key={index}>
                             {coluna.label}
                         </MuiTableClhild>
@@ -124,7 +124,7 @@ export const EstoqueTable = ({
                                     );
                                 }
 
-                                // 3. Renderização padrão para os outros campos genéricos (Nome, Categoria, Cor, Tamanho, etc.)
+                                // 3. Rende padrão para os outros campos genéricos (Nome, Categoria, Cor, Tamanho, etc.)
                                 return (
                                     <MuiTableRowCell key={i}>
                                         {valorCampo !== undefined && valorCampo !== "" ? String(valorCampo) : "---"}
