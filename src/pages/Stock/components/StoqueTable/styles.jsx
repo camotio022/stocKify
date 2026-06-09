@@ -9,7 +9,7 @@ export const MuiHeaderTable = styled(Box)(({ }) => ({
     justifyContent: 'space-between',
     width: '100%',
     height: '42px',
-    gap: '12px',
+    gap: '2px',
     backgroundColor: 'rgba(15, 23, 42, 0.4)', // Fundo escuro semitransparente
     backdropFilter: 'blur(12px)', // Faz o degradê de trás aparecer fosco
 }))
@@ -19,7 +19,6 @@ export const MuiRowTable = styled(Stack)(({ }) => ({
     justifyContent: 'space-between',
     width: '100%',
     height: 'auto',
-    scrollbarGutter: 'stable',
 }))
 export const MuiTableClhild = styled(Typography)(({ }) => ({
     display: 'flex',
@@ -47,7 +46,7 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     '&:hover': {
         color: '#17a2b8', // O texto assume o ciano puro no foco
         textShadow: '0 0 8px rgba(23, 162, 184, 0.8)',
-    }
+    },
 }))
 export const MuiTableRow = styled(Box)(({ index }) => ({
     display: 'flex',
@@ -69,7 +68,6 @@ export const MuiTableRowCell = styled(Typography)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    gap: '4px',
     width: '100%',
     height: '34px',
     boxSizing: 'border-box',

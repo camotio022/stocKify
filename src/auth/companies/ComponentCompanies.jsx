@@ -75,7 +75,7 @@ export const ComponentCompanies = () => {
         sessionStorage.removeItem('empresasDisponiveis');
 
         // 3. Navega de cabeça erguida para a Home
-        navigate('/');
+        window.location.replace('/')
     };
 
     const renderIcon = (tipo) => {
