@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Root } from "../../styles/Root/root_styles";
 import { Checkbox } from "@mui/material";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
@@ -11,7 +11,7 @@ import { ContainerTableStock } from "../../components/Table/ShowItens";
 import { FormatRelativeTime } from "../../components/dateCalcs";
 
 export const ExitsItems = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // 🔥 SOLUÇÃO: Começa como true para blindar o flash visual
     const { setDownloads, search, select, user, tenant } = useContext(AuthContext);
     const [saidas, setSaidas] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -29,20 +29,17 @@ export const ExitsItems = () => {
         }
     };
 
-    // Extrai as colunas dinâmicas que o tenant configurou para o estoque
-    const colunasDinamicas = tenant?.colunasEstoque || [];
-
     useEffect(() => {
-        // Segurança: Só ativa o listener se houver usuário e tenant ativo real
-        if (!user || !tenant?.id || tenant.id === "none") return;
+        // Segurança: Se não houver dados prontos de login ou tenant, desliga a carga e aborta
+        if (!user || !tenant?.id || tenant.id === "none") {
+            setLoading(false);
+            return;
+        }
 
         setLoading(true);
 
-        // 🚀 ROTA DE DADOS ATUALIZADA: Subcoleção dentro do tenant ativo
         const movimentacoesRef = collection(db, 'tenants', tenant.id, 'movimentacoes');
 
-        // 🔥 TRAVA CIRÚRGICA: Traz apenas documentos de SAÍDA ordenados por data
-        // Nota: Lembre-se de clicar no link do console do navegador no primeiro teste para criar o Índice Composto!
         const q = query(
             movimentacoesRef,
             where('tipoMovimentacao', '==', 'saida'),
@@ -55,7 +52,6 @@ export const ExitsItems = () => {
             const listaSaidas = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
 
-                // Objeto de saída perfeitamente estruturado
                 const objetoSaida = {
                     id: doc.id,
                     motivo: data.motivo || "",
@@ -63,10 +59,9 @@ export const ExitsItems = () => {
                     subtotal: data.subtotal || 0,
                     timestamp: data.timestamp,
                     author: data.author?.userName || "",
-                    produto: data.produto || {} // Dados denormalizados do produto para o modo camaleão
+                    produto: data.produto || {}
                 };
 
-                // 🔍 Sistema de busca e filtros locais baseado no contexto do app
                 if (!search && !select) {
                     return objetoSaida;
                 } else {
@@ -83,22 +78,21 @@ export const ExitsItems = () => {
 
             setSaidas(listaSaidas);
 
-            // Alimenta a sua estrutura global de downloads mantendo compatibilidade
             setDownloads(prevState => ({
                 ...prevState,
                 saidas: listaSaidas,
             }));
 
-            setLoading(false);
+            setLoading(false); // 🔓 Trava desligada: dados processados e filtrados na memória
         }, (error) => {
             console.error("Erro ao escutar histórico de saídas:", error);
             setLoading(false);
         });
 
-        // Limpeza do listener ao desmontar a tela
         return () => unsubscribe();
 
     }, [search, select, user, tenant?.id]);
+
     const selectSx = {
         backgroundColor: Root.cyan,
         color: Root.white,
@@ -110,31 +104,34 @@ export const ExitsItems = () => {
 
     return (
         <ContainerTableStock children={(<>
-            <MuiHeaderTable>
-                {/* Coluna do Checkbox Geral no Cabeçalho */}
-                <MuiTableClhild >
-                    <Checkbox
-                        sx={{ color: Root.white }}
-                        onChange={(e) => {
-                            const isChecked = e.target.checked;
-                            const newSelected = isChecked ? saidas.map(item => item.id) : [];
-                            setSelectedItems(newSelected);
-                        }}
-                    />
-                </MuiTableClhild>
+            {saidas.length > 0 ?
+                <MuiHeaderTable>
+                    <MuiTableClhild>
+                        <Checkbox
+                            sx={{ color: Root.white }}
+                            onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                const newSelected = isChecked ? saidas.map(item => item.id) : [];
+                                setSelectedItems(newSelected);
+                            }}
+                        />
+                    </MuiTableClhild>
+                    <MuiTableClhild>Item Retirado</MuiTableClhild> {/* 💡 Adicionado para casar com o dado */}
+                    <MuiTableClhild>Motivo</MuiTableClhild>
+                    <MuiTableClhild>Qtd Retirada</MuiTableClhild>
+                    <MuiTableClhild>Valor Total</MuiTableClhild>
+                    <MuiTableClhild>Quem Tirou</MuiTableClhild>
+                    <MuiTableClhild>Data/Hora</MuiTableClhild>
+                </MuiHeaderTable> : null
+            }
 
-                {/* 🔒 Seus Cabeçalhos Fixos e Universais */}
-                <MuiTableClhild>Motivo</MuiTableClhild>
-                <MuiTableClhild>Qtd Retirada</MuiTableClhild>
-                <MuiTableClhild>Valor Total</MuiTableClhild>
-                <MuiTableClhild>Quem Tirou</MuiTableClhild>
-                <MuiTableClhild>Data/Hora</MuiTableClhild>
-            </MuiHeaderTable>
             <MuiRowTable>
                 {loading ? (
+                    /* ⏳ ESTADO 1: Firebase trabalhando -> Mostra única e exclusivamente o Skeleton */
                     <LoadingTable />
-                ) : (
-                    <>
+                ) : saidas.length > 0 ? (
+                    /* 📊 ESTADO 2: Carga finalizada e existem registros -> Renderiza o grid */
+                    <Fragment>
                         {saidas.map((item, index) => {
                             const isSelected = selectedItems.includes(item.id);
                             const isFocused = focus === index;
@@ -145,7 +142,6 @@ export const ExitsItems = () => {
                                     sx={isSelected || isFocused ? selectSx : null}
                                     key={item.id}
                                 >
-                                    {/* Checkbox Individual */}
                                     <MuiTableRowCell>
                                         <Checkbox
                                             sx={{ color: Root.white }}
@@ -154,29 +150,32 @@ export const ExitsItems = () => {
                                         />
                                     </MuiTableRowCell>
 
-                                    {/* 📦 Cruzamento Perfeito com cada Cabeçalho acima: */}
+                                    {/* 1. Item Retirado */}
+                                    <MuiTableRowCell>
+                                        {item.produto?.nomeItem || '---'}
+                                    </MuiTableRowCell>
 
-                                    {/* 1. Motivo */}
+                                    {/* 2. Motivo */}
                                     <MuiTableRowCell>
                                         {item.motivo ? item.motivo.replace('_', ' ') : '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 2. Qtd Retirada */}
+                                    {/* 3. Qtd Retirada */}
                                     <MuiTableRowCell>
                                         {item.quantidade} {item.quantidade > 1 ? 'unidades' : 'unidade'}
                                     </MuiTableRowCell>
 
-                                    {/* 3. Valor Total */}
+                                    {/* 4. Valor Total */}
                                     <MuiTableRowCell>
                                         {item.subtotal ? `R$ ${Number(item.subtotal).toFixed(2)}` : '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 4. Quem Tirou */}
+                                    {/* 5. Quem Tirou */}
                                     <MuiTableRowCell>
                                         {item.author || '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 5. Data/Hora */}
+                                    {/* 6. Data/Hora */}
                                     <MuiTableRowCell>
                                         {item.timestamp ? (
                                             <FormatRelativeTime
@@ -187,9 +186,11 @@ export const ExitsItems = () => {
                                 </MuiTableRow>
                             );
                         })}
-                    </>
+                    </Fragment>
+                ) : (
+                    /* 📦 ESTADO 3: Carga finalizada e subcoleção limpa -> Chama o Empty State automatizado */
+                    <NoTasksFromThisState route={'saidas'} />
                 )}
-
             </MuiRowTable>
         </>)} />
     );

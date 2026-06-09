@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Checkbox } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
@@ -12,7 +12,7 @@ import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
 
 export const Entradas = () => {
     const [entradas, setEntradas] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // 🔥 COMEÇA COMO TRUE para evitar flashes de "sem dados"
     const {
         user,
         setDownloads,
@@ -20,7 +20,7 @@ export const Entradas = () => {
         select,
         tenant
     } = useContext(AuthContext);
-    
+
     const [focus, setFocus] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]);
 
@@ -37,29 +37,23 @@ export const Entradas = () => {
     };
 
     useEffect(() => {
-        // Segurança: Só ativa o listener se houver usuário e tenant ativo real
-        if (!user || !tenant?.id || tenant.id === "none") return;
+        if (!user || !tenant?.id || tenant.id === "none") {
+            setLoading(false);
+            return;
+        }
 
         setLoading(true);
 
-        // 🚀 NOVA ROTA DE DADOS: Subcoleção unificada dentro do tenant ativo
         const movimentacoesRef = collection(db, 'tenants', tenant.id, 'movimentacoes');
-        
-        // 🔥 TRAVA CIRÚRGICA: Traz apenas registros de ENTRADA ordenados por data
-        // Nota: Lembre-se de clicar no link do console do navegador no primeiro teste para criar o Índice Composto se necessário!
         const q = query(
             movimentacoesRef,
             where('tipoMovimentacao', '==', 'entrada'),
             orderBy('timestamp', 'desc')
         );
 
-        console.log("📥 Escutando exclusivamente as entradas do tenant:", tenant.id);
-
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const listaEntradas = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
-
-                // Objeto de entrada perfeitamente estruturado de acordo com o novo modelo
                 const objetoEntrada = {
                     id: doc.id,
                     motivo: data.motivo || "",
@@ -68,10 +62,9 @@ export const Entradas = () => {
                     subtotal: data.subtotal || 0,
                     timestamp: data.timestamp,
                     author: data.author?.userName || "",
-                    produto: data.produto || {} // Dados denormalizados do produto (Nome, SKU, etc.)
+                    produto: data.produto || {}
                 };
 
-                // 🔍 Sistema de busca e filtros locais mantido do seu contexto
                 if (!search && !select) {
                     return objetoEntrada;
                 } else {
@@ -87,21 +80,19 @@ export const Entradas = () => {
             }).filter(item => item !== null);
 
             setEntradas(listaEntradas);
-            
-            // Alimenta a sua estrutura global de downloads mantendo compatibilidade
+
             setDownloads(prevState => ({
                 ...prevState,
                 entradas: listaEntradas,
             }));
-            
-            setLoading(false);
+
+            setLoading(false); // 🔥 Terminou de baixar e filtrar? Desliga o loading
         }, (error) => {
             console.error("Erro ao buscar histórico de entradas:", error);
             setLoading(false);
         });
 
         return () => unsubscribe();
-
     }, [search, select, user, tenant?.id]);
 
     const selectSx = {
@@ -115,33 +106,32 @@ export const Entradas = () => {
 
     return (
         <ContainerTableStock children={(<>
-            {entradas.length > 0 && (
-                <MuiHeaderTable>
-                    {/* Coluna do Checkbox Geral */}
-                    <MuiTableClhild sx={{ }}>
-                        <Checkbox
-                            sx={{ ml: 0.7, color: Root.white }}
-                            onChange={(e) => {
-                                const isChecked = e.target.checked;
-                                const newSelected = isChecked ? entradas.map(item => item.id) : [];
-                                setSelectedItems(newSelected);
-                            }}
-                        />
-                    </MuiTableClhild>
-                    {/* 🔒 Seus Cabeçalhos Fixos e Universais para Entradas */}
-                    <MuiTableClhild>Item Adicionado</MuiTableClhild>
-                    <MuiTableClhild>Motivo</MuiTableClhild>
-                    <MuiTableClhild>Qtd Adicionada</MuiTableClhild>
-                    <MuiTableClhild>Custo Total</MuiTableClhild>
-                    <MuiTableClhild>Quem Adicionou</MuiTableClhild>
-                    <MuiTableClhild>Data/Hora</MuiTableClhild>
-                </MuiHeaderTable>
-            )}
+            {/* 🔒 CABEÇALHO FIXO: Ele sempre fica na tela, protegendo o esqueleto ou a tabela contra quebras de layout */}
+            {entradas.length > 0 ?  <MuiHeaderTable>
+                <MuiTableClhild>
+                    <Checkbox
+                        sx={{ ml: 0.7, color: Root.white }}
+                        onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            const newSelected = isChecked ? entradas.map(item => item.id) : [];
+                            setSelectedItems(newSelected);
+                        }}
+                    />
+                </MuiTableClhild>
+                <MuiTableClhild>Item Adicionado</MuiTableClhild>
+                <MuiTableClhild>Motivo</MuiTableClhild>
+                <MuiTableClhild>Qtd Adicionada</MuiTableClhild>
+                <MuiTableClhild>Custo Total</MuiTableClhild>
+                <MuiTableClhild>Quem Adicionou</MuiTableClhild>
+                <MuiTableClhild>Data/Hora</MuiTableClhild>
+            </MuiHeaderTable>: null}
 
             <MuiRowTable>
                 {loading ? (
+                    /* ⏳ ESTADO 1: Se estiver carregando, mostra APENAS o esqueleto */
                     <LoadingTable />
-                ) : (
+                ) : entradas.length > 0 ? (
+                    /* 📊 ESTADO 2: Se o loading acabou e existem dados, renderiza a lista */
                     <Fragment>
                         {entradas.map((item, index) => {
                             const isSelected = selectedItems.includes(item.id);
@@ -154,55 +144,48 @@ export const Entradas = () => {
                                     sx={isSelected || isFocused ? selectSx : null}
                                     key={item.id}
                                 >
-                                    {/* Checkbox Individual */}
                                     <MuiTableRowCell>
                                         <Checkbox
-                                            sx={{ color: Root.white  }}
+                                            sx={{ color: Root.white }}
                                             checked={isSelected}
                                             onChange={() => handleCheckboxChange(item.id)}
                                         />
                                     </MuiTableRowCell>
 
-                                    {/* 📦 Cruzamento Perfeito com cada Cabeçalho acima: */}
-                                    
-                                    {/* 1. Item Adicionado (Nome do Produto vindo do objeto denormalizado) */}
                                     <MuiTableRowCell>
                                         {item.produto?.nomeItem || '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 2. Motivo */}
                                     <MuiTableRowCell>
                                         {item.motivo ? item.motivo.replace('_', ' ') : '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 3. Qtd Adicionada */}
                                     <MuiTableRowCell>
                                         {item.quantidade} {item.quantidade > 1 ? 'unidades' : 'unidade'}
                                     </MuiTableRowCell>
 
-                                    {/* 4. Custo Total (Subtotal pago ao fornecedor) */}
                                     <MuiTableRowCell>
                                         {item.subtotal ? `R$ ${Number(item.subtotal).toFixed(2)}` : '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 5. Quem Adicionou */}
                                     <MuiTableRowCell>
                                         {item.author || '---'}
                                     </MuiTableRowCell>
 
-                                    {/* 6. Data/Hora */}
                                     <MuiTableRowCell>
                                         {item.timestamp ? (
-                                            <FormatRelativeTime 
-                                                dateTimeString={item.timestamp.toDate ? item.timestamp.toDate().toISOString() : item.timestamp} 
+                                            <FormatRelativeTime
+                                                dateTimeString={item.timestamp.toDate ? item.timestamp.toDate().toISOString() : item.timestamp}
                                             />
                                         ) : '---'}
                                     </MuiTableRowCell>
                                 </MuiTableRow>
                             );
                         })}
-                        {entradas.length === 0 && <NoTasksFromThisState routeTasks={'entradas'} />}
                     </Fragment>
+                ) : (
+                    /* 📦 ESTADO 3: Se o loading acabou e o array está zerado, mostra o Empty State premium */
+                    <NoTasksFromThisState route={'entradas'} />
                 )}
             </MuiRowTable>
         </>)} />
