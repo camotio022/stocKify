@@ -3,7 +3,7 @@ import * as Tag from './styles.js'
 import { Stack } from "@mui/material"
 import { Root } from "../styles/Root/root_styles.jsx"
 import Image from '../images/layout/junta1.png'
-import { DeleteOutline, DetailsOutlined, ExitToApp, History, Home, HomeOutlined, InsertInvitation, Insights, Inventory, Inventory2Outlined, LoginOutlined, Logout, LogoutOutlined, Person2, Person2Outlined, Settings, SettingsOutlined, ShoppingCartCheckout } from "@mui/icons-material"
+import { DeleteOutline, DetailsOutlined, ExitToApp, History, HistoryOutlined, Home, HomeOutlined, InsertInvitation, Insights, Inventory, Inventory2Outlined, LoginOutlined, Logout, LogoutOutlined, Person2, Person2Outlined, Settings, SettingsOutlined, ShoppingCartCheckout } from "@mui/icons-material"
 import { AuthContext } from "../auth_context/index.jsx"
 import { useLocation } from "react-router-dom"
 import { LogoMainLayout } from "../components/Logo/index.jsx"
@@ -58,11 +58,11 @@ export const MainLayout = ({ children }) => {
             link: '/details',
             icon: <DetailsOutlined />
         },
-        // {
-        //     name: 'Históricos',
-        //     link: '/history',
-        //     icon: <History />
-        // },
+        {
+            name: 'Históricos',
+            link: '/history',
+            icon: <HistoryOutlined />
+        },
     ]
     const handleFinalLogout = () => {
         logout();

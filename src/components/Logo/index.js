@@ -34,7 +34,7 @@ export const LogoText = styled(Typography)(({ }) => ({
     textTransform: 'uppercase',
     fontWeight: 900,
     fontFamily: Root.fontFamilySansSerif,
-    background: `linear-gradient(90deg, ${Root.cyan}, ${Root.color_button_secondary})`,
+    background: `linear-gradient(90deg,  hsl(188, 100%, 48%), ${Root.white})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     filter: `drop-shadow(0px 0px 5px rgba(147, 45, 210, 0.3))`,
@@ -44,7 +44,7 @@ export const LogoText = styled(Typography)(({ }) => ({
 // O Subtítulo do print (Soluções Inteligentes em Estoque)
 export const CompanyText = styled(Typography)(({ }) => ({
 fontFamily: Root.fontFamilySansSerif,
-    background: `linear-gradient(90deg, ${Root.color_button_secondary}, ${Root.cyan})`,
+    background: `linear-gradient(90deg, ${Root.white}, hsl(188, 100%, 48%))`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     filter: `drop-shadow(0px 0px 5px rgba(158, 62, 218, 0.3))`,
