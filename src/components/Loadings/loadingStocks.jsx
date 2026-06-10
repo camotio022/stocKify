@@ -30,7 +30,7 @@ export const LoadingModal = ({ open, message }) => {
                     size={60}
                     thickness={4.5}
                     sx={{
-                        color: '#9000ff',
+                        color: Root.white,
                         '& .MuiCircularProgress-circle': {
                             strokeLinecap: 'round',
                         }
@@ -41,7 +41,7 @@ export const LoadingModal = ({ open, message }) => {
                 <Typography
                     variant="body1"
                     sx={{
-                        color: '#9000ff',
+                        color: Root.white,
                         marginTop: '20px',
                         fontWeight: 500,
                         letterSpacing: '0.5px',

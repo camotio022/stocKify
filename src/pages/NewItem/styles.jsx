@@ -55,16 +55,16 @@ export const TagsNewItem = {
 
     close: styled(Stack)(({ }) => ({
         position: 'absolute',
-        top: '15px',
         right: '15px',
         width: '32px',
         height: '32px',
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         border: `2px solid ${Root.color_button}`,
         borderRadius: '6px',
         backgroundColor: 'rgba(128, 0, 128, 0.1)',
-        color: Root.color_button,
+        color: Root.white,
         cursor: 'pointer',
         transition: 'all .3s',
         '&:hover': {

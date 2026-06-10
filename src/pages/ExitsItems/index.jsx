@@ -9,6 +9,7 @@ import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
 import { LoadingTable } from "../../components/LoadingSkeletonCard";
 import { ContainerTableStock } from "../../components/Table/ShowItens";
 import { FormatRelativeTime } from "../../components/dateCalcs";
+import { LoadingModal } from "../../components/Loadings/loadingStocks";
 
 export const ExitsItems = () => {
     const [loading, setLoading] = useState(true); // 🔥 SOLUÇÃO: Começa como true para blindar o flash visual
@@ -128,7 +129,7 @@ export const ExitsItems = () => {
             <MuiRowTable>
                 {loading ? (
                     /* ⏳ ESTADO 1: Firebase trabalhando -> Mostra única e exclusivamente o Skeleton */
-                    <LoadingTable />
+                    <LoadingModal message="Sincronizando as Saídas em tempo real..." />
                 ) : saidas.length > 0 ? (
                     /* 📊 ESTADO 2: Carga finalizada e existem registros -> Renderiza o grid */
                     <Fragment>

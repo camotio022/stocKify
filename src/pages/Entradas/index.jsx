@@ -9,6 +9,7 @@ import { ContainerTableStock } from "../../components/Table/ShowItens";
 import { FormatRelativeTime } from "../../components/dateCalcs";
 import { LoadingTable } from "../../components/LoadingSkeletonCard";
 import { NoTasksFromThisState } from "../../components/NoTaskThisStates";
+import { LoadingModal } from "../../components/Loadings/loadingStocks";
 
 export const Entradas = () => {
     const [entradas, setEntradas] = useState([]);
@@ -129,7 +130,7 @@ export const Entradas = () => {
             <MuiRowTable>
                 {loading ? (
                     /* ⏳ ESTADO 1: Se estiver carregando, mostra APENAS o esqueleto */
-                    <LoadingTable />
+                    <LoadingModal message="Sincronizando as Entradas em tempo real..." />
                 ) : entradas.length > 0 ? (
                     /* 📊 ESTADO 2: Se o loading acabou e existem dados, renderiza a lista */
                     <Fragment>

@@ -17,12 +17,12 @@ export const EstoqueTable = ({
     loading
 }) => {
 
-    const { 
-        enablingDeleteButtom, 
+    const {
+        enablingDeleteButtom,
         setEnablingDeleteButtom,
         tenant // 🟢 Puxamos o tenant completo aqui de dentro do seu contexto global!
     } = useContext(AuthContext)
-    
+
     const [options, setOptions] = useState('')
     const [focus, setFocus] = useState(null); // Índice do item focado
     const [disabledItems, setDisabledItems] = useState([]); // Lista de itens desabilitados
@@ -41,7 +41,7 @@ export const EstoqueTable = ({
             setFocus(index);
         }
     }
-    
+
     const handleOptions = (item) => {
         setOptions(item)
     }
@@ -51,16 +51,16 @@ export const EstoqueTable = ({
         const currentDate = new Date();
         return itemDate < currentDate;
     }
-    console.log('vendo se os produtos chegam vazios em algum momento:',stock)
     return (
         <ContainerTableStock children={(<>
             <LoadingModal open={loading} message="Sincronizando estoque em tempo real..." />
-            {options && <Options
-                optionItem={options}
-                name={options.nome}
-                setOptions={setOptions}
-            />}
-            
+            <Options
+                open={!!options}           // 🔥 Converte o objeto do item em um Booleano puro (true se houver item selecionado, false se for null)
+                optionItem={options}       // Passa o objeto completo do item selecionado
+                name={options?.nomeItem || options?.nome || ''} // Proteção contra quebra usando Optional Chaining (?.)
+                setOptions={setOptions}    // Função para limpar o estado e fechar o modal
+            />
+
             {/* 🌟 CABEÇALHOS CAMALEÃO: Muta baseado nas colunas que você configurou no Tenant */}
             {
                 loading &&
@@ -76,12 +76,12 @@ export const EstoqueTable = ({
                     </MuiTableClhild>
                 </MuiHeaderTable>
             }
-            
+
             <MuiRowTable>
                 {stock.map((item, index) => {
                     const isFocused = focus === index; // Verifica se o item está focado
                     const isDisabled = disabledItems.includes(item.id); // Verifica se o item está desabilitado
-                    
+
                     return (
                         <MuiTableRow
                             key={item.id}
@@ -129,12 +129,12 @@ export const EstoqueTable = ({
                                     <MuiTableRowCell key={i}>
                                         {valorCampo !== undefined && valorCampo !== "" ? String(valorCampo) : "---"}
                                         {/* Insere o sulfixo 'unidades' de forma inteligente se for o campo de quantidade */}
-                                        {coluna.campo === 'quantidade' && valorCampo && !String(valorCampo).includes('unidades') && ' unidades'}
+                                        {coluna.campo === 'quantidade' && valorCampo && coluna.sufixo &&
+                                            ` ${Number(valorCampo) === 1 ? coluna.sufixo[0] : coluna.sufixo[1]}`
+                                        }
                                     </MuiTableRowCell>
                                 );
                             })}
-
-                            {/* Coluna fixa de Opções (...) mantendo seus hovers e degradês de CSS */}
                             <MuiTableRowCell
                                 onClick={(e) => {
                                     e.stopPropagation(); // Evita disparar o foco da linha ao clicar nos três pontinhos
@@ -143,13 +143,13 @@ export const EstoqueTable = ({
                                 sx={{
                                     width: '50%',
                                     alignItems: 'center',
+                                    zIndex: 1,
                                     '&:hover': {
                                         background: `linear-gradient(90deg,  #822e91 30%, #cd3fe6 100%) !important`,
                                         transform: 'scale(1.02)',
                                         boxShadow: `0 0 3px ${Root.color_button}`,
                                         color: Root.color_app_bar,
                                         borderRadius: '8px',
-                                        mr: 1
                                     },
                                 }}>
                                 <MoreHoriz />

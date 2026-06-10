@@ -65,26 +65,28 @@ export const MuiTableRow = styled(Box)(({ index }) => ({
     boxSizing: 'border-box'
 }))
 export const MuiTableRowCell = styled(Typography)(({ }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    display: 'block',              // 🔥 CORREÇÃO: 'flex' quebra o ellipsis, 'block' força o funcionamento
+    whiteSpace: 'nowrap',          // Impede o texto de quebrar para a linha de baixo
+    overflow: 'hidden',            // Corta o que passar do limite da largura
+    textOverflow: 'ellipsis',      // 🎯 Garante os "..." no final do texto cortado
+    
     width: '100%',
     height: '34px',
+    lineHeight: '34px',            // 🔥 Alinha o texto perfeitamente no centro vertical (substitui o center do flex)
     boxSizing: 'border-box',
-    padding: '10px 16px',
+    padding: '0px 16px',           // Ajustado para o padding não somar na altura do bloco com lineHeight
+    
     fontFamily: Root.fontFamilySansSerif,
     fontSize: '14px',
     fontWeight: 500,
-    textOverflow: 'ellipsis',
     transition: 'all 0.2s ease-in-out',
-    backgroundColor: 'rgba(15, 23, 42, 0.4)', // Fundo escuro semitransparente
-    backdropFilter: 'blur(12px)', // Faz o degradê de trás aparecer fosco
-    color: Root.text, // 🔥 O Branco Gelo que dá o contraste perfeito sobre o vidro escuro
-    whiteSpace: 'nowrap',     // Impede o texto de quebrar para a linha de baixo
-    overflow: 'hidden',       // Corta o que passar do limite da largura
+    backgroundColor: 'rgba(15, 23, 42, 0.4)',
+    backdropFilter: 'blur(12px)',
+    color: Root.text,
+    
     '&:hover': {
-        color: '#ffffff', // Clarea para branco puro
-        textShadow: '0 0 8px rgba(255, 255, 255, 0.5)', // Brilho sutil de tela de luxo
-        transform: 'translateX(2px)', // Micro movimento para a direita dando feedback de foco
+        color: '#ffffff',
+        textShadow: '0 0 8px rgba(255, 255, 255, 0.5)',
+        transform: 'translateX(2px)',
     }
-}))
+}));
