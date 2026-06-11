@@ -1,159 +1,130 @@
-import { Stack } from "@mui/system";
+import { Stack, Box, Typography } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
-import { Box, Typography } from "@mui/material";
-import { styled } from "@mui/material/node/styles";
+import { styled } from "@mui/material/styles";
 
 export const StylesDetailsItems = {
+    // 🌌 CONTAINER PRINCIPAL DA PÁGINA
     container: styled(Stack)(({ }) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        gap: '1rem',
+        gap: '1.5rem',
         width: "100%",
-        minHeight: ")%",
+        padding: '24px',
+        boxSizing: 'border-box',
         overflowX: 'hidden',
-        overflowY: 'scroll',
-        top: 0,
-        left: 0,
-        zIndex: 5,
-        transition: 'all .3s',
-        marginBlock: '12px',
+        overflowY: 'auto',
         ...Root.scrollBar
     })),
+
+    // 🗺️ HEADER DA PÁGINA (ESTILO BREADCRUMB / NAVEGAÇÃO)
     nav_bar: styled(Box)(() => ({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
-        paddingBlock: '8px',
         height: "50px",
-        borderBottom: `1px solid ${Root.color_button_secondary}`,
-        boxSizing: 'border-box'
+        borderBottom: `1px solid rgba(255, 255, 255, 0.08)`,
+        boxSizing: 'border-box',
+        mb: 1
     })),
+
+    // 🔮 CARD GLASSMORPHIC DE RESUMO DO PRODUTO
     container2: styled(Stack)(({ }) => ({
         position: 'relative',
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        gap: '1rem',
+        gap: '1.5rem',
         width: '100%',
-        minHeight: '300px',
-        borderRadius: '8px',
-        backgroundColor: Root.color_button_secondary,
-        ...Root.boxShadow
+        padding: '24px',
+        boxSizing: 'border-box',
+        borderRadius: '12px',
+        background: 'rgba(20, 15, 35, 0.6)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
     })),
+
     title: styled(Typography)(() => ({
-        position: 'relative',
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: '24px',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        fontFamily: Root.fontFamilyMonospace,
-        ...Root.hover
+        fontFamily: Root.fontFamilySansSerif,
+        fontWeight: 800,
+        letterSpacing: '0.5px',
+        textTransform: 'uppercase',
     })),
-    subtitle: styled(Typography)(({ minh }) => ({
-        position: 'relative',
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: minh && '35%',
-        fontSize: '18px',
-        fontWeight: 'bold',
-        color: Root.color_button,
-        textAlign: 'center',
-        fontFamily: Root.fontFamilyMonospace,
-        border: `${0.5}px solid ${Root.color_default}`,
-        cursor: 'pointer',
-        ...Root.hover
-    })),
+
+    // 🏷️ ÁREA DE INFORMAÇÕES SECUNDÁRIAS (TAGS)
     sections: styled(Stack)(({ }) => ({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-start",
-        gap: '12px',
-        width: "95%",
-        height: "90%",
-        marginLeft: '16px'
+        flexWrap: 'wrap',
+        gap: '16px',
+        width: "100%",
     })),
+
     sectionsRow: styled(Stack)(({ }) => ({
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
-        gap: '8px',
-        textTransform: 'uppercase',
-        color: Root.color_button,
-
+        gap: '6px',
     })),
+
+    // 💎 MINI TAGS DE VIDRO DO PRODUTO
     sectionsRowValue: styled(Stack)(({ }) => ({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: Root.color_button,
-        color: Root.color_default,
-        padding: '10px',
-        borderRadius: '8px',
-        fontWeight: 'bold',
-        fontFamily: Root.fontFamilyMonospace,
+        color: '#FFF',
+        padding: '8px 16px',
+        borderRadius: '6px',
+        fontWeight: 600,
+        fontSize: '0.9rem',
+        fontFamily: Root.fontFamilySansSerif,
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
     })),
-    infeite: styled(Stack)(({ }) => ({
-        position: 'absolute',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        right: 0,
-        borderTopLeftRadius: '50%',
-        borderBottomRightRadius: '50%',
-        backgroundColor: Root.color_button_secondary,
-    })),
-    image: styled(Stack)(({ }) => ({
-        position: 'absolute',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '40%',
-        height: '100%',
-        right: 0,
-        top: 0,
-    })),
+
+    // 📊 CABEÇALHO DA TABELA DE COMMITS
     bar: styled(Stack)(({ }) => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '4px',
         width: '100%',
-        height: '60px',
-        backgroundColor: Root.color_default,
-        borderBottom: `1px solid ${Root.color_button_secondary}`,
-        color: Root.color_button,
-        fontWeight: 'bold',
-        fontFamily: Root.fontFamilyMonospace,
+        height: '46px',
+        backgroundColor: 'rgba(15, 23, 42, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
     })),
+
     barTag: styled(Stack)(({ }) => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '4px',
+        gap: '6px',
         width: '100%',
-        height: '60px',
-        borderRadius: '8px',
-        fontFamily: Root.fontFamilyMonospace,
+        height: '100%',
+        fontFamily: Root.fontFamilySansSerif,
+        fontSize: '13px',
+        fontWeight: 700,
+        color: 'rgba(255, 255, 255, 0.5)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            color: '#FFF'
+        }
     })),
-
-}
+};

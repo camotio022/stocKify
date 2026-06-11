@@ -1,130 +1,97 @@
-import { MenuItem, Stack } from "@mui/material"
-import { Root } from "../../../../styles/Root/root_styles"
-import { Add, AttachMoney, Build, Cached, CardGiftcard, CheckCircle, DeleteForever, FavoriteBorder, Hd, LocalDining, Restaurant, Timeline } from "@mui/icons-material"
+import React, { useContext, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { StylesLists } from "./styles"
-import { Fragment, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../../../auth_context"
-import { collection, onSnapshot, query, where } from "firebase/firestore"
-import { db } from "../../../../../firebase_config"
-import { descriptionsTypeLists } from "./descriptionsTypeLists"
-import { my_lists } from "../../../../api/lists/get"
+import { AuthContext } from "../../../../auth_context/index.jsx";
+import { Root } from "../../../../styles/Root/root_styles";
 
 export const MyLists = ({ item }) => {
-    const [lists, setLists] = useState([])
-    const { user } = useContext(AuthContext)
-    const [value, setValue] = useState(0)
-    const [openDs, setOpenDs] = useState('')
-    const [progress, setProgress] = useState(false)
-    const getLists = async (id) => {
-        if (!id) {
-            console.error("userId não fornecido.");
-            return;
-        }
-        const unsubscribe = onSnapshot(query(collection(db, "lists"), where("userId", "==", id)), (querySnapshot) => {
-            const listsData = [];
-            querySnapshot.forEach((doc) => {
-                listsData.push(doc.data());
-            });
-            setLists(listsData);
-        });
-        return unsubscribe;
-    }
-    useEffect(() => {
-        getLists(user.id)
-    }, [user.id])
-    const iconType = {
-        to_cook: <Restaurant />,
-        to_eat: <LocalDining />,
-        to_use: <CheckCircle />,
-        to_sell: <AttachMoney />,
-        to_sample: <Hd />,
-        to_donate: <CardGiftcard />,
-        to_donates: <FavoriteBorder />,
-        to_consume: <Restaurant />,
-        to_customize: <Build />,
-        to_repurpose: <Cached />,
-        to_test: <Timeline />,
-        to_dispose: <DeleteForever />
-    }
-    const openDescription = (i) => {
-        if (openDs === i.listName) {
-            return setOpenDs('');
-        }
-        setOpenDs(i.listName)
-    }
-    const handleAddList = async (list, i) => {
-        if (!list.id) return;
-        setProgress(true)
-        try {
+    const { tenant } = useContext(AuthContext);
+    const [creating, setCreating] = useState(false);
 
-            const newItemInList = {
-                idItem: i.id,
-                name: i.nome,
-                category: i.categoria,
-                quantidade: value
-            }
-            await my_lists.addItemToList(list.id, newItemInList)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setProgress(false)
-            setValue('')
-        }
-    }
+    const glowColor = tenant?.theme?.buttons?.primary || Root.color_button;
+    const accentColor = tenant?.theme?.buttons?.secondary || Root.cyan;
+
+    // Array fictício simulando o seu retorno do banco de listas vinculadas
+    const mockListas = [
+        { nome: "Inventário Mensal Moda", tipo: "Geral" },
+        { nome: "Reposição Cozinha Lateral", tipo: "Urgente" }
+    ];
 
     return (
-        <Fragment>
-            <StylesLists.headerInfos direction={'row'}>
-                {['Nome', 'Tipo de lista'].map((i, ix) => {
-                    return (
-                        <StylesLists.headerInfosItem key={ix}>{i}</StylesLists.headerInfosItem>
-                    )
-                })}
-            </StylesLists.headerInfos>
-            <StylesLists.contain>
-                {lists.map((list, index) => {
-                    const icon = iconType[list.type]
-                    const description = descriptionsTypeLists[list.type]
-                    return (
-                        <StylesLists.listContain key={index} sx={{
-                            backgroundColor: (openDs === list.listName) && Root.color_button_secondary,
-                            borderLeft: `5px solid ${Root.color_button}`,
-                            boxSizing: 'border-box'
+        <StylesLists.listContain>
+            {/* Tabela de Listas Ativas */}
+            {!creating && (
+                <>
+                    <StylesLists.headerInfos>
+                        <Box sx={{ width: '60%', textAlign: 'left' }}>Nome da Lista</Box>
+                        <Box sx={{ width: '40%', textAlign: 'right' }}>Tipo</Box>
+                    </StylesLists.headerInfos>
 
-                        }}>
-                            <StylesLists.menuItem onClick={() => openDescription(list)} sx={(openDs === list.listName) && {
-                                backgroundColor: Root.color_button,
-                                color: Root.color_default,
-                                borderRadius: '0px',
-                            }}
-                            >
-                                {list.listName} {icon}
+                    <StylesLists.contain>
+                        {mockListas.map((lista, index) => (
+                            <StylesLists.menuItem key={index}>
+                                <Typography sx={{ fontSize: '14px', fontWeight: 500, width: '60%', textAlign: 'left' }}>
+                                    {lista.nome}
+                                </Typography>
+                                <Typography sx={{ fontSize: '13px', color: accentColor, fontWeight: 600, width: '40%', textAlign: 'right' }}>
+                                    {lista.tipo}
+                                </Typography>
                             </StylesLists.menuItem>
-                            {(openDs === list.listName) && <StylesLists.tagDescription>
-                                <Stack sx={{ width: '88%' }}>{description}</Stack>
-                                <Stack direction={'row'}>
-                                    <StylesLists.tagDescriptionInput
-                                        value={value}
-                                        type="number"
-                                        onChange={(e) => setValue(e.target.value)}
-                                        placeholder="Digite a quantidade" />
-                                    <StylesLists.tagDescriptionButton
+                        ))}
+                    </StylesLists.contain>
 
-                                        disabled={!value}
-                                        onClick={() => handleAddList(list, item)}
-                                    >
-                                        {progress? 'loading...':'Adicionar'}
-                                    </StylesLists.tagDescriptionButton>
-                                </Stack>
-                            </StylesLists.tagDescription>}
-                        </StylesLists.listContain>
-                    )
-                })}
-            </StylesLists.contain>
+                    <StylesLists.button
+                        onClick={() => setCreating(true)}
+                        sx={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                            border: `1px solid ${glowColor}50`,
+                            color: '#FFF',
+                            '&:hover': {
+                                backgroundColor: `${glowColor}20`,
+                                boxShadow: `0 0 15px ${glowColor}30`
+                            }
+                        }}
+                    >
+                        <Add sx={{ fontSize: '18px', color: accentColor }} />
+                        Nova Lista
+                    </StylesLists.button>
+                </>
+            )}
 
-            <StylesLists.button>
-                <Add /> Nova Lista
-            </StylesLists.button>
-        </Fragment>
-    )
-}
+            {/* Painel de Criação de Nova Lista */}
+            {creating && (
+                <StylesLists.tagDescription>
+                    <Typography sx={{ fontWeight: 600, color: '#FFF', width: '100%', textAlign: 'left' }}>
+                        Criar nova lista de destino
+                    </Typography>
+                    
+                    <StylesLists.tagDescriptionInput 
+                        placeholder="Digite o nome da lista..." 
+                    />
+
+                    <Box sx={{ display: 'flex', gap: 1, width: '100%', mt: 1 }}>
+                        <StylesLists.tagDescriptionButton
+                            onClick={() => setCreating(false)}
+                            sx={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+                            }}
+                        >
+                            Cancelar
+                        </StylesLists.tagDescriptionButton>
+
+                        <StylesLists.tagDescriptionButton
+                            sx={{
+                                background: `linear-gradient(90deg, ${glowColor} 0%, ${accentColor} 100%)`,
+                                '&:hover': { filter: 'brightness(1.1)' }
+                            }}
+                        >
+                            Salvar Lista
+                        </StylesLists.tagDescriptionButton>
+                    </Box>
+                </StylesLists.tagDescription>
+            )}
+        </StylesLists.listContain>
+    );
+};
