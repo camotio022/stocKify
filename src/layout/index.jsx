@@ -64,6 +64,7 @@ export const MainLayout = ({ children }) => {
             icon: <HistoryOutlined />
         },
     ]
+    console.log(location.pathname)
     const handleFinalLogout = () => {
         logout();
         setShowLogoutModal(false);
@@ -79,7 +80,7 @@ export const MainLayout = ({ children }) => {
                 <LogoMainLayout text={tenant?.name} />
                 <UserItens />
             </Tag.AppBar>
-            
+
             <Tag.MuiMainLayoutRitghStep>
                 <Tag.MuiMainLayoutLogo>
                     <Tag.MuiMainLayoutLinks>
@@ -88,14 +89,23 @@ export const MainLayout = ({ children }) => {
                                 return (
                                     <Tag.MuiMainLayoutLink
                                         to={path.link}
-                                        sx={path.link === location.pathname && {
+                                        sx={{
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'flex-start',
                                             color: Root.white,
-                                            textTransform: 'uppercase',
-                                            height: '38px',
-                                            background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
+                                            ...(
+                                                path.link === location.pathname ||
+                                                (path.link !== '/' && location.pathname.startsWith(path.link))
+                                            ) && {
+                                                borderLeft: '2px solid hsl(188, 100%, 48%)',
+                                                textTransform: 'uppercase',
+                                                height: '38px',
+                                                color: Root.white,
+                                                background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
+                                                boxShadow: `0 0 15px ${Root.color_button}30`,
+                                                fontWeight: 700
+                                            }
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}

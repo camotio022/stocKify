@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Typography } from "@mui/material";
 import { MuiSearch, MuiSearchContainer, MuiSelect, MuiStockBotton, MuiStockNavBar, MuiStockNavBarRigth, StyledInputBase } from "../../pages/Stock/styles";
-import { Add, Delete, SaveAlt, Search, Upgrade } from "@mui/icons-material";
+import { Add, AddRounded, Delete, SaveAlt, Search, Upgrade } from "@mui/icons-material";
 import { Root } from "../../styles/Root/root_styles";
 import { StylesBar } from "./styles";
 import { useLocation } from "react-router-dom";
@@ -14,12 +14,15 @@ export const NavBarTop = ({
     setNewItem,
 }) => {
     const {
+        tenant,
         select,
         setSelect,
         search,
         setSearch,
         enablingDeleteButtom
     } = useContext(AuthContext)
+    const glowColor = tenant?.theme?.buttons?.primary || Root.color_button;
+const accentColor = tenant?.theme?.buttons?.secondary || Root.cyan;
     const location = useLocation()
     const handleSelectChange = (event) => {
         setSelect(event.target.value);
@@ -116,25 +119,48 @@ export const NavBarTop = ({
                 </MuiStockNavBar>
                 <MuiSearch>
                     <ButtonNeon
-                        onClick={() => setNewItem(!NewItem)} sx={{
-                            backgroundColor: Root.green,
-                            color: Root.color_default,
-                            ...Root.hoverReverse,
-                        }}>
-                        <Add /> Novo produto
+                        onClick={() => setNewItem(!NewItem)}
+                        sx={{
+                            background: `linear-gradient(90deg, ${glowColor} 0%, ${accentColor} 100%)`,
+                            '&:hover': {
+                                filter: 'brightness(1.1)',
+                                boxShadow: `0 0 20px ${glowColor}50`,
+                                transform: 'translateY(-1px)'
+                            },
+                            '&:active': {
+                                transform: 'translateY(0px)'
+                            }
+                        }}
+                    >
+                        <AddRounded sx={{ fontSize: '18px' }} />
+                        Novo produto
                     </ButtonNeon>
 
-                    <MuiSearchContainer>
+                    {/* 🔍 CONTAINER DE FILTRO COMPATÍVEL COM O SEU FOCO NEON */}
+                    <MuiSearchContainer
+                        sx={{
+                            '&:focus-within': {
+                                borderColor: accentColor,
+                                boxShadow: `0 0 12px ${accentColor}30`,
+                                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                            }
+                        }}
+                    >
+                        {/* 🧭 ÍCONE DE LUPA POSICIONADO ANTES (UX PADRÃO APPLE/STRIPE) */}
+                        <Search
+                            sx={{
+                                color: accentColor,
+                                fontSize: '18px',
+                                transition: 'transform 0.2s',
+                            }}
+                        />
+
                         <StyledInputBase
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder={select ?
-                                `Filtrar por ${filtro.label}` : 'Filtrar por nome'}
+                            placeholder={select ? `Filtrar por ${filtro.label}...` : 'Filtrar por nome...'}
                             inputProps={{ 'aria-label': 'search' }}
                         />
-                        <Search sx={{
-                            ml: '12px'
-                        }} />
                     </MuiSearchContainer>
                 </MuiSearch>
             </StylesBar.conatiner>

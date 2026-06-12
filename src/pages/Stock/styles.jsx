@@ -54,7 +54,7 @@ export const MuiStockBotton = styled(Button)(({ }) => ({
     height: '36px', // Ajustado para ser flexível ao padding
     padding: '8px 16px',
     gap: '8px',
-    borderRadius: '4px',
+    borderRadius: '8px',
     boxSizing: 'border-box',
     fontFamily: Root.fontFamilySansSerif,
     fontSize: '12px',
@@ -86,7 +86,7 @@ export const MuiSearchIconTeep = styled(Stack)(({ }) => ({
     justifyContent: 'center',
     gap: '10px',
     padding: '4px',
-    borderRadius: '4px',
+    borderRadius: '8px',
     backgroundColor: Root.color_button,
     color: Root.white,
     ...Root.hoverReverse,
@@ -103,25 +103,19 @@ export const MuiSearchContainerFather = styled('div')({
 export const MuiSearchContainer = styled(Stack)({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',       // 🔥 Força o ícone e o input a viajarem exatamente na mesma linha do horizonte
-    justifyContent: 'flex-start', // Começa alinhando tudo da esquerda para a direita
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     position: 'relative',
-    borderRadius: '4px',       // Formato de cápsula que combina com o novo padrão da barra
-    border: '1px solid rgba(23, 162, 184, 0.2)', // Borda ciano sutil para o foco
-    backgroundColor: 'rgba(15, 23, 42, 0.4)',  // Nosso Dark Glass de fundo
-    width: '50%',
-    height: '36px',             // Altura sincronizada com os 38px dos botões da barra!
-    padding: '0 14px',          // Padding interno para os filhos não colarem na borda do container
+    borderRadius: '8px', // Cantos suavizados
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    backgroundColor: 'rgba(15, 23, 42, 0.5)', // Vidro fumê escuro
+    backdropFilter: 'blur(10px)',
+    width: '40%', // Uma largura um pouco mais equilibrada para não esmagar as ações
+    height: '36px',
+    paddingInline: '14px',
     boxSizing: 'border-box',
-   
-    gap: '8px',                 // ⬅️ O flexbox usa esse gap para afastar o ícone do texto automaticamente
-    transition: '0.3s all ease-in-out',
-
-    '&:focus-within': {         // Acende a cápsula quando o usuário for digitar
-        border: `1px solid #17a2b8`,
-        boxShadow: `0 0 15px rgba(23, 162, 184, 0.25)`,
-        backgroundColor: 'rgba(23, 162, 184, 0.02)',
-    }
+    gap: '10px',
+    transition: '0.25s all ease-in-out',
 });
 
 export const SearchIconWrapper = styled(Stack)({
@@ -134,28 +128,31 @@ export const SearchIconWrapper = styled(Stack)({
 });
 
 export const StyledInputBase = styled(InputBase)({
-    flex: 1,                    // 🔥 Faz o input ocupar TODO o espaço restante da linha de forma elástica
+    flex: 1,
     height: '100%',
-    color: '#E2E8F0',           // Texto Branco Gelo legível
+    color: '#E2E8F0',
     fontFamily: Root.fontFamilySansSerif,
     fontSize: '14px',
-
     '& .MuiInputBase-input': {
-        padding: '0px',         // Zera os paddings nativos do MUI que causam trancos verticais
+        padding: '0px',
         height: '100%',
         display: 'flex',
         alignItems: 'center',
+        '&::placeholder': {
+            color: 'rgba(255, 255, 255, 0.35)',
+            opacity: 1
+        }
     }
 });
 export const MuiSearch = styled(Stack)(({ theme }) => ({
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'center', // Alinha botão e input perfeitamente no mesmo horizonte
     justifyContent: 'flex-end',
     flexDirection: 'row',
     gap: '12px',
     width: '100%',
-    height: '100%',
-    fontFamily: Root.fontFamilyMonospace,
+    boxSizing: 'border-box',
+    marginRight: '9px'
 }));
 export const MuiSearchIcon = styled(Search)(({ theme }) => ({}));
 export const MuiInputNative = styled('input')(({ }) => ({

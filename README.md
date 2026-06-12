@@ -25,3 +25,10 @@ Acesse o projeto online: [stoc-kify.vercel.app](https://stoc-kify.vercel.app)
 
 ---
 Desenvolvido por **Temotio Luis** 🚀
+[
+  { "campo": "nome", "label": "Nome do Alimento", "type": "text", "required": true },
+  { "campo": "quantidade", "label": "Quantidade", "type": "number", "required": true },
+  { "campo": "preco", "label": "Preço de Custo", "type": "number", "required": false },
+  { "campo": "dataValidade", "label": "Data de Validade", "type": "date", "required": true },
+  { "campo": "unidade", "label": "Unidade de Medida", "type": "select", "options": ["KG", "Litro", "Unidade", "Pacote"], "required": true }
+]

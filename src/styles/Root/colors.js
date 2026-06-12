@@ -34,6 +34,8 @@ export const colors = {
   dark: '#343a40',
   doacao: '#1E293B',
   text: '#E2E8F0',
+  columnTable: 'rgba(20, 15, 35, 0.7)',
+  columnTableLine: 'rgba(255, 255, 255, 0.02)',
   borderImage: {
     border: '2px solid transparent',
     backgroundImage: 'linear-gradient(rgba(176, 73, 224, 0.32), rgba(204, 214, 236, 0.85)), linear-gradient(90deg, hsl(188, 100%, 48%), #63278b)',

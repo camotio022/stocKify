@@ -1,11 +1,10 @@
-
 import { Button, FormControl, Stack, TextField, Typography } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
-import { styled } from "@mui/material/node/styles";
+import { styled } from "@mui/material/styles";
 
 export const TagsNewItem = {
-    // --- 1. OVERLAY (FUNDO EMBAÇADO) ---
-    container: styled(Stack)(({ }) => ({
+    // 🌌 OVERLAY ESCURO COM DESFOQUE DE CINEMA
+    container: styled(Stack)(() => ({
         position: 'fixed',
         top: 0,
         left: 0,
@@ -14,123 +13,156 @@ export const TagsNewItem = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 100,
-        // Efeito de desfoque de fundo (backdrop-filter) para foco total no modal
-        backgroundColor: 'rgba(255, 255, 255, 0.9q)',
-        backdropFilter: 'blur(8px)',
-        transition: 'all .3s ease-in-out',
+        zIndex: 1100, // Fica acima da sidebar e tabelas
+        backgroundColor: 'rgba(10, 6, 22, 0.5)', // Cortina escura translúcida
+        backdropFilter: 'blur(12px)',
+        transition: 'all 0.3s ease-in-out',
     })),
-    paper: styled(Stack)(({ moreitems }) => ({
+
+    // 🔮 CAPSULA GLASSMORPHIC ULTRA SLIM
+    paper: styled(Stack)(() => ({
         position: 'relative',
         display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '16px', // Maior respiro entre campos
-        width: '450px', // Largura fixa para estabilidade visual
-        minHeight: '200px',
-        padding: '60px 30px 30px 30px',
-
-        // Estilo Futurista: Vidro semi-transparente
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        border: `5px solid ${Root.color_button}`,
-        borderRadius: '12px', // Bordas mais arredondadas e modernas
-        fontFamily: Root.fontFamilySansSerif,
+        flexDirection: 'column',
+        gap: '18px',
+        width: '440px',
+        maxHeight: '90vh',
+        padding: '50px 24px 28px 24px',
+        boxSizing: 'border-box',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        background: 'rgba(20, 15, 35, 0.75)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '12px',
+        boxShadow: '0 24px 50px rgba(0, 0, 0, 0.4)',
         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        ...Root.scrollBar
     })),
 
-    // --- 3. TÍTULO E FECHAMENTO ---
-    typography: styled(Typography)(({ }) => ({
+    // 👑 TÍTULO DO PRODUTO (UPPERCASE NEON)
+    typography: styled(Typography)(() => ({
         position: 'absolute',
         top: '20px',
-        left: '30px',
+        left: '24px',
         fontFamily: Root.fontFamilySansSerif,
-        fontSize: '14px',
-        color: Root.color_button,
+        fontSize: '12px',
         fontWeight: 800,
         textTransform: 'uppercase',
-        letterSpacing: '0.1em',
+        letterSpacing: '1px',
+        color: 'rgba(255, 255, 255, 0.4)',
     })),
 
-    close: styled(Stack)(({ }) => ({
+    // ❌ BOTÃO FECHAR CRIOGÊNICO REATIVO
+    close: styled(Stack)(() => ({
         position: 'absolute',
-        right: '15px',
-        width: '32px',
-        height: '32px',
+        top: '16px',
+        right: '16px',
+        width: '28px',
+        height: '28px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        border: `2px solid ${Root.color_button}`,
         borderRadius: '6px',
-        backgroundColor: 'rgba(128, 0, 128, 0.1)',
-        color: Root.white,
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        color: 'rgba(255, 255, 255, 0.6)',
         cursor: 'pointer',
-        transition: 'all .3s',
+        transition: 'all 0.25s ease-in-out',
         '&:hover': {
-            backgroundColor: Root.color_button,
             color: '#FFF',
             transform: 'rotate(90deg)',
-            fontWeight: 800,
         }
     })),
 
-    // --- 4. CAMPOS DE ENTRADA (INPUTS) ---
-    fromControl: styled(FormControl)(({ }) => ({
-        width: '100%', // Mobile first e mais limpo
-        backgroundColor: '#F8F9FA',
-        borderRadius: '8px',
-        transition: 'all 0.3s',
-        '& .MuiFilledInput-root': {
-            backgroundColor: 'transparent',
-            '&:before, &:after': { display: 'none' }, // Remove linha padrão do MUI
-        },
-        '&:hover': {
-            boxShadow: `0 0 0 2px ${Root.color_button_secondary}`,
-        }
-    })),
-
-    textfield: styled(TextField)(({ }) => ({
+    // 🎛️ FORMS DE SELEÇÃO NO ESTILO ESCURO
+    fromControl: styled(FormControl)(() => ({
         width: '100%',
-        backgroundColor: '#F8F9FA',
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
         borderRadius: '8px',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        transition: 'all 0.2s ease-in-out',
         '& .MuiFilledInput-root': {
             backgroundColor: 'transparent',
+            color: '#FFF',
+            fontFamily: Root.fontFamilySansSerif,
+            fontSize: '14px',
             '&:before, &:after': { display: 'none' },
         },
         '& .MuiInputLabel-root': {
-            color: '#6c757d',
+            color: 'rgba(255, 255, 255, 0.4)',
+            fontFamily: Root.fontFamilySansSerif,
             fontSize: '14px',
+            '&.Mui-focused': {
+                color: 'inherit' // Herda a cor injetada via SX para manter o camaleão ativo
+            }
         },
-        '&:hover': {
-            boxShadow: `0 0 0 2px ${Root.color_button_secondary}`,
+        '& .MuiSelect-select': {
+            display: 'flex',
+            alignItems: 'center',
+            color: '#FFF',
+        },
+        '& .MuiSvgIcon-root': {
+            color: 'rgba(255, 255, 255, 0.3)'
         }
     })),
 
-    // --- 5. BOTÃO DE AÇÃO (NEON SUBMIT) ---
-    submit: styled(Button)(({ can }) => ({
-        marginTop: '20px',
+    // ⌨️ INPUTS DE TEXTO VIDRO FUMÊ
+    textfield: styled(TextField)(() => ({
         width: '100%',
-        height: '48px',
-        backgroundColor: Root.color_button,
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+        borderRadius: '8px',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        transition: 'all 0.2s ease-in-out',
+        '& .MuiFilledInput-root': {
+            backgroundColor: 'transparent',
+            color: '#FFF',
+            fontFamily: Root.fontFamilySansSerif,
+            fontSize: '14px',
+            '&:before, &:after': { display: 'none' },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'rgba(255, 255, 255, 0.4)',
+            fontFamily: Root.fontFamilySansSerif,
+            fontSize: '14px',
+            '&.Mui-focused': {
+                color: 'inherit'
+            }
+        },
+        '& input': {
+            color: '#FFF',
+            boxSizing: 'border-box'
+        }
+    })),
+
+    // ⚡ BOTÃO PRINCIPAL DE ENVIO (SUBMIT NEON)
+    submit: styled(Button)(() => ({
+        marginTop: '8px',
+        width: '100%',
+        height: '44px',
         color: '#FFF',
         fontWeight: 700,
         fontFamily: Root.fontFamilySansSerif,
         borderRadius: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-        boxShadow: `0 8px 16px ${Root.color_button}`,
-        transition: 'all 0.3s',
-
+        letterSpacing: '0.5px',
+        fontSize: '0.85rem',
+        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
         '&:hover': {
-            backgroundColor: Root.color_button,
-            transform: 'translateY(-2px)',
-            boxShadow: `0 12px 20px ${Root.color_button_secondary}`,
+            filter: 'brightness(1.1)',
+            transform: 'translateY(-1px)',
+        },
+        '&:active': {
+            transform: 'translateY(0px)',
         },
         '&:disabled': {
-            backgroundColor: '#E9ECEF',
-            color: '#ADB5BD',
-        },
-        ':focus': { outline: 'none' }
+            background: 'rgba(255, 255, 255, 0.03) !important',
+            color: 'rgba(255, 255, 255, 0.2) !important',
+            border: '1px solid rgba(255, 255, 255, 0.02) !important',
+            boxShadow: 'none !important',
+            cursor: 'not-allowed',
+            opacity: 0.6
+        }
     }))
-}
+};

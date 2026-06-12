@@ -1,118 +1,129 @@
-import { Box, Drawer, MenuItem, Stack, Typography } from "@mui/material";
-
+import { Box, MenuItem, Stack, Typography } from "@mui/material";
 import { Settings } from "@mui/icons-material";
 import { Root } from "../../../styles/Root/root_styles";
-import { styled } from "@mui/material/node/styles";
-export const ContainAbsolute = styled(Stack)(({})=> ({
-    zIndex: 4,
+import { styled } from "@mui/material/styles";
+
+// 🌌 CONTAINER PRINCIPAL DA SIDEBAR DE NOTIFICAÇÕES (GLASSMORPHIC)
+export const ContainAbsolute = styled(Stack)(() => ({
+    zIndex: 1200, // Acima de modais padrão
     position: 'absolute',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    minWidth: '30%',
-    height: '100%',
+    width: '360px',
+    height: 'calc(100% - 24px)',
+    top: '12px',
     right: '12px',
-    overflow: 'auto',
-    backgroundColor: Root.color_app_bar,
-    boxShadow: Root.boxS,
-    borderRadius: '12px',
-    ...Root.scrollBar,
-    boxSizing: 'border-box'
-}))
-export const ContainerDrawer = styled(Drawer)(({ }) => ({
-    zIndex: 222222,
-    '& .MuiDrawer-paper': {
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            width: '5px',
-            height: '3px',
-            backgroundColor: Root.white,
-        },
-        '&::-webkit-scrollbar-thumb': {
-            backgroundColor: Root.color_button,
-            borderRadius: '6px',
-        },
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    background: 'rgba(20, 15, 35, 0.85)',
+    backdropFilter: 'blur(25px)',
+    border: '1px solid rgba(255, 255, 255, 0.06)',
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+    borderRadius: '16px',
+    boxSizing: 'border-box',
+    paddingBottom: '20px',
+    ...Root.scrollBar
+}));
 
-    },
-}))
-export const ContainerNotifications = styled(Stack)(({ }) => ({
-    minWidth: '100%',
-    width: 'auto',
+export const ContainerNotifications = styled(Stack)(() => ({
+    width: '100%',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     flexDirection: 'column',
-    flexDirection: 'row',
+    position: 'sticky',
+    top: 0,
+    zIndex: 10,
+    background: 'rgba(20, 15, 35, 0.5)',
+    backdropFilter: 'blur(10px)',
+}));
 
-}))
-export const AppBarNotifications = styled(Stack)(({ }) => ({
+// 👑 BARRA DE TOPO DA COMPONENTE
+export const AppBarNotifications = styled(Stack)(() => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: '100%',
-    height: '3rem',
-    borderBottom: `1px solid ${Root.color_app_bar}`,
-    padding: '12px',
-}))
+    height: '4rem',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+    padding: '0 20px',
+    boxSizing: 'border-box'
+}));
+
+// 🔤 TIPOGRAFIA NEON DO TÍTULO
 export const TitleTypho = styled(Typography)(({ canUpper }) => ({
-    fontFamily: 'Arial, sans-serif',
-    fontWeight: 'bold',
-    color: Root.color_button,
-    textTransform: canUpper && 'uppercase',
-    letterSpacing: canUpper && '2px',
-}))
-export const SettingsIcon = styled(Settings)(({ }) => ({
-    color: Root.color_button,
-    fontSize: '24px'
-}))
-export const NotificationComponent = styled(MenuItem)(({ first, last }) => ({
+    fontFamily: Root.fontFamilySansSerif,
+    fontWeight: 800,
+    fontSize: '14px',
+    color: '#FFF',
+    textTransform: canUpper ? 'uppercase' : 'none',
+    letterSpacing: canUpper ? '1.5px' : '0px',
+}));
+
+export const SettingsIcon = styled(Settings)(() => ({
+    color: 'rgba(255, 255, 255, 0.4)',
+    fontSize: '20px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    '&:hover': {
+        color: '#FFF',
+        transform: 'rotate(45deg)'
+    }
+}));
+
+// 📳 CARD DE CADA NOTIFICAÇÃO INDIVIDUAL (REATIVO)
+export const NotificationComponent = styled(MenuItem)(({ isread }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    gap: '10px',
-    flexDirection: 'column',
-    minHeight: '4rem',
-    height: 'auto',
-    paddingTop: first ? '3rem' : '1rem',
-    paddingBottom: last ? '2rem' : '1rem',
-    width: '100%'
-}))
-export const WrapperNotification = styled(Box)(({ }) => ({
-    position: 'relative',
+    width: '100%',
+    padding: '16px 20px',
+    boxSizing: 'border-box',
+    whiteSpace: 'normal',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.03)',
+    backgroundColor: isread === 'true' ? 'transparent' : 'rgba(255, 255, 255, 0.02)',
+    transition: 'all 0.25s ease-in-out',
+    '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    }
+}));
+
+export const WrapperNotification = styled(Box)(() => ({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    gap: '8px',
-    flexDirection: 'row',
-    marginInline: 1,
+    gap: '14px',
     width: '100%',
     height: 'auto'
-}))
-export const AvatarCommentNotification = styled(Stack)(({ }) => ({
+}));
+
+// 🔮 AVATAR COM BRILHO NEON BACKDROP
+export const AvatarCommentNotification = styled(Stack)(() => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '2.5rem',
-    height: '2.5rem',
-    border: `1px solid ${Root.color_app_bar}`,
+    width: '40px',
+    height: '40px',
     borderRadius: '50%',
-    backgroundColor: Root.color_app_bar,
-    boxShadow: Root.boxS,
-}))
-export const AvatarCommentActionFlutuente = styled(Stack)(({ }) => ({
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    color: '#FFF',
+    flexShrink: 0
+}));
+
+export const AvatarCommentActionFlutuente = styled(Stack)(() => ({
     position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    top: -8,
-    right: -12,
-    width: '1.5rem',
-    height: '1.5rem',
-    color: Root.color_button
-}))
-export const ContentNotifications = styled(Typography)(({ variant, isRead }) => ({
-
-}))
+    bottom: '-2px',
+    right: '-4px',
+    width: '18px',
+    height: '18px',
+    borderRadius: '50%',
+    backgroundColor: '#00F5D4', // Seu Cyan de Luxo
+    color: '#0A0616',
+    boxShadow: '0 0 10px #00F5D4'
+}));

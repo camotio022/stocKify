@@ -38,6 +38,8 @@ export const Root = {
   doacao: colors.doacao,
   text: colors.text,
   backgroundCyan: colors.backgroundCyan,
+  columnTable: colors.columnTable,
+  columnTableLine: colors.columnTableLine,
   // Estilos compostos utilizando as referências do objeto colors
   hover: {
     ':hover': {

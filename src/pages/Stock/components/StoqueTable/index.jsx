@@ -92,7 +92,7 @@ export const EstoqueTable = ({
                                     ? { opacity: 0.5 } // Estilo para itens desabilitados
                                     : isFocused
                                         ? {
-                                            backgroundColor: Root.cyan,
+                                            backgroundColor: Root.columnTable,
                                             color: Root.white,
                                             textTransform: 'uppercase',
                                             fontWeight: 'bold',

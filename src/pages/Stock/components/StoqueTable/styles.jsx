@@ -6,17 +6,16 @@ import { styled } from "@mui/material/node/styles";
 export const MuiHeaderTable = styled(Box)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width: '100%',
     height: '42px',
-    gap: '2px',
-    backgroundColor: 'rgba(15, 23, 42, 0.4)', // Fundo escuro semitransparente
+    backgroundColor: Root.columnTable, // Fundo escuro semitransparente
     backdropFilter: 'blur(12px)', // Faz o degradê de trás aparecer fosco
 }))
 export const MuiRowTable = styled(Stack)(({ }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width: '100%',
     height: 'auto',
 }))
@@ -34,14 +33,7 @@ export const MuiTableClhild = styled(Typography)(({ }) => ({
     fontWeight: 800,  // Peso ideal para fontes pequenas não borrarem com o brilho
     letterSpacing: '0.06em', // 🔥 Aumentar o espaçamento melhora a leitura de textos em caixa alta
     textTransform: 'uppercase',
-
-    // 🎨 CORES E BRILHO DE ALTO CONTRASTE
     color: Root.white, // ✨ Mudar o texto base para Branco Puro garante leitura 100% nítida no escuro
-    textShadow: `
-        0 0 4px rgba(23, 162, 184, 0.6), 
-        0 0 12px rgba(23, 162, 184, 0.3)
-    `,
-
     transition: 'all 0.3s ease',
     '&:hover': {
         color: '#17a2b8', // O texto assume o ciano puro no foco
@@ -54,12 +46,10 @@ export const MuiTableRow = styled(Box)(({ index }) => ({
     justifyContent: 'center',
     width: '100%',
     height: '40px',
-    gap: '2px',
-    backgroundColor: index % 2 === 1 && Root.tableBg,
+    gap: '1px',
     '&:hover': {
-        backgroundColor: Root.color_button_secondary,
+
         transition: 'all .3s',
-        boxShadow: Root.boxS,
         color: Root.color_default,
     },
     boxSizing: 'border-box'
