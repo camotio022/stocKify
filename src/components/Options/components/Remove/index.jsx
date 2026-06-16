@@ -32,42 +32,51 @@ export const RemoveItems = ({ item, setRemove }) => {
         'Nenhuma das opções'
     ])].filter(val => val === 'Nenhuma das opções' || (typeof val === 'number' && val > 0)); // Evita renderizar 0 se o estoque for muito baixo
 
-    const hadleToRemove = async () => {
-        if (!user || !user.tenant) {
-            console.error("Usuário deslogado ou sem tenant ativo.");
+    const handleToRemove = async () => {
+        // 🛡️ Validação alinhada com o seu AuthContext: usa tenant.id e user
+        if (!user || !tenant?.id) {
+            console.error("[Stockify Security] Usuário deslogado ou sem unidade (tenant) ativa.");
             return;
         }
 
         const valorRetirada = Number(inputValue);
 
+        // Proteção de input: quantidadeTotal deve ser o saldo atual vindo da tabela
         if (!valorRetirada || valorRetirada <= 0 || valorRetirada > quantidadeTotal) {
+            console.warn("[Stockify Validation] Quantidade de retirada inválida ou acima do saldo disponível.");
             return;
         }
 
+        // Monta o autor com base nas propriedades do operador logado
         const author = {
-            userName: user.name,
-            userEmail: user.email,
-            userId: user.id
+            userName: user.name || user.displayName || 'Operador',
+            userEmail: user.email || '',
+            userId: user.id || user.uid || ''
         };
 
         try {
             setProgress(true);
 
-            // 1. Remove do estoque principal no Firestore
-            await addProduct.to_remove_quantiadade(item.id, valorRetirada, author);
+            // 🚀 CHAMADA ÚNICA E SUPREMA: 
+            // Passa o tenant.id na frente para abrir a gaveta certa.
+            // Essa única linha vai atualizar o saldo em /stock E criar a movimentação de 'saida' em /movimentacoes!
+            const sucesso = await addProduct.to_remove_quantiadade(tenant.id, item.id, valorRetirada, author);
 
-            // 2. Registra o histórico na coleção de saídas com a chave do tenant
-            await addProduct.registerSaida(item, author, valorRetirada, user.tenant);
+            if (sucesso) {
+                setSuccessMessage(true);
 
-            setSuccessMessage(true);
-
-            // Retorna suavemente para a tela de menu do modal pai após exibir o sucesso
-            setTimeout(() => {
-                setRemove(false); // No novo modelo de injeção, isso executa setView('menu')
-            }, 1200);
+                // Retorna suavemente para a tela de menu do modal pai após exibir o sucesso
+                setTimeout(() => {
+                    // Se o novo modelo pede setView('menu'), você pode descomentar a linha abaixo:
+                    // if (typeof setView === 'function') setView('menu');
+                    setRemove(false);
+                }, 1200);
+            } else {
+                console.error("[Stockify] Falha interna ao processar a baixa do item.");
+            }
 
         } catch (error) {
-            console.error("Erro ao processar a retirada do item:", error);
+            console.error("Erro crítico ao processar a retirada do item:", error);
         } finally {
             setProgress(false);
             setInputValue('');
@@ -76,7 +85,7 @@ export const RemoveItems = ({ item, setRemove }) => {
 
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeIn 0.2s ease-in-out' }}>
-            
+
             {/* 💬 PERGUNTA CONTEXTUAL */}
             <StylesRemoveItem.quetion>
                 Qual é a sua quantidade a retirar?
@@ -130,7 +139,7 @@ export const RemoveItems = ({ item, setRemove }) => {
 
             {/* ⌨️ INPUT DE QUANTIDADE CUSTOMIZADA */}
             {showInput && (
-                <Stack 
+                <Stack
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -158,8 +167,8 @@ export const RemoveItems = ({ item, setRemove }) => {
 
             {/* ⚡ BOTÃO RETIRAR CONTEXTUALIZADO */}
             {inputValue && Number(inputValue) > 0 && Number(inputValue) <= quantidadeTotal && !successMessage && (
-                <StylesRemoveItem.retirar 
-                    onClick={hadleToRemove} 
+                <StylesRemoveItem.retirar
+                    onClick={handleToRemove}
                     disabled={progress}
                     sx={{
                         background: `linear-gradient(90deg, ${glowColor} 0%, ${accentColor} 100%)`,
@@ -174,9 +183,9 @@ export const RemoveItems = ({ item, setRemove }) => {
                 >
                     {progress ? 'Processando...' : `Confirmar Retirada de ${inputValue}`}
                     {progress && (
-                        <CircularProgress 
-                            size={20} 
-                            sx={{ marginLeft: '12px', color: '#FFF' }} 
+                        <CircularProgress
+                            size={20}
+                            sx={{ marginLeft: '12px', color: '#FFF' }}
                         />
                     )}
                 </StylesRemoveItem.retirar>
@@ -185,16 +194,16 @@ export const RemoveItems = ({ item, setRemove }) => {
             {/* ⚠️ CONSOLE DE ALERTAS FLUTUANTES DO VIDRO */}
             <Stack sx={{ width: '100%', alignItems: 'center', gap: 1, mt: 2 }}>
                 {inputValue && Number(inputValue) > quantidadeTotal && (
-                    <Alert 
-                        sx={{ 
-                            width: '100%', 
-                            borderRadius: '8px', 
-                            background: 'rgba(239, 68, 68, 0.15)', 
-                            color: '#FEE2E2', 
+                    <Alert
+                        sx={{
+                            width: '100%',
+                            borderRadius: '8px',
+                            background: 'rgba(239, 68, 68, 0.15)',
+                            color: '#FEE2E2',
                             border: '1px solid rgba(239, 68, 68, 0.25)',
                             fontFamily: Root.fontFamilySansSerif
-                        }} 
-                        variant="outlined" 
+                        }}
+                        variant="outlined"
                         severity="error"
                     >
                         Estoque insuficiente. Disponível: {quantidadeTotal} itens.
@@ -202,16 +211,16 @@ export const RemoveItems = ({ item, setRemove }) => {
                 )}
 
                 {successMessage && (
-                    <Alert 
-                        sx={{ 
-                            width: '100%', 
-                            borderRadius: '8px', 
-                            background: 'rgba(34, 197, 94, 0.15)', 
-                            color: '#DCFCE7', 
+                    <Alert
+                        sx={{
+                            width: '100%',
+                            borderRadius: '8px',
+                            background: 'rgba(34, 197, 94, 0.15)',
+                            color: '#DCFCE7',
                             border: '1px solid rgba(34, 197, 94, 0.25)',
                             fontFamily: Root.fontFamilySansSerif
-                        }} 
-                        variant="outlined" 
+                        }}
+                        variant="outlined"
                         severity="success"
                     >
                         Baixa concluída! Atualizando inventário...

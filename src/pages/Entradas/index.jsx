@@ -1,7 +1,7 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { Checkbox } from "@mui/material";
 import { Root } from "../../styles/Root/root_styles";
-import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
 import { MuiHeaderTable, MuiRowTable, MuiTableClhild, MuiTableRow, MuiTableRowCell } from "../Stock/components/StoqueTable/styles";
 import { db } from "../../../firebase_config";
 import { AuthContext } from "../../auth_context";
@@ -13,7 +13,7 @@ import { LoadingModal } from "../../components/Loadings/loadingStocks";
 
 export const Entradas = () => {
     const [entradas, setEntradas] = useState([]);
-    const [loading, setLoading] = useState(true); // 🔥 COMEÇA COMO TRUE para evitar flashes de "sem dados"
+    const [loading, setLoading] = useState(true); 
     const {
         user,
         setDownloads,
@@ -45,27 +45,41 @@ export const Entradas = () => {
 
         setLoading(true);
 
+        // 🎯 Rota de subcoleção sênior unificada
         const movimentacoesRef = collection(db, 'tenants', tenant.id, 'movimentacoes');
+        
+        // 🛡️ Removemos o orderBy('timestamp') para evitar o crash de campo inexistente
         const q = query(
             movimentacoesRef,
-            where('tipoMovimentacao', '==', 'entrada'),
-            orderBy('timestamp', 'desc')
+            where('tipoMovimentacao', '==', 'entrada')
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const listaEntradas = querySnapshot.docs.map((doc) => {
                 const data = doc.data();
+                
+                // 🍎 MAPEAMENTO REAL: Puxa os dados de dentro de 'metadata' e 'produto' do seu print!
                 const objetoEntrada = {
                     id: doc.id,
-                    motivo: data.motivo || "",
-                    quantidade: data.quantidade || 0,
-                    custoUnitario: data.custoUnitario || 0,
-                    subtotal: data.subtotal || 0,
-                    timestamp: data.timestamp,
-                    author: data.author?.userName || "",
-                    produto: data.produto || {}
+                    motivo: data.metadata?.motivo || "Cadastro Inicial",
+                    fornecedor: data.metadata?.fornecedor || "N/A",
+                    quantidade: Number(data.produto?.quantidade || 0),
+                    subtotal: Number(data.produto?.subtotal || 0),
+                    author: data.metadata?.operador || "Operador",
+                    
+                    // Une os seus campos de string para o FormatRelativeTime conseguir computar
+                    dataEHoraISO: data.dataMovimentacao && data.horaMovimentacao 
+                        ? convertToISODate(data.dataMovimentacao, data.horaMovimentacao)
+                        : new Date().toISOString(),
+                        
+                    produto: {
+                        id: data.produto?.id || "",
+                        nomeItem: data.produto?.nomeItem || "Sem Nome",
+                        sku: data.produto?.sku || "N/A"
+                    }
                 };
 
+                // 🔍 MECANISMO DE BUSCA INTELIGENTE ADAPTADO
                 if (!search && !select) {
                     return objetoEntrada;
                 } else {
@@ -78,7 +92,10 @@ export const Entradas = () => {
                     }
                     return null;
                 }
-            }).filter(item => item !== null);
+            })
+            .filter(item => item !== null)
+            // ⏳ Ordenação feita diretamente no Front para simular o 'desc' por data/hora com segurança
+            .sort((a, b) => new Date(b.dataEHoraISO) - new Date(a.dataEHoraISO));
 
             setEntradas(listaEntradas);
 
@@ -86,15 +103,24 @@ export const Entradas = () => {
                 ...prevState,
                 entradas: listaEntradas,
             }));
-
-            setLoading(false); // 🔥 Terminou de baixar e filtrar? Desliga o loading
+            setLoading(false);
         }, (error) => {
-            console.error("Erro ao buscar histórico de entradas:", error);
+            console.error("Erro ao buscar histórico de entradas nas movimentações:", error);
             setLoading(false);
         });
-
+        
         return () => unsubscribe();
     }, [search, select, user, tenant?.id]);
+
+    // 📅 Função auxiliar sênior para transformar sua data e hora manuais em formato ordenável
+    function convertToISODate(dataStr, horaStr) {
+        try {
+            const [dia, mes, ano] = dataStr.split('/');
+            return `${ano}-${mes}-${dia}T${horaStr}`;
+        } catch {
+            return new Date().toISOString();
+        }
+    }
 
     const selectSx = {
         backgroundColor: Root.cyan,
@@ -107,8 +133,7 @@ export const Entradas = () => {
 
     return (
         <ContainerTableStock children={(<>
-            {/* 🔒 CABEÇALHO FIXO: Ele sempre fica na tela, protegendo o esqueleto ou a tabela contra quebras de layout */}
-            {entradas.length > 0 ?  <MuiHeaderTable>
+            {entradas.length > 0 ? <MuiHeaderTable>
                 <MuiTableClhild>
                     <Checkbox
                         sx={{ ml: 0.7, color: Root.white }}
@@ -125,14 +150,12 @@ export const Entradas = () => {
                 <MuiTableClhild>Custo Total</MuiTableClhild>
                 <MuiTableClhild>Quem Adicionou</MuiTableClhild>
                 <MuiTableClhild>Data/Hora</MuiTableClhild>
-            </MuiHeaderTable>: null}
+            </MuiHeaderTable> : null}
 
             <MuiRowTable>
                 {loading ? (
-                    /* ⏳ ESTADO 1: Se estiver carregando, mostra APENAS o esqueleto */
                     <LoadingModal message="Sincronizando as Entradas em tempo real..." />
                 ) : entradas.length > 0 ? (
-                    /* 📊 ESTADO 2: Se o loading acabou e existem dados, renderiza a lista */
                     <Fragment>
                         {entradas.map((item, index) => {
                             const isSelected = selectedItems.includes(item.id);
@@ -153,6 +176,7 @@ export const Entradas = () => {
                                         />
                                     </MuiTableRowCell>
 
+                                    {/* Exibe o nome de dentro do objeto produto estruturado */}
                                     <MuiTableRowCell>
                                         {item.produto?.nomeItem || '---'}
                                     </MuiTableRowCell>
@@ -174,9 +198,9 @@ export const Entradas = () => {
                                     </MuiTableRowCell>
 
                                     <MuiTableRowCell>
-                                        {item.timestamp ? (
+                                        {item.dataEHoraISO ? (
                                             <FormatRelativeTime
-                                                dateTimeString={item.timestamp.toDate ? item.timestamp.toDate().toISOString() : item.timestamp}
+                                                dateTimeString={item.dataEHoraISO}
                                             />
                                         ) : '---'}
                                     </MuiTableRowCell>
@@ -185,7 +209,6 @@ export const Entradas = () => {
                         })}
                     </Fragment>
                 ) : (
-                    /* 📦 ESTADO 3: Se o loading acabou e o array está zerado, mostra o Empty State premium */
                     <NoTasksFromThisState route={'entradas'} />
                 )}
             </MuiRowTable>

@@ -11,106 +11,35 @@ import { ItemQrCode } from "../pages/Qr_Code";
 import { Percepcoes } from "../pages/percepcoes";
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { ComponentCompanies } from "../auth/companies/ComponentCompanies";
+import { OnboardingScreen } from "../../hooks/OnboardingScreen";
 
 export const MainRoutes = () => {
     const { isLoggedIn, loading, tenant } = useContext(AuthContext);
 
-    // Trava de segurança para não piscar a tela
+    // 🛡️ 1. TRAVA DE SEGURANÇA: Bloqueia renderizações precoces enquanto busca dados
     if (loading) {
         return (
             <Box
                 sx={{
-                    position: 'fixed', // 🔥 Fixa a tela de carregamento sobrepondo todo o app
-                    top: 0,
-                    left: 0,
-                    width: '100vw',  // 🔥 Garante 100% da largura da tela
-                    height: '100vh', // 🔥 Garante 100% da altura da tela
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    bgcolor: '#0D0B14', // O Midnight Violet oficial do Stockify
+                    position: 'fixed',
+                    top: 0, left: 0,
+                    width: '100vw', height: '100vh',
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    bgcolor: '#0D0B14',
                     overflow: 'hidden',
-                    zIndex: 99999 // 🔥 Garante que fique por cima de qualquer modal ou sidebar antiga
+                    zIndex: 99999
                 }}
             >
-                {/* 🌌 Efeito de Luz de Fundo (Glow de Ambiente) */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        width: '300px',
-                        height: '300px',
-                        borderRadius: '50%',
-                        bgcolor: 'rgba(124, 58, 237, 0.25)', // Roxo elétrico sutil
-                        filter: 'blur(100px)',
-                        zIndex: 1
-                    }}
-                />
-
-                {/* 💎 Box Central com Glassmorphism e Fundo Desfocado */}
-                <Box
-                    sx={{
-                        position: 'relative',
-                        zIndex: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        p: 5,
-                        mx: 2,
-                        maxWidth: '420px',
-                        width: '100%',
-                        borderRadius: '24px',
-                        // Mistura de fundo semitransparente com desfoque de vidro (backdrop-filter)
-                        background: 'rgba(20, 15, 35, 0.65)',
-                        backdropFilter: 'blur(16px)',
-                        webkitBackdropFilter: 'blur(16px)',
-                        border: '1px solid rgba(124, 58, 237, 0.3)', // Borda fina roxa com transparência
-                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.05)',
-                        textAlign: 'center'
-                    }}
-                >
-                    {/* 🌀 Spinner Customizado com Neon Glow */}
-                    <Box sx={{ position: 'relative', display: 'inline-flex', mb: 3 }}>
-                        <CircularProgress
-                            size={64}
-                            thickness={4.5}
-                            sx={{
-                                color: '#7C3AED', // Roxo principal
-                                filter: 'drop-shadow(0px 0px 8px #7C3AED)', // Efeito Neon
-                            }}
-                        />
-                    </Box>
-
-                    {/* 📝 Mensagem Profissional de Arquitetura Corporativa */}
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            color: '#ffffff',
-                            fontWeight: 700,
-                            letterSpacing: '0.5px',
-                            mb: 1
-                        }}
-                    >
-                        Sincronizando Sessão
-                    </Typography>
-
-                    <Typography
-                        variant="body2"
-                        sx={{
-                            color: 'rgba(255, 255, 255, 0.6)',
-                            fontWeight: 400,
-                            lineHeight: 1.5,
-                            px: 2
-                        }}
-                    >
-                        Validando credenciais corporativas e isolando ambiente seguro multi-tenant...
-                    </Typography>
+                <Box sx={{ position: 'absolute', width: '300px', height: '300px', borderRadius: '50%', bgcolor: 'rgba(124, 58, 237, 0.25)', filter: 'blur(100px)', zIndex: 1 }} />
+                <Box sx={{ relative: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', p: 5, background: 'rgba(20, 15, 35, 0.65)', backdropFilter: 'blur(16px)', borderRadius: '24px', border: '1px solid rgba(124, 58, 237, 0.3)' }}>
+                    <CircularProgress size={64} thickness={4.5} sx={{ color: '#7C3AED', filter: 'drop-shadow(0px 0px 8px #7C3AED)' }} />
+                    <Typography variant="h6" sx={{ color: '#ffffff', fontWeight: 700, mt: 2 }}>Sincronizando Sessão</Typography>
                 </Box>
             </Box>
         );
     }
 
-    // 🔑 Se não estiver logado, renderiza apenas a tela de Login
+    // 🔒 2. NÃO LOGADO: Renderiza apenas o portal de Login
     if (!isLoggedIn) {
         return (
             <Routes>
@@ -120,26 +49,45 @@ export const MainRoutes = () => {
         );
     }
 
-    // 2. 🏢 USUÁRIO LOGADO, MAS SEM EMPRESA SELECIONADA: Força a tela de escolha
-    if (isLoggedIn && !tenant) {
+    // 🏢 3. LOGADO MAS SEM EMPRESA ATIVA: Força Onboarding ou Seleção
+    // Colocamos essa verificação AQUI. O React renderiza isso e dá 'return', 
+    // impedindo que o código abaixo tente ler o 'tenant.id' nulo!
+    // barramos o usuário aqui de qualquer forma, impedindo que o F5 pule para a home.
+    if (isLoggedIn && (!tenant || tenant === "none")) {
         return (
             <Routes>
                 <Route path="/mult_companies" element={<ComponentCompanies />} />
-                {/* Qualquer rota digitada aqui vai empurrar ele de volta para a seleção */}
-                <Route path="*" element={<Navigate to="/mult_companies" replace />} />
+                <Route path="/createNewTenant" element={<OnboardingScreen />} />
+                <Route
+                    path="*"
+                    element={
+                        sessionStorage.getItem("empresasDisponiveis")
+                            ? <Navigate to="/mult_companies" replace />
+                            : <Navigate to="/createNewTenant" replace />
+                    }
+                />
             </Routes>
         );
     }
-    const idChaveEfetivo = tenant?.id && tenant.id !== "none"
-        ? tenant.id
-        : (sessionStorage.getItem("activeTenantId") || "default");
 
-    // 🔐 Se estiver logado, envelopa o bloco de rotas passando para a sua propriedade 'childrens'
+    // =========================================================================
+    // 🔐 4. AMBIENTE SEGURO GARANTIDO (Só chega aqui se REALMENTE tiver uma empresa ativa)
+    // =========================================================================
+
+    // Mudamos o fallback: se não houver tenant.id e nem activeTenantId real no sessionStorage,
+    // o valor fica nulo e não deixará renderizar dados falsos.
+    const activeId = tenant?.id && tenant.id !== "none"
+        ? tenant.id
+        : sessionStorage.getItem("activeTenantId");
+
+    // Se por um erro de sincronismo assíncrono o ID sumir, joga pro Onboarding em vez de abrir a Home limpa
+    if (!activeId) {
+        return <Navigate to="/createNewTenant" replace />;
+    }
+
     return (
-        /* 🟢 A MÁGICA ESTÁ AQUI: Passando a key atrelada ao ID da empresa, o React desfaz 
-           o layout antigo engessado e monta o novo na hora do clique, eliminando o limbo do F5! */
         <MainLayout
-            key={idChaveEfetivo}
+            key={activeId}
             children={
                 <Routes>
                     <Route path="/" element={<Stock />} />

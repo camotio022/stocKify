@@ -1,15 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Close } from "@mui/icons-material";
 import { TagsNewItem } from "./styles";
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, InputLabel, Select, MenuItem, FormControl, Box } from '@mui/material'; 
 import { Root } from "../../styles/Root/root_styles";
 import { addProduct } from "../../api/products/add";
 import { AuthContext } from '../../auth_context/index';
 import { SimpleAlert } from "../../components/Alert";
 
-// Imports do Firebase para ler o documento do Tenant logado
+// 🚀 Importação do nosso dicionário de 20 segmentos oficial
+
+
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase_config";
+import { SEGMENT_TEMPLATES } from "../../../hooks/utils";
 
 export const NewItem = ({ newItem, setNewItem }) => {
     const { user, tenant } = useContext(AuthContext);
@@ -17,11 +20,18 @@ export const NewItem = ({ newItem, setNewItem }) => {
     const [success, setSuccess] = useState(false);
 
     // 🧬 Estados Dinâmicos para a Regra de Negócio Real
-    const [colunas, setColunas] = useState([]); // Armazena a array 'colunasEstoque' vinda do Firebase
-    const [formData, setFormData] = useState({}); // Controla os inputs gerados na tela
+    const [colunas, setColunas] = useState([]); 
+    const [formData, setFormData] = useState({}); 
+    
+    // 🧠 Estado para controlar o primeiro select da engrenagem assistida
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
 
     const glowColor = tenant?.theme?.buttons?.primary || Root.color_button;
     const accentColor = tenant?.theme?.buttons?.secondary || Root.cyan;
+
+    // Pega o dicionário específico do segmento atual do Tenant
+    const segmentoAtivo = tenant?.segmento || "mercearia_mercado";
+    const dicionarioDoNicho = SEGMENT_TEMPLATES[segmentoAtivo]?.dicionario || {};
 
     // 🔍 BUSCA A ARRAY 'colunasEstoque' EXCLUSIVA DO TENANT NO FIREBASE
     useEffect(() => {
@@ -33,12 +43,10 @@ export const NewItem = ({ newItem, setNewItem }) => {
 
                 if (tenantSnap.exists()) {
                     const tenantData = tenantSnap.data();
-
-                    // Pega a sua array cadastrada no Firebase
                     const colunasDoBanco = tenantData.colunasEstoque || [];
                     setColunas(colunasDoBanco);
 
-                    // 🛡️ Inicializa o formulário usando 'col.campo' para evitar uncontrolled inputs
+                    // 🛡️ Inicializa o formulário limpo usando 'col.campo'
                     setFormData(prev => {
                         const initialForm = { ...prev };
                         colunasDoBanco.forEach(col => {
@@ -56,10 +64,12 @@ export const NewItem = ({ newItem, setNewItem }) => {
             }
         };
 
-        if (newItem) fetchTenantColumns();
+        if (newItem) {
+            fetchTenantColumns();
+            setCategoriaSelecionada(""); // Reseta a categoria ao abrir o modal
+        }
     }, [newItem, tenant?.id]);
 
-    // 🚀 Atualização limpa capturando a chave pelo name do target nativo
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -72,13 +82,12 @@ export const NewItem = ({ newItem, setNewItem }) => {
         if (!tenant?.id) return;
         setProgress(true);
 
-        // 🧹 Tratamento sanitário usando 'col.campo' para salvar sem chaves undefined
+        // 🧹 Tratamento sanitário usando o seu 'col.campo' oficial
         const cleanPayload = {};
         colunas.forEach(col => {
             if (col.campo && col.campo !== 'id' && col.campo !== 'actions' && col.campo !== 'dataChegada') {
                 const value = formData[col.campo];
 
-                // Se no esquema do banco diz que é número, limpa e força a conversão matemática
                 if (col.type === 'number') {
                     cleanPayload[col.campo] = value !== "" && value !== undefined ? Number(value) : 0;
                 } else {
@@ -87,34 +96,36 @@ export const NewItem = ({ newItem, setNewItem }) => {
             }
         });
 
-        // 🚀 Payload montado perfeitamente integrado ao cruzamento de dados
+        // 🚀 A SUA NOVA ESTRATÉGIA: Payload com rastreabilidade completa de categorias no Firebase
         const payload = {
             ...cleanPayload,
-            tenantId: tenant.id,
+            categoria_assistida: categoriaSelecionada || "Geral", // Salva o grupo (Ex: Secos & Enlatados)
+            segmento_origem: segmentoAtivo, // Salva o nicho de origem
             dataChegada: new Date().toISOString().split('T')[0],
             author: {
                 userName: user?.name || 'Operador',
                 userEmail: user?.email || '',
-                userId: user?.id || ''
+                userId: user?.id || user?.uid || ''
             }
         };
 
         try {
-            await addProduct.add(payload, tenant.id);
-            await addProduct.novas_entradas(payload, tenant.id);
+            // 💥 Chamada única e atômica: adiciona em /produtos e já gera a movimentação de entrada em /movimentacoes
+            await addProduct.add(tenant.id, payload);
 
             setSuccess(true);
             setTimeout(() => {
-                // Reseta o estado do formulário mantendo as chaves estruturadas limpas
+                // Reseta o formulário
                 const resetForm = {};
                 colunas.forEach(col => { if (col.campo) resetForm[col.campo] = ""; });
                 setFormData(resetForm);
+                setCategoriaSelecionada("");
 
                 setSuccess(false);
                 setNewItem(false);
             }, 2000);
         } catch (err) {
-            console.error("Erro crítico ao registrar produto dinâmico:", err);
+            console.error("Erro crítico ao registrar produto dinâmico na subcoleção:", err);
         } finally {
             setProgress(false);
         }
@@ -138,16 +149,59 @@ export const NewItem = ({ newItem, setNewItem }) => {
                     Novo Registro ({tenant?.name || 'Estoque'})
                 </TagsNewItem.typography>
 
-                {/* 🔄 RENDERIZADOR REAL: Mapeia os inputs usando as propriedades 'campo' e 'label' do seu print */}
-                {/* 🔄 RENDERIZADOR INTELIGENTE AUTOVALIDADO */}
+                {/* 🔄 RENDERIZADOR DINÂMICO DE ENTRADAS ASSISTIDAS */}
                 {colunas.map((col, index) => {
-                    // Ignora chaves administrativas que o sistema controla por fora
                     if (!col.campo || col.campo === 'id' || col.campo === 'actions' || col.campo === 'dataChegada') return null;
 
                     const chaveUnica = col.campo || `input-${index}`;
                     const ehObrigatorio = col.required ?? true;
 
-                    // 🎭 CENÁRIO A: Se no Firebase você definiu o type como "select", ele vira um Dropdown
+                    // 🧠 VALIDAÇÃO ESTRATÉGICA SUPREMA: Se o campo for o Nome Assistido por Filtro
+                    if (col.campo === "nome" && col.type === "select_assistido") {
+                        return (
+                            <Box key={chaveUnica} sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                
+                                {/* Dropdown PASSO 1: Selecionar a Categoria do Dicionário */}
+                                <TagsNewItem.fromControl variant="filled" required={ehObrigatorio}>
+                                    <InputLabel sx={{ color: 'rgba(255,255,255,0.6)' }}>Categoria do Item</InputLabel>
+                                    <Select
+                                        value={categoriaSelecionada}
+                                        onChange={(e) => {
+                                            setCategoriaSelecionada(e.target.value);
+                                            setFormData(prev => ({ ...prev, nome: "" })); // Limpa o nome anterior
+                                        }}
+                                    >
+                                        {Object.keys(dicionarioDoNicho).map((cat) => (
+                                            <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </TagsNewItem.fromControl>
+
+                                {/* Dropdown PASSO 2: Selecionar o Item correspondente filtrado */}
+                                <TagsNewItem.fromControl 
+                                    variant="filled" 
+                                    required={ehObrigatorio}
+                                    disabled={!categoriaSelecionada}
+                                    sx={{ opacity: !categoriaSelecionada ? 0.5 : 1 }}
+                                >
+                                    <InputLabel sx={{ color: 'rgba(255,255,255,0.6)' }}>{col.label}</InputLabel>
+                                    <Select
+                                        name="nome"
+                                        value={formData.nome || ''}
+                                        onChange={handleInputChange}
+                                    >
+                                        {categoriaSelecionada && dicionarioDoNicho[categoriaSelecionada].map((itemSugerido) => (
+                                            <MenuItem key={itemSugerido} value={itemSugerido}>
+                                                {itemSugerido}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </TagsNewItem.fromControl>
+                            </Box>
+                        );
+                    }
+
+                    // 🎭 CENÁRIO B: Dropdown tradicional fixo (Ex: tamanho)
                     if (col.type === 'select') {
                         return (
                             <TagsNewItem.fromControl
@@ -160,7 +214,6 @@ export const NewItem = ({ newItem, setNewItem }) => {
                                 <Select
                                     name={col.campo}
                                     value={formData[col.campo] !== undefined ? formData[col.campo] : ''}
-                                    // Simula o formato do evento nativo para reaproveitar a sua função handleInputChange existente
                                     onChange={(e) => handleInputChange({ target: { name: col.campo, value: e.target.value } })}
                                 >
                                     {col.options?.map((opcao, optIdx) => (
@@ -173,7 +226,7 @@ export const NewItem = ({ newItem, setNewItem }) => {
                         );
                     }
 
-                    // ⌨️ CENÁRIO B: Se for text, number ou date, o TextField assume o controle e se valida sozinho
+                    // ⌨️ CENÁRIO C: Inputs tradicionais controlados (quantidade, preco, codigo_barras)
                     return (
                         <TagsNewItem.textfield
                             key={chaveUnica}
@@ -181,39 +234,32 @@ export const NewItem = ({ newItem, setNewItem }) => {
                             name={col.campo}
                             required={ehObrigatorio}
                             label={col.label || col.campo}
-
-                            // 🔥 MÁGICA: O input muda de comportamento dinamicamente (vira calendário se for 'date', bloqueia letras se for 'number')
                             type={col.type || 'text'}
-
                             variant="filled"
                             value={formData[col.campo] !== undefined ? formData[col.campo] : ''}
                             onChange={handleInputChange}
-
-                            // Força o texto do label a encolher se for campo de data para não atropelar o calendário nativo
                             InputLabelProps={col.type === 'date' ? { shrink: true } : undefined}
-
-                            // Validações nativas do HTML5 baseadas no tipo
                             inputProps={{
-                                ...(col.type === 'number' && { min: 0, step: "any" }) // Impede números negativos em preço/quaantidade
+                                ...(col.type === 'number' && { min: 0, step: "any" })
                             }}
                             sx={{ '&:focus-within': { borderColor: accentColor }, '& .MuiInputLabel-root.Mui-focused': { color: accentColor } }}
                         />
                     );
                 })}
 
-                {/* 🛡️ BOTÃO DE SUBMIT COM VALIDAÇÃO DINÂMICA REAL */}
+                {/* 🛡️ BOTÃO DE SUBMIT COM VALIDAÇÃO COMPLETA */}
                 <TagsNewItem.submit
                     onClick={handleSubmit}
                     disabled={
                         progress ||
                         !tenant?.id ||
                         colunas.length === 0 ||
+                        
+                        // Garante que o usuário escolheu o nome e a categoria assistida
+                        (colunas.some(c => c.type === "select_assistido") && !categoriaSelecionada) ||
 
-                        // Varre a array e bloqueia o botão se achar algum campo obrigatorio em branco
                         colunas.some(col => {
-                            if (!col.campo || col.campo === 'id' || col.campo === 'actions' || col.campo === 'dataChegada') {
-                                return false;
-                            }
+                            if (!col.campo || col.campo === 'id' || col.campo === 'actions' || col.campo === 'dataChegada') return false;
                             const valor = formData[col.campo];
                             return valor === undefined || String(valor).trim() === "";
                         })

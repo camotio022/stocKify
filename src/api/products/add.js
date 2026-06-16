@@ -1,13 +1,21 @@
 import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase_config";
+
+// 📅 Mantendo o seu formato exato de data (Ex: 15/06/2026)
 function formatDate(date) {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    const formattedDay = day < 10 ? `0${day}` : day;
-    const formattedMonth = month < 10 ? `0${month}` : month;
+    return `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
+}
 
-    return `${formattedDay}/${formattedMonth}/${year}`;
+// ⏰ Mantendo o seu formato exato de hora (Ex: 13:56:12)
+function getHoraExata() {
+    const dataAtual = new Date();
+    const h = dataAtual.getHours().toString().padStart(2, '0');
+    const m = dataAtual.getMinutes().toString().padStart(2, '0');
+    const s = dataAtual.getSeconds().toString().padStart(2, '0');
+    return `${h}:${m}:${s}`;
 }
 async function createCommit(refDocId, author, quantidade) {
     try {
@@ -32,50 +40,77 @@ async function createCommit(refDocId, author, quantidade) {
     }
 }
 export const addProduct = {
-    add: async (data) => {
-        try {
-            let id;
-            const stockCollectionRef = collection(db, 'stock');
-            const querySnapshot = await getDocs(query(stockCollectionRef,
-                where("nome", "==", data.nome),
-                where("dataValidade", "==", data.dataValidade)
-            ));
-            if (querySnapshot.size > 0) {
-                querySnapshot.forEach(async (doc) => {
-                    const existingItem = doc.data();
-                    id = doc.id;
-                    const newQuantity = Number(existingItem.quantidade) + Number(data.quantidade);
-                    await updateDoc(doc.ref, { quantidade: newQuantity });
-                    console.log(`Quantity updated for existing item ${doc.id} to ${newQuantity}`);
-                });
-            } else {
-                const docRef = await addDoc(stockCollectionRef, data);
-                const docId = docRef.id;
-                id = docId;
-                await updateDoc(doc(db, 'stock', docId), { id: docId });
-                console.log("New item added to stock with ID: ", docRef.id);
-            }
-            const commitQuerySnapshot = await getDocs(collection(db, 'commits'));
+    add: async (tenantId, data) => {
+        if (!tenantId) throw new Error("Operação cancelada: tenantId não fornecido.");
 
-            let lastCommitNumber = commitQuerySnapshot.size;
-            console.log(data.author)
-            const newComnmit = {
-                refDoc: id,
-                commitNumber: lastCommitNumber,
-                timestamp: formatDate(new Date()),
-                author: {
-                    userName: data.author.userName,
-                    userEmail: data.author.userEmail,
-                    userId: data.author.userId,
-                },
-                quantidade: data.quantidade,
-                type: 'entradas'
+        try {
+            let produtoId;
+            const stockCollectionRef = collection(db, 'tenants', tenantId, 'produtos');
+
+            // Query usando a chave universal 'nome' que padronizamos
+            const querySnapshot = await getDocs(query(stockCollectionRef,
+                where("nome", "==", data.nome)
+            ));
+
+            if (querySnapshot.size > 0) {
+                // Produto já existe: incrementa o saldo atual
+                const docSnapshot = querySnapshot.docs[0];
+                const existingItem = docSnapshot.data();
+                produtoId = docSnapshot.id;
+
+                const newQuantity = Number(existingItem.quantidade || 0) + Number(data.quantidade || 0);
+
+                await updateDoc(docSnapshot.ref, {
+                    quantidade: newQuantity,
+                    dataAtualizacao: new Date().toISOString()
+                });
+                console.log(`[Stockify Stock] Saldo atualizado para ${newQuantity}`);
+            } else {
+                // Produto novo: cria o documento na subcoleção /stock
+                const docRef = await addDoc(stockCollectionRef, data);
+                produtoId = docRef.id;
+
+                await updateDoc(doc(db, 'tenants', tenantId, 'produtos', produtoId), { id: produtoId });
+                console.log("[Stockify Stock] Novo item registrado no saldo.");
             }
-            await addDoc(collection(db, 'commits'), newComnmit)
+
+            // =========================================================================
+            // 🚀 ESPELHO FIEL DO SEU CADASTRO MANUAL (image_73f222.png)
+            // =========================================================================
+            const movimentacoesCollectionRef = collection(db, 'tenants', tenantId, 'movimentacoes');
+
+            const payloadMovimentacao = {
+                tipoMovimentacao: "entrada", // Carimbo fixo de entrada
+                dataMovimentacao: formatDate(new Date()),
+                horaMovimentacao: getHoraExata(),
+
+                // 📦 Objeto 'metadata' igualzinho ao seu print
+                metadata: {
+                    fornecedor: data.fornecedor || "Não informado",
+                    numeroNotaFiscal: data.numeroNotaFiscal || "N/A",
+                    observacao: data.observacao || "",
+                    motivo: data.motivo || "Cadastro Inicial de Estoque",
+                    // Salva quem operou o sistema se você tiver o auth estruturado
+                    operador: data.author?.userName || "Operador"
+                },
+
+                // 🍎 Objeto 'produto' estruturado exatamente igual ao seu cadastro manual
+                produto: {
+                    id: produtoId,
+                    nomeItem: data.nome, // Mapeia 'nome' para o seu campo 'nomeItem'
+                    quantidade: Number(data.quantidade || 0),
+                    sku: data.sku || data.numero_serie || "N/A",
+                    subtotal: (Number(data.quantidade || 0) * Number(data.preco || 0)).toFixed(2)
+                }
+            };
+
+            // Salva na coleção /movimentacoes exatamente com a sua cara
+            await addDoc(movimentacoesCollectionRef, payloadMovimentacao);
+            console.log(`[Stockify] Movimentação registrada seguindo o modelo manual.`);
 
             return true;
         } catch (error) {
-            console.error("Error adding document: ", error);
+            console.error("Erro ao rodar API de estoque e movimentação:", error);
             throw error;
         }
     },
@@ -93,62 +128,76 @@ export const addProduct = {
         }
 
     },
-    to_remove_quantiadade: async (refDoc, quantidade_to_remove, author) => {
-        console.log(refDoc, quantidade_to_remove)
-        try {
-            const stockDocRef = doc(db, 'stock', refDoc);
-            const docSnapshot = await getDoc(stockDocRef);
-            if (docSnapshot.exists()) {
-                const existingItem = docSnapshot.data();
-                const newQuantity = existingItem.quantidade - quantidade_to_remove;
+    // 👑 REMOVER QUANTIDADE DO ESTOQUE + LANÇAR HISTÓRICO DE SAÍDA NO MODELO OFICIAL
+    to_remove_quantiadade: async (tenantId, refDoc, quantidade_to_remove, author, metadataAvulso = {}) => {
+        if (!tenantId) throw new Error("Operação cancelada: tenantId não fornecido.");
+        if (!refDoc) return false;
 
-                if (newQuantity >= 0) {
-                    await updateDoc(stockDocRef, { quantidade: newQuantity });
-                    console.log(`Quantity updated for existing item ${refDoc.id} to ${newQuantity}`);
-                    await createCommit(refDoc, author, quantidade_to_remove);
-                    return true;
-                } else {
-                    console.error("Quantidade insuficiente para remover.");
-                    return false;
-                }
-            } else {
-                console.error("Item não encontrado no estoque.");
+        try {
+            // 🎯 CORREÇÃO CRÍTICA: Aponta direto para a subcoleção '/produtos' que você renomeou!
+            const produtoDocRef = doc(db, 'tenants', tenantId, 'produtos', refDoc);
+            const docSnapshot = await getDoc(produtoDocRef);
+
+            if (!docSnapshot.exists()) {
+                console.error("Item não encontrado na subcoleção de produtos desse tenant.");
                 return false;
             }
 
-        } catch (error) {
-            console.error("Erro ao remover quantidade: ", error);
-            throw error;
-        }
-    },
-    registerSaida: async (item, author, quantidade, userTenant) => {
-        try {
-            const date = new Date()
-            function getHoraExata() {
-                const dataAtual = new Date();
-                const horas = dataAtual.getHours();
-                const minutos = dataAtual.getMinutes();
-                const segundos = dataAtual.getSeconds();
+            const existingItem = docSnapshot.data();
+            const currentQuantity = Number(existingItem.quantidade || 0);
+            const quantityToRemove = Number(quantidade_to_remove);
+            const newQuantity = currentQuantity - quantityToRemove;
 
-                return `${horas}:${minutos}:${segundos}`;
+            // 🛡️ Trava de segurança: impede o saldo de ficar negativo
+            if (newQuantity < 0) {
+                console.error("Quantidade insuficiente para realizar a baixa.");
+                return false;
             }
-            const saidaCollectionRef = collection(db, 'saidas');
-            const newSaida = {
-                refDoc: item.id,
-                author: author,
-                quantidade: quantidade,
-                nomeItem: item.nome,
-                dataValidade: item.dataValidade,
-                dataRetirada: formatDate(date),
-                horaRetirada: getHoraExata(),
-                tenant: userTenant,
+
+            // 1️⃣ Atualiza o saldo real do item na subcoleção correta: /produtos
+            await updateDoc(produtoDocRef, {
+                quantidade: newQuantity,
+                dataAtualizacao: new Date().toISOString()
+            });
+            console.log(`[Stockify Produtos] Quantidade atualizada para o item ${refDoc}. Novo saldo: ${newQuantity}`);
+
+            // =========================================================================
+            // 2️⃣ REGISTRO HISTÓRICO ESPELHADO NO SEU MODELO MANUAL (image_73f222.png)
+            // =========================================================================
+            const movimentacoesCollectionRef = collection(db, 'tenants', tenantId, 'movimentacoes');
+
+            const payloadMovimentacaoSaida = {
+                tipoMovimentacao: "saida", // Carimbo de baixa
+                dataMovimentacao: formatDate(new Date()),
+                horaMovimentacao: getHoraExata(),
+
+                // Objeto 'metadata' do seu print de referência
+                metadata: {
+                    fornecedor: metadataAvulso.fornecedor || "N/A",
+                    numeroNotaFiscal: metadataAvulso.numeroNotaFiscal || "N/A",
+                    observacao: metadataAvulso.observacao || "",
+                    motivo: metadataAvulso.motivo || "Retirada de insumo / Baixa de estoque",
+                    operador: author?.userName || "Operador"
+                },
+
+                // Objeto 'produto' estruturado exatamente igual ao seu cadastro manual
+                produto: {
+                    id: refDoc,
+                    nomeItem: existingItem.nome || "Item Sem Nome",
+                    quantidade: quantityToRemove,
+                    sku: existingItem.sku || existingItem.numero_serie || "N/A",
+                    subtotal: (quantityToRemove * Number(existingItem.preco || 0)).toFixed(2)
+                }
             };
 
-            await addDoc(saidaCollectionRef, newSaida);
+            // Salva na coleção única /movimentacoes do Tenant
+            await addDoc(movimentacoesCollectionRef, payloadMovimentacaoSaida);
+            console.log("[Stockify] Movimentação de SAÍDA registrada com sucesso.");
 
-            console.log("Saida registered successfully.");
+            return true;
+
         } catch (error) {
-            console.error("Error registering saida: ", error);
+            console.error("Erro crítico ao processar a retirada no documento de produtos: ", error);
             throw error;
         }
     }

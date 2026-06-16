@@ -106,7 +106,7 @@ export const DetailsItems = () => {
                         Item Selecionado
                     </Typography>
                     <StylesDetailsItems.title sx={{ color: '#FFF', fontSize: '2rem', textAlign: 'left', mt: 0.5, lineHeight: 1.2 }}>
-                        {item.nome || 'Carregando produto...'}
+                        {item.name || item.insumo_prato || item.nome || 'Carregando produto...'}
                     </StylesDetailsItems.title>
                 </Box>
 
@@ -116,12 +116,12 @@ export const DetailsItems = () => {
                         Volume em Estoque
                     </Typography>
                     <Typography sx={{ fontSize: '3rem', fontWeight: 900, color: accentColor, fontFamily: Root.fontFamilySansSerif, display: 'flex', alignItems: 'baseline', gap: 1, lineHeight: 1 }}>
-                        {item.quantidade || 0}
+                        {item.quantidade || item.qtd_estoque || 0}
                         <span style={{ fontSize: '1.2rem', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)', textTransform: 'lowercase' }}>
                             {/* 🎯 O SEGREDO: Se for array de [singular, plural], escolhe pelo índice. Se for string pura, tira o 's' se for 1 */}
                             {Array.isArray(item.sufixo)
-                                ? (Number(item.quantidade) === 1 ? item.sufixo[0] : item.sufixo[1])
-                                : (Number(item.quantidade) === 1 ? (item.sufixo?.replace(/s$/, '') || 'unidade') : (item.sufixo || 'unidades'))
+                                ? (Number(item.quantidade || item.qtd_estoque) === 1 ? item.sufixo[0] : item.sufixo[1])
+                                : (Number(item.quantidade || item.qtd_estoque) === 1 ? (item.sufixo?.replace(/s$/, '') || 'unidade') : (item.sufixo || 'unidades'))
                             }
                         </span>
                     </Typography>
@@ -132,7 +132,7 @@ export const DetailsItems = () => {
                 {/* Mapeamento Dinâmico de Metadados em Formato de Grade */}
                 <StylesDetailsItems.sections>
                     {filteredKeys.map((key, index) => {
-                        const { label, color } = keyMapping[key] || { label: key, color: 'rgba(255,255,255,0.1)' };
+                        const { label, color } = keyMapping[key] || { label: key, color: 'rgba(0, 204, 255, 0.1)' };
                         return (
                             <SectionTag
                                 key={index}
