@@ -12,11 +12,12 @@ import generateExcelFile from "../saveExcel/index.js"
 import { NewItem } from "../pages/NewItem/index.jsx"
 import { MuiSelectItem, MuiSelectItemOption, MuiSelectItemOptions, MuiStockModalTop } from "../pages/Stock/styles.jsx"
 import { ModalZindex } from "../components/Modal/index.jsx"
-import { Mobile } from "../mobile/layout/index.jsx"
+import { EstoqueMobile } from "../mobile/layout/index.jsx"
 import { LayoutMobile } from "../mobile/styles/layout.jsx"
 import { UserItens } from "./components/user/index.jsx"
 import { NotificationsApp } from "../pages/Notifications/index.jsx"
 import { LogoutConfirmationModal } from "../components/Alertas/LogoutUser.jsx"
+
 export const MainLayout = ({ children }) => {
     const location = useLocation()
     const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -30,8 +31,11 @@ export const MainLayout = ({ children }) => {
         selectedItems,
         matches,
         notifications, setNotifications,
-        messages, setMessage
+        messages, setMessage,
+        produtos, setProdutos,
     } = useContext(AuthContext)
+
+    // 🗺️ Centralizando todas as rotas para herdar o mesmo estilo inteligente
     const paths = [
         {
             name: 'Dashboard',
@@ -64,16 +68,24 @@ export const MainLayout = ({ children }) => {
             icon: <HistoryOutlined />
         },
     ]
-    console.log(location.pathname)
+
     const handleFinalLogout = () => {
         logout();
         setShowLogoutModal(false);
     };
+
+    // 📱 Se 'matches' for true (detectado pelo hook de media query do seu contexto),
+    // ele joga para o layout mobile corrigindo a prop de 'children'
     if (matches) {
         return (
-            <Mobile childrens={childrens} />
+            <EstoqueMobile produtos={produtos} tenant={tenant}/>
         )
     }
+    // 🏁 Função auxiliar para pintar o link se ele estiver ativo na URL
+    const checkActiveRoute = (link) => {
+        return link === location.pathname || (link !== '/' && location.pathname.startsWith(link));
+    }
+
     return (
         <Tag.MuiMainLayout>
             <Tag.AppBar>
@@ -86,6 +98,7 @@ export const MainLayout = ({ children }) => {
                     <Tag.MuiMainLayoutLinks>
                         {
                             paths.map((path, index) => {
+                                const isActive = checkActiveRoute(path.link);
                                 return (
                                     <Tag.MuiMainLayoutLink
                                         to={path.link}
@@ -94,10 +107,7 @@ export const MainLayout = ({ children }) => {
                                             alignItems: 'center',
                                             justifyContent: 'flex-start',
                                             color: Root.white,
-                                            ...(
-                                                path.link === location.pathname ||
-                                                (path.link !== '/' && location.pathname.startsWith(path.link))
-                                            ) && {
+                                            ...(isActive && {
                                                 borderLeft: '2px solid hsl(188, 100%, 48%)',
                                                 textTransform: 'uppercase',
                                                 height: '38px',
@@ -105,32 +115,62 @@ export const MainLayout = ({ children }) => {
                                                 background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
                                                 boxShadow: `0 0 15px ${Root.color_button}30`,
                                                 fontWeight: 700
-                                            }
+                                            })
                                         }} key={index}>
                                         <Stack sx={{ fontSize: '90%' }}>
                                             {path.icon}
                                         </Stack>
-
-                                        {<Stack sx={{ fontSize: '90%', }}>
+                                        <Stack sx={{ fontSize: '90%' }}>
                                             {path.name}
-                                        </Stack>}
+                                        </Stack>
                                     </Tag.MuiMainLayoutLink>
                                 )
                             })
                         }
                     </Tag.MuiMainLayoutLinks>
+
+                    {/* ⚙️ HUB DE CONFIGURAÇÕES E PERFIL ATUALIZADO */}
                     <Tag.MuiMainLayoutSettingsUser>
-                        <Tag.MuiMainLayoutLink>
+                        <Tag.MuiMainLayoutLink 
+                            to="/minha-conta"
+                            sx={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'flex-start', color: Root.white,
+                                ...(checkActiveRoute('/minha-conta') && {
+                                    borderLeft: '2px solid hsl(188, 100%, 48%)',
+                                    textTransform: 'uppercase',
+                                    height: '38px',
+                                    background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
+                                    boxShadow: `0 0 15px ${Root.color_button}30`,
+                                    fontWeight: 700
+                                })
+                            }}
+                        >
                             <Person2Outlined /> {'Minha conta'}
                         </Tag.MuiMainLayoutLink>
-                        <Tag.MuiMainLayoutLink>
+
+                        <Tag.MuiMainLayoutLink 
+                            to="/configuracoes"
+                            sx={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'flex-start', color: Root.white,
+                                ...(checkActiveRoute('/configuracoes') && {
+                                    borderLeft: '2px solid hsl(188, 100%, 48%)',
+                                    textTransform: 'uppercase',
+                                    height: '38px',
+                                    background: `linear-gradient(90deg, ${Root.color_button}, ${Root.cyan})`,
+                                    boxShadow: `0 0 15px ${Root.color_button}30`,
+                                    fontWeight: 700
+                                })
+                            }}
+                        >
                             <SettingsOutlined /> {'Configurações'}
                         </Tag.MuiMainLayoutLink>
-                        <Tag.MuiMainLayoutLink onClick={() => setShowLogoutModal(true)} >
+
+                        <Tag.MuiMainLayoutLink onClick={() => setShowLogoutModal(true)} style={{ cursor: 'pointer' }}>
                             <Logout /> {'Saír'}
                         </Tag.MuiMainLayoutLink>
                     </Tag.MuiMainLayoutSettingsUser>
                 </Tag.MuiMainLayoutLogo>
+
                 {newItem &&
                     <NewItem
                         newItem={newItem}
@@ -141,6 +181,7 @@ export const MainLayout = ({ children }) => {
                     setSaveExcel={setSaveExcel}
                     saveExcel={saveExcel}
                 />}
+                
                 <Tag.RenderChildrensAndNavBar>
                     <NavBarTop
                         newItem={newItem}
@@ -158,7 +199,8 @@ export const MainLayout = ({ children }) => {
                 open={showLogoutModal}
                 onClose={() => setShowLogoutModal(false)}
                 onConfirm={handleFinalLogout}
-                tenantData={tenant} />
+                tenantData={tenant} 
+            />
         </Tag.MuiMainLayout>
     )
 }

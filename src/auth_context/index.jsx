@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [notifications, setNotifications] = useState(false);
     const [messages, setMessage] = useState(false);
+    const [produtos, setProdutos] = useState([])
     const [enablingDeleteButtom, setEnablingDeleteButtom] = useState(false);
     const [downloads, setDownloads] = useState({ estoque: [], entradas: [], saidas: [] });
 
@@ -56,124 +57,169 @@ export const AuthProvider = ({ children }) => {
         }
         return null;
     });
+    // 🔥 NOVO EFFECT SÊNIOR: Escuta e alimenta os produtos do Tenant ativo em Tempo Real
+    useEffect(() => {
+        let unsubscribeProdutos = null;
 
-   useEffect(() => {
-    setLoading(true);
+        // 🛡️ Só tenta buscar se existir uma empresa ativa selecionada no sistema
+        if (tenant && tenant.id) {
+            console.log(`[Stockify Realtime Products] Conectando ao estoque da empresa: ${tenant.name}`);
 
-    const loggedInStatus = sessionStorage.getItem('isLoggedIn');
-    const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
-    
-    if (loggedInStatus === 'true') {
-        setIsLoggedIn(true);
-        const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
-        if (userDataFromSession) setUser(userDataFromSession);
-        if (empresasSalvas) setMult_tenants(JSON.parse(empresasSalvas));
-    }
+            try {
+                // 🎯 Aponta direto para a subcoleção de produtos daquela empresa específica
+                const produtosRef = collection(db, 'tenants', tenant.id, 'produtos');
 
-    let unsubscribeSnapshot = null; // Guardará a função de limpeza do listener de dados
+                // Cria o listener em tempo real do Firebase Firestore
+                unsubscribeProdutos = onSnapshot(produtosRef, (querySnapshot) => {
+                    const listaDeProdutos = [];
 
-    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
-        try {
-            if (firebaseUser) {
-                const userData = await queryUser(firebaseUser.email);
-                setUser(userData);
-
-                const emailAutenticado = firebaseUser.email.toLowerCase();
-                
-                // 🎯 Referência da query por Collection Group
-                const q = query(
-                    collectionGroup(db, 'associated_users'), 
-                    where('userEmail', '==', emailAutenticado)
-                );
-
-                // 🔥 O PULO DO GATO: Escuta a associação de empresas EM TEMPO REAL
-                unsubscribeSnapshot = onSnapshot(q, async (querySnapshot) => {
-                    const empresasAssociadas = [];
-                    querySnapshot.forEach((doc) => {
-                        // Garante o ID do tenant subindo os nós: associated_users -> docTenant
-                        empresasAssociadas.push(doc.ref.parent.parent.id);
+                    querySnapshot.forEach((docSnap) => {
+                        listaDeProdutos.push({
+                            id: docSnap.id,
+                            ...docSnap.data()
+                        });
                     });
 
-                    console.log("[Stockify Realtime Auth] Unidades ativas atualizadas:", empresasAssociadas);
+                    // 🔥 Alimenta o estado global que a sua tabela e seus cards mobile consomem!
+                    setProdutos(listaDeProdutos);
+                    console.log(`[Stockify Realtime Products] ${listaDeProdutos.length} itens carregados.`);
+                }, (error) => {
+                    console.error("Erro ao escutar subcoleção de produtos:", error);
+                });
 
-                    // 🚨 CASO O TENANT SEJA APAGADO OU O USUÁRIO DESVINCULADO (LIMBO TOTAL)
-                    if (empresasAssociadas.length === 0) {
-                        setTenant(null); 
-                        setMult_tenants([]);
-                        sessionStorage.removeItem('activeTenantId');
-                        sessionStorage.removeItem('tenant');
-                        sessionStorage.removeItem('empresasDisponiveis');
-                        
-                        // Opcional: Se quiser forçar o deslogamento completo do Firebase Auth se ele perder todas as empresas
-                        // await signOut(auth);
-                        
-                        setLoading(false);
-                        return;
-                    }
+            } catch (err) {
+                console.error("Falha ao estruturar referência de produtos:", err);
+            }
+        } else {
+            // Se o cara deslogou ou não escolheu empresa, limpa o estoque por segurança
+            setProdutos([]);
+        }
 
-                    // Se sobrou alguma empresa válida, atualiza a lista reativa e a sessão
-                    setMult_tenants(empresasAssociadas);
-                    sessionStorage.setItem('empresasDisponiveis', JSON.stringify(empresasAssociadas));
+        // 🧼 FUNÇÃO DE LIMPEZA (CLEANUP): Mata o listener antigo quando o usuário troca de empresa ou sai do app
+        return () => {
+            if (unsubscribeProdutos) {
+                console.log("[Stockify Realtime Products] Desconectando listener de produtos antigo.");
+                unsubscribeProdutos();
+            }
+        };
+    }, [tenant]); // 🔄 Ele roda de novo automaticamente sempre que o 'tenant' mudar!
+    useEffect(() => {
+        setLoading(true);
 
-                    const activeTenantId = sessionStorage.getItem('activeTenantId');
+        const loggedInStatus = sessionStorage.getItem('isLoggedIn');
+        const empresasSalvas = sessionStorage.getItem('empresasDisponiveis');
 
-                    // Verifica se a empresa que ele estava navegando ainda existe na lista
-                    if (activeTenantId && empresasAssociadas.includes(activeTenantId)) {
-                        const res = await getTenancies.tenancy(activeTenantId);
-                        if (res) {
-                            setTenant(res);
-                            sessionStorage.setItem('tenant', JSON.stringify(res));
+        if (loggedInStatus === 'true') {
+            setIsLoggedIn(true);
+            const userDataFromSession = JSON.parse(sessionStorage.getItem('user'));
+            if (userDataFromSession) setUser(userDataFromSession);
+            if (empresasSalvas) setMult_tenants(JSON.parse(empresasSalvas));
+        }
+
+        let unsubscribeSnapshot = null; // Guardará a função de limpeza do listener de dados
+
+        const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+            try {
+                if (firebaseUser) {
+                    const userData = await queryUser(firebaseUser.email);
+                    setUser(userData);
+
+                    const emailAutenticado = firebaseUser.email.toLowerCase();
+
+                    // 🎯 Referência da query por Collection Group
+                    const q = query(
+                        collectionGroup(db, 'associated_users'),
+                        where('userEmail', '==', emailAutenticado)
+                    );
+
+                    // 🔥 O PULO DO GATO: Escuta a associação de empresas EM TEMPO REAL
+                    unsubscribeSnapshot = onSnapshot(q, async (querySnapshot) => {
+                        const empresasAssociadas = [];
+                        querySnapshot.forEach((doc) => {
+                            // Garante o ID do tenant subindo os nós: associated_users -> docTenant
+                            empresasAssociadas.push(doc.ref.parent.parent.id);
+                        });
+
+                        console.log("[Stockify Realtime Auth] Unidades ativas atualizadas:", empresasAssociadas);
+
+                        // 🚨 CASO O TENANT SEJA APAGADO OU O USUÁRIO DESVINCULADO (LIMBO TOTAL)
+                        if (empresasAssociadas.length === 0) {
+                            setTenant(null);
+                            setMult_tenants([]);
+                            sessionStorage.removeItem('activeTenantId');
+                            sessionStorage.removeItem('tenant');
+                            sessionStorage.removeItem('empresasDisponiveis');
+
+                            // Opcional: Se quiser forçar o deslogamento completo do Firebase Auth se ele perder todas as empresas
+                            // await signOut(auth);
+
+                            setLoading(false);
+                            return;
+                        }
+
+                        // Se sobrou alguma empresa válida, atualiza a lista reativa e a sessão
+                        setMult_tenants(empresasAssociadas);
+                        sessionStorage.setItem('empresasDisponiveis', JSON.stringify(empresasAssociadas));
+
+                        const activeTenantId = sessionStorage.getItem('activeTenantId');
+
+                        // Verifica se a empresa que ele estava navegando ainda existe na lista
+                        if (activeTenantId && empresasAssociadas.includes(activeTenantId)) {
+                            const res = await getTenancies.tenancy(activeTenantId);
+                            if (res) {
+                                setTenant(res);
+                                sessionStorage.setItem('tenant', JSON.stringify(res));
+                            } else {
+                                // Se a empresa ativa sumiu mas ele tem outras, força reset para nulo para ele escolher a outra
+                                setTenant(null);
+                                sessionStorage.removeItem('tenant');
+                                sessionStorage.removeItem('activeTenantId');
+                            }
+                        } else if (empresasAssociadas.length === 1) {
+                            // Se só restou uma única empresa de pé, foca nela automaticamente
+                            const único = empresasAssociadas[0];
+                            sessionStorage.setItem('activeTenantId', único);
+                            const res = await getTenancies.tenancy(único);
+                            if (res) {
+                                setTenant(res);
+                                sessionStorage.setItem('tenant', JSON.stringify(res));
+                            }
                         } else {
-                            // Se a empresa ativa sumiu mas ele tem outras, força reset para nulo para ele escolher a outra
+                            // Se a empresa ativa foi excluída e ele tem múltiplas outras, joga pro painel de seleção
                             setTenant(null);
                             sessionStorage.removeItem('tenant');
                             sessionStorage.removeItem('activeTenantId');
                         }
-                    } else if (empresasAssociadas.length === 1) {
-                        // Se só restou uma única empresa de pé, foca nela automaticamente
-                        const único = empresasAssociadas[0];
-                        sessionStorage.setItem('activeTenantId', único);
-                        const res = await getTenancies.tenancy(único);
-                        if (res) {
-                            setTenant(res);
-                            sessionStorage.setItem('tenant', JSON.stringify(res));
-                        }
-                    } else {
-                        // Se a empresa ativa foi excluída e ele tem múltiplas outras, joga pro painel de seleção
-                        setTenant(null);
-                        sessionStorage.removeItem('tenant');
-                        sessionStorage.removeItem('activeTenantId');
-                    }
-                    
-                    setLoading(false);
-                }, (snapshotError) => {
-                    console.error("Erro no Listener reativo de empresas:", snapshotError);
-                    setLoading(false);
-                });
 
-            } else {
-                // Caso deslogue voluntariamente, limpa toda a árvore de estados e sessões
-                setUser(null);
-                setTenant(null);
-                setIsLoggedIn(false);
-                setMult_tenants([]);
-                sessionStorage.clear();
-                
-                if (unsubscribeSnapshot) unsubscribeSnapshot();
+                        setLoading(false);
+                    }, (snapshotError) => {
+                        console.error("Erro no Listener reativo de empresas:", snapshotError);
+                        setLoading(false);
+                    });
+
+                } else {
+                    // Caso deslogue voluntariamente, limpa toda a árvore de estados e sessões
+                    setUser(null);
+                    setTenant(null);
+                    setIsLoggedIn(false);
+                    setMult_tenants([]);
+                    sessionStorage.clear();
+
+                    if (unsubscribeSnapshot) unsubscribeSnapshot();
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error("Erro no monitoramento de autenticação:", error);
                 setLoading(false);
             }
-        } catch (error) {
-            console.error("Erro no monitoramento de autenticação:", error);
-            setLoading(false);
-        }
-    });
+        });
 
-    // Limpeza rigorosa de listeners ao desmontar o Provider para evitar vazamento de memória (Memory Leak)
-    return () => {
-        unsubscribeAuth();
-        if (unsubscribeSnapshot) unsubscribeSnapshot();
-    };
-}, []);
+        // Limpeza rigorosa de listeners ao desmontar o Provider para evitar vazamento de memória (Memory Leak)
+        return () => {
+            unsubscribeAuth();
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
+        };
+    }, []);
 
     const login = (userData) => {
         setIsLoggedIn(true);
@@ -286,9 +332,10 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
+            produtos, setProdutos,
             isLoggedIn, login, logout, tenant, setTenant, loading, loginWithGoogle, loginWithEmailAndPassword,
-            user, newItem, setNewItem, saveExcel, setSaveExcel, selectedItems, setSelectedItems, downloads, 
-            setDownloads, setMult_tenants, mult_tanants, matches, notifications, setNotifications, messages, 
+            user, newItem, setNewItem, saveExcel, setSaveExcel, selectedItems, setSelectedItems, downloads,
+            setDownloads, setMult_tenants, mult_tanants, matches, notifications, setNotifications, messages,
             setMessage, select, setSelect, search, setSearch, enablingDeleteButtom, setEnablingDeleteButtom, checkTenant
         }}>
             {children}
