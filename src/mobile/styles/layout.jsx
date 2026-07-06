@@ -1,130 +1,95 @@
-import { Avatar, Box, Stack } from "@mui/material";
-import { Root } from "../../styles/Root/root_styles";
-import { styled } from "@mui/material/styles"; // 💎 Correção na importação para compatibilidade do MUI v5
+import { Box, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 export const LayoutMobile = {
-    // 📱 CONTEINER MESTRE DA TELA DO CELULAR
-    _containerMobile: styled(Stack)(({ }) => ({
+    _app_bar: styled(Box)(() => ({
+        position: 'fixed', display: "flex", alignItems: "center", justifyContent: 'space-around',
+        flexDirection: 'row', width: '100%', height: '68px', bottom: 0, left: 0, zIndex: 100,
+        background: 'rgba(10, 8, 24, 0.96)', backdropFilter: 'blur(30px)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.04)', paddingBottom: '8px', boxSizing: 'border-box'
+    })),
+
+ _app_bar_top: styled(Box)(() => ({
+    position: 'fixed', 
+    display: "flex", 
+    alignItems: "center", 
+    justifyContent: 'space-between',
+    flexDirection: 'row', 
+    width: '100%', 
+    height: '80px', 
+    top: 0, 
+    left: 0, 
+    zIndex: 90,
+    background: 'rgba(4, 2, 13, 0.9)', 
+    backdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.03)', 
+    paddingInline: '16px', 
+    boxSizing: 'border-box',
+
+    // 🔥 ANIMAÇÃO DA BOLINHA EM TEMPO REAL (GLOW & PULSE)
+    '& .pulse-dot': {
         position: 'relative',
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        width: "100vw",
-        minHeight: '100vh',
-        backgroundColor: '#020205', // Fundo profundo do Stockify
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        paddingBottom: '80px', // Abre espaço para a barra inferior não cobrir os cards
+        boxShadow: '0 0 0 0 rgba(16, 185, 129, 0.7)',
+        animation: 'realtimePulse 1.6s infinite cubic-bezier(0.66, 0, 0, 1)',
+    },
+
+    '@keyframes realtimePulse': {
+        '0%': {
+            transform: 'scale(0.95)',
+            boxShadow: '0 0 0 0 rgba(16, 185, 129, 0.7)',
+        },
+        '70%': {
+            transform: 'scale(1)',
+            boxShadow: '0 0 0 6px rgba(16, 185, 129, 0)',
+        },
+        '100%': {
+            transform: 'scale(0.95)',
+            boxShadow: '0 0 0 0 rgba(16, 185, 129, 0)',
+        },
+    }
+})),
+
+    // CARDS DE MINI RESUMO (GRID DE 4 COLUNAS)
+    _summaryCardCard: styled(Stack)(() => ({
+        backgroundColor: 'rgba(209, 190, 190, 0.12)',
+        border: '1px solid rgba(255, 255, 255, 0.03)',
+        borderRadius: '12px', padding: '10px 6px', alignItems: 'flex-start', boxSizing: 'border-box',
+        '&.warning': { backgroundColor: 'rgba(249, 116, 22, 0.12)', borderColor: 'rgba(249, 115, 22, 0.15)' },
+        '& .badge': {
+            width: '20px', height: '20px', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px'
+        },
+        '& .badge.blue': { backgroundColor: 'rgba(37, 99, 235, 0.15)' },
+        '& .badge.purple': { backgroundColor: 'rgba(124, 58, 237, 0.15)' },
+        '& .badge.green': { backgroundColor: 'rgba(16, 185, 129, 0.15)' },
+        '& .badge.orange': { backgroundColor: 'rgba(249, 115, 22, 0.15)' },
+        '& .title': { fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden' },
+        '& .text-orange': { color: '#F97316' },
+        '& .value': { fontSize: '14px', fontWeight: '800', color: '#fff', margin: '2px 0' },
+        '& .value.text-green': { color: '#10B981' },
+        '& .value.text-orange': { color: '#F97316' },
+        '& .sub': { fontSize: '8px', color: 'rgba(255, 255, 255, 0.25)', whiteSpace: 'nowrap' }
     })),
 
-    // 📥 BARRA DE NAVEGAÇÃO INFERIOR (FLUTUANTE)
-    _app_bar: styled(Box)(({ }) => ({
-        position: 'fixed',
-        display: "flex",
-        alignItems: "center",
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        width: '100%',
-        height: '68px',
-        bottom: 0,
-        left: 0,
-        zIndex: 100,
-        background: 'rgba(5, 5, 18, 0.85)', // Efeito de Vidro Escuro
-        backdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(0, 255, 255, 0.15)', // Linha sutil de Neon Cyan
-        boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.5)',
-        paddingInline: '10px'
+    // CARDS DE AÇÕES RÁPIDAS SLIDER
+    _actionCard: styled(Stack)(() => ({
+        minWidth: '78px', height: '84px',backgroundColor: 'rgba(209, 190, 190, 0.12)',
+        border: '1px solid rgba(255, 255, 255, 0.03)', borderRadius: '12px',
+        alignItems: 'center', justifyContent: 'center', padding: '8px', boxSizing: 'border-box', gap: '8px',
+        '& .icon-box': { width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        '& .text': { fontSize: '10px', color: 'rgba(255,255,255,0.6)', fontWeight: '500', textAlign: 'center', lineHeight: '1.2' }
     })),
 
-    // 🔝 BARRA DE STATUS SUPERIOR (FIXA)
-    _app_bar_top: styled(Box)(({ }) => ({
-        position: 'fixed',
-        display: "flex",
-        alignItems: "center",
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        width: '100%',
-        height: '60px',
-        top: 0,
-        left: 0,
-        zIndex: 90,
-        background: 'rgba(5, 5, 18, 0.8)', 
-        backdropFilter: 'blur(15px)',
-        borderBottom: '1px solid rgba(138, 43, 226, 0.15)', // Linha sutil de Neon Purple
-        paddingInline: '15px',
+    // MENU FLUTUANTE SUSPENSO DO FAB (EXIBIDO NA IMAGEM)
+    _fabMenuWrapper: styled(Stack)(() => ({
+        position: 'fixed', bottom: '146px', right: '16px', zIndex: 98, gap: '10px', alignItems: 'flex-end',
+        '& .menu-item-row': { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' },
+        '& .menu-text': { backgroundColor: 'rgba(15, 12, 30, 0.8)', color: 'rgba(255,255,255,0.8)', fontSize: '12px', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)' },
+        '& .menu-icon-circle': { width: '34px', height: '34px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }
     })),
 
-    // 🏷️ LOGO E MENUS ATÔMICOS
-    _logoMobile: styled(Stack)(({ }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%'
-    })),
-
-    _menuMobile: styled(Stack)(({ }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '40px',
-        height: '40px',
-        cursor: 'pointer',
-        color: '#00FFFF'
-    })),
-
-    // 📦 ENVELOPE INDIVIDUAL DOS ÍCONES NO MAP
-    _containerItemMap: styled(Stack)(({ }) => ({
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '65px',
-        height: '100%',
-    })),
-
-    // 👑 TÍTULO GIGANTE DA ROTA ATIVA (EFEITO GLOW)
-    _bigTitle: styled('h1')(({ cor }) => ({
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        width: '90%',
-        margin: '85px 0 15px 0', // Dá o recuo exato para não sumir atrás da barra superior
-        fontSize: '2.2rem',
-        fontFamily: 'Orbitron, sans-serif',
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: '1px',
-        
-        // ✨ Efeito de Texto Vazado Futurista Refatorado
-        color: 'transparent',
-        WebkitTextStrokeWidth: '1px',
-        WebkitTextStrokeColor: cor ? 'rgba(255, 255, 255, 0.3)' : '#00FFFF',
-        
-        // Gradiente interno opcional de preenchimento suave
-        background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0) 100%)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-    })),
-
-    // 👤 AVATAR BIOMÉTRICO DO OPERADOR
-    _userAvatar: styled(Avatar)(({ }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '38px',
-        height: '38px',
-        background: `linear-gradient(135deg, ${Root.color_button || '#8A2BE2'}, ${Root.cyan || '#00FFFF'})`,
-        color: '#ffffff',
-        fontWeight: '700',
-        fontFamily: 'Orbitron, sans-serif',
-        fontSize: '13px',
-        border: '1px solid rgba(0, 255, 255, 0.4)',
-        boxShadow: `0 0 12px ${Root.color_button || '#8A2BE2'}60`,
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease',
-        '&:hover': {
-            transform: 'scale(1.05)'
-        }
-    })),
+    _fabButton: styled(Box)(() => ({
+        position: 'fixed', bottom: '84px', right: '16px', width: '48px', height: '48px', borderRadius: '50%',
+        background: 'linear-gradient(135deg, #701A8A 0%, #17A2B8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 6px 20px rgba(23, 162, 184, 0.3)', cursor: 'pointer', zIndex: 99
+    }))
 };

@@ -3,12 +3,12 @@ import { styled } from '@mui/material/node/styles';
 import { Root } from '../../styles/Root/root_styles';
 
 
-export const BrandContainer = styled('div')(({ }) => ({
+export const BrandContainer = styled('div')(({ logged  }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginLeft: '2vw',
+    marginLeft: logged,
     width: '20%',
     boxSizing: 'border-box',
     /* 🔑 Efeito visual de clique e link */
@@ -20,8 +20,6 @@ export const BrandContainer = styled('div')(({ }) => ({
     '&:hover': {
         transform: 'scale(1.05)',
     },
-
-
 }));
 
 // O LOGO EXATO DO SEU PRINT

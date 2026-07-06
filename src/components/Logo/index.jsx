@@ -6,11 +6,11 @@ import FetureImgLogo from '../../images/layout/feture.png'
 import FetureImgLogo1 from '../../images/layout/feture.png'
 import { Root } from "../../styles/Root/root_styles"
 import * as Tag from './index.js'
-export const LogoMainLayout = ({ image, text, black, top, tenant }) => {
+export const LogoMainLayout = ({ image, text, black, logged, tenant }) => {
     const navigate = useNavigate() // 🟢 Função para redirecionar o usuário
 
     return (
-        <Tag.BrandContainer onClick={() => navigate('/')}>
+        <Tag.BrandContainer logged={logged} onClick={() => navigate('/')}>
             {/* Texto substituto da imagem, alinhado e com gradiente */}
             <Tag.LogoText variant="h6">
                 Stockify

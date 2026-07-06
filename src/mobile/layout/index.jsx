@@ -6,442 +6,312 @@ import {
     TextField,
     Card,
     CardContent,
-    Divider,
     Chip,
     IconButton,
     InputAdornment,
-    Menu,
-    MenuItem,
-    ListItemIcon,
-    ListItemText,
     Stack,
-    Container,
-    Link
+    Grid,
+    Badge,
+    Avatar
 } from '@mui/material';
 import {
     SearchOutlined,
-    QrCodeScannerOutlined,
-    FilterListOutlined,
     MoreVertOutlined,
-    EditOutlined,
-    DeleteOutline,
-    InfoOutlined,
-    LocalMallOutlined,
     Inventory2Outlined,
     LoginOutlined,
     LogoutOutlined,
-    InsightsOutlined,
     HistoryOutlined,
-    TerminalOutlined
+    Menu as MenuIcon,
+    NotificationsOutlined,
+    KeyboardArrowDown,
+    GridViewOutlined,
+    CheckCircle,
+    Add,
+    Close,
+    AutoAwesome,
+    ChevronRight,
+    TrendingUp,
+    WarningAmber,
+    FilePresent,
+    ArrowDownward,
+    ArrowUpward,
+    CropFree
 } from '@mui/icons-material';
-import { Root } from '../../styles/Root/root_styles';
-import { LayoutMobile } from "../styles/layout"
-import { useLocation } from 'react-router-dom';
+import { LayoutMobile } from "../styles/layout";
+import { useLocation, Link } from 'react-router-dom';
 
-// 📱 COMPONENTE ATÔMICO DE RENDERIZAÇÃO DE LINK LINK RESPONSIVO
-const MobileNavLink = ({ item, index, location, paths }) => {
+const MobileNavLink = ({ item, location }) => {
     const isPathActive = location.pathname === item.link;
-    const previousIndex = paths.findIndex((p) => p.link === location.pathname) - 1;
-
-    // 💎 DESIGN SYSTEM: Estilização futurista com a paleta Stockify
-    const linkStyles = {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        width: '58px',
-        height: '58px',
-        borderRadius: '50%',
-        transition: 'all 0.3s ease',
-        textDecoration: 'none',
-
-        // Estado Ativo: Gradiente Elétrico e Glow Roxo
-        ...(isPathActive ? {
-            background: `linear-gradient(135deg, ${Root.color_button || '#8A2BE2'}, ${Root.cyan || '#00FFFF'})`,
-            color: '#ffffff',
-            boxShadow: `0 0 15px ${Root.color_button || '#8A2BE2'}`,
-            transform: 'translateY(-5px)',
-            fontWeight: '700',
-        } : {
-            // Estado Inativo: Discreto sobre o fundo escuro
-            backgroundColor: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
-            color: 'rgba(255, 255, 255, 0.6)',
-        })
-    };
-
     return (
-        <LayoutMobile._containerItemMap key={index} sx={{ position: 'relative' }}>
-            {/* Curva de transição suave nativa do seu layout */}
-            {!isPathActive && (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'transparent',
-                        borderTopRightRadius: index === previousIndex && '50%',
-                        borderTopLeftRadius: index === (2 + previousIndex) && '50%',
-                        pointerEvents: 'none'
-                    }}
-                />
-            )}
-
-            <Link to={item.link} style={linkStyles}>
-                <Stack sx={{ fontSize: '110%', mb: 0.2 }}>
-                    {item.icon}
-                </Stack>
-                <Typography
-                    variant="caption"
-                    sx={{
-                        fontSize: '10px',
-                        fontFamily: isPathActive ? 'Orbitron' : 'Urbanist',
-                        letterSpacing: isPathActive ? '0.5px' : '0'
-                    }}
-                >
-                    {item.name}
-                </Typography>
-            </Link>
-        </LayoutMobile._containerItemMap>
+        <Box 
+            component={Link}
+            to={item.link}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textDecoration: 'none',
+                gap: 0.5,
+                color: isPathActive ? '#17A2B8' : 'rgba(255, 255, 255, 0.4)',
+                height: '100%',
+                px: 1
+            }}
+        >
+            <Stack sx={{ fontSize: '22px' }}>{item.icon}</Stack>
+            <Typography variant="caption" sx={{ fontSize: '10px', fontFamily: 'Urbanist, sans-serif' }}>{item.name}</Typography>
+        </Box>
     );
 };
 
-
-
-
-
-
-
-
-
-
-export const EstoqueMobile = ({ produtos = [], role, tenant, setNewItem, setSaveExcel }) => {
-    const location = useLocation()
+export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
+    const location = useLocation();
     const [search, setSearch] = useState('');
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedProductId, setSelectedProductId] = useState(null);
+    const [fabOpen, setFabOpen] = useState(false); // Mudei para false por padrão para não cobrir a tela de início
+
     const paths = [
-        {
-            name: 'Estoque',
-            link: '/',
-            icon: <Inventory2Outlined />
-        },
-        {
-            name: 'Entradas',
-            link: '/entradas',
-            icon: <LoginOutlined />
-        },
-        {
-            name: 'Saídas',
-            link: '/exits',
-            icon: <LogoutOutlined />
-        },
-        {
-            name: 'Insights',
-            link: '/insights',
-            icon: <InsightsOutlined />
-        },
-        {
-            name: 'Histórico',
-            link: '/history',
-            icon: <HistoryOutlined />
-        },
-    ]
+        { name: 'Estoque', link: '/', icon: <Inventory2Outlined /> },
+        { name: 'Entradas', link: '/entradas', icon: <LoginOutlined /> },
+        { name: 'Saídas', link: '/exits', icon: <LogoutOutlined /> },
+        { name: 'Relatórios', link: '/reports', icon: <HistoryOutlined /> },
+        { name: 'Mais', link: '/more', icon: <GridViewOutlined /> },
+    ];
 
-    // Pega o nome da rota atual para renderizar no título gigante
-    const currentRouteName = paths.find(item => item.link === location.pathname)?.name || "Stockify";
-    // 🎯 Abre a gaveta de opções (Menu) de cada Card
-    const handleOpenMenu = (event, id) => {
-        setAnchorEl(event.currentTarget);
-        setSelectedProductId(id);
-    };
-
-    const handleCloseMenu = () => {
-        setAnchorEl(null);
-        setSelectedProductId(null);
-    };
-
-    // 🔍 Filtro reativo baseado na pesquisa do operador
     const produtosFiltrados = produtos.filter(prod =>
         prod.nome?.toLowerCase().includes(search.toLowerCase())
     );
 
-    // 🛠️ Pega o segmento ou a lista de colunas personalizadas que o Tenant configurou no banco
-    // Fallback caso a empresa não tenha colunas salvas, trazendo chaves padrão generificadas
-    const colunasDoTenant = tenant.colunasEstoque
-
     return (
-        <Box sx={{
-            width: '100vw',                     // 🚀 Garante largura total da tela física
-            height: '100vh',                 // 🚀 Ocupa toda a altura disponível
-            color: '#ffffff',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',               // 🎯 CENTRALIZA todos os itens filhos perfeitamente na horizontal
-            justifyContent: 'flex-start',
-            gap: 2.5,
-            px: 2,                              // Padding de segurança para os cards não colarem no vidro
-            pt: '85px',                         // Empurra o conteúdo para baixo da topbar fixa
-            pb: '110px',                        // Empurra o último card para cima do menu inferior fixo
-            boxSizing: 'border-box',
-            overflowY: 'auto',                  // 🔥 ATIVA O SCROLL VERTICAL REAL NO CONTAINER MESTRE
-            overflowX: 'hidden',                // Bloqueia dança para os lados
-            backgroundColor: '#020205',         // Aplica o tema escuro do Stockify tirando o vermelho
-            ...Root.scrollBar
-        }}>
+        <Box sx={{ width: '100vw', height: '100vh', color: '#ffffff', display: 'flex', flexDirection: 'column', backgroundColor: '#04020d', overflow: 'hidden', position: 'relative' }}>
+            
+            {/* 🔝 1. TOPBAR / CABEÇALHO FIXO */}
+            <LayoutMobile._app_bar_top>
+                <Box display="flex" alignItems="center" gap={1.5}>
+                    <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #7C3AED, #06B6D4)', p: '2px' }}>
+                        <Box sx={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: '#070514', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', color: '#fff', fontSize: '14px' }}>T</Box>
+                    </Box>
+                    <Stack gap={0.2}>
+                        <Typography sx={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: 0.5 }}>👋 Boa noite, Timóteo</Typography>
+                        <Box display="flex" alignItems="center" gap={0.5}>
+                            <Typography sx={{ fontSize: '14px', fontWeight: '700', color: '#fff' }}>Glow Fashion</Typography>
+                            <KeyboardArrowDown sx={{ color: '#fff', fontSize: 16 }} />
+                        </Box>
+                        <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                            Última sincronização: agora 
+                            <Box className="pulse-dot" sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
+                        </Typography>
+                    </Stack>
+                </Box>
+                
+                <Box display="flex" alignItems="center" gap={1.5}>
+                    <Badge badgeContent={8} sx={{ '& .MuiBadge-badge': { backgroundColor: '#6366F1', color: '#fff', fontSize: '10px', height: 16, minWidth: 16 } }}>
+                        <NotificationsOutlined sx={{ color: '#fff', fontSize: 24 }} />
+                    </Badge>
+                    <Button variant="contained" startIcon={<AutoAwesome sx={{ fontSize: 14 }} />} sx={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', textTransform: 'none', fontSize: '11px', fontWeight: '600', py: 0.6, color: '#A855F7', boxShadow: 'none' }}>
+                        Assistente
+                    </Button>
+                </Box>
+            </LayoutMobile._app_bar_top>
 
-<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, width: '100%' }}>
-                <TextField 
-                    fullWidth 
+            {/* 📜 ÁREA DE SCROLL INDEPENDENTE */}
+            <Box sx={{ flex: 1, overflowY: 'auto', px: 2, pt: '96px', pb: '94px', display: 'flex', flexDirection: 'column', gap: 3.5, width: '100%', boxSizing: 'border-box' }}>
+                
+                {/* 🔍 INPUT DE BUSCA ARREDONDADO */}
+                <TextField
+                    fullWidth
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="[ ACESSAR_INVENTÁRIO_GLOBAL ]" 
+                    placeholder="Buscar produtos, categorias, SKUs..."
                     variant="outlined"
                     InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchOutlined sx={{ color: '#00FFFF', filter: 'drop-shadow(0 0 5px #00FFFF)' }} />
-                            </InputAdornment>
-                        ),
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton sx={{ color: '#00FFFF', animation: 'pulse 2s infinite' }}>
-                                    <QrCodeScannerOutlined />
-                                </IconButton>
-                            </InputAdornment>
-                        )
+                        startAdornment: <InputAdornment position="start"><SearchOutlined sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 20 }} /></InputAdornment>,
+                        endAdornment: <InputAdornment position="end"><CropFree sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 20 }} /></InputAdornment>
                     }}
-                    sx={{ 
-                        input: { color: '#ffffff', fontFamily: 'Orbitron', fontSize: '13px', letterSpacing: '1px' }, 
-                        '& .MuiOutlinedInput-root': {
-                            backgroundColor: 'rgba(5, 5, 20, 0.6)',
-                            borderRadius: '4px', // Cantos secos, estilo militar/HUD
-                            backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(0, 255, 255, 0.2)',
-                            boxShadow: 'inset 0 0 15px rgba(0, 255, 255, 0.05)',
-                            '& fieldset': { borderColor: 'transparent' },
-                            '&:hover fieldset': { borderColor: 'transparent' },
-                            '&.Mui-focused': {
-                                border: '1px solid #00FFFF',
-                                boxShadow: '0 0 15px rgba(0, 255, 255, 0.25), inset 0 0 10px rgba(0, 255, 255, 0.1)',
-                            }
-                        }
+                    sx={{
+                        input: { color: '#ffffff', fontSize: '14px' },
+                        '& .MuiOutlinedInput-root': { backgroundColor: 'rgba(255, 255, 255, 0.03)', borderRadius: '14px', '& fieldset': { borderColor: 'rgba(255,255,255,0.05)' } }
                     }}
                 />
 
-                {/* BOTÕES ESTILO CENTRAL DE CONTROLE */}
-                <Box sx={{ display: 'flex', gap: 1.5, width: '100%' }}>
-                    <Button 
-                        variant="contained" 
-                        fullWidth
-                        onClick={() => setSaveExcel(true)}
-                        sx={{ 
-                            backgroundColor: 'rgba(10, 10, 30, 0.8)', 
-                            border: '1px solid #8A2BE2', 
-                            color: '#8A2BE2', 
-                            fontFamily: 'Orbitron', 
-                            fontSize: '11px', 
-                            fontWeight: '700',
-                            borderRadius: '4px', 
-                            py: 1.2,
-                            letterSpacing: '1px',
-                            boxShadow: '0 0 10px rgba(138, 43, 226, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(138, 43, 226, 0.1)', color: '#ffffff' }
-                        }}
-                    >
-                        EXTRACT.XLS
-                    </Button>
-                    <Button 
-                        variant="contained" 
-                        fullWidth
-                        onClick={() => setNewItem(true)}
-                        sx={{ 
-                            background: 'transparent',
-                            border: '1px solid #00FFFF',
-                            color: '#00FFFF', 
-                            fontWeight: '700', 
-                            fontFamily: 'Orbitron', 
-                            fontSize: '11px', 
-                            borderRadius: '4px', 
-                            py: 1.2,
-                            letterSpacing: '1px',
-                            boxShadow: '0 0 15px rgba(0, 255, 255, 0.2)',
-                            '&:hover': { background: 'linear-gradient(90deg, #8A2BE2, #00FFFF)', color: '#fff' }
-                        }}
-                    >
-                        + INJETAR_ITEM
-                    </Button>
+                {/* ➕ BANNER NOVO PRODUTO */}
+                <Box onClick={() => setNewItem(true)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, borderRadius: '16px', background: 'linear-gradient(90deg, #5B21B6 0%, #0369A1 100%)', cursor: 'pointer', width: '100%', boxSizing: 'border-box' }}>
+                    <Box display="flex" alignItems="center" gap={2}>
+                        <Box sx={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Add sx={{ color: '#fff' }} /></Box>
+                        <Stack>
+                            <Typography sx={{ fontWeight: '700', fontSize: '14px', letterSpacing: '0.5px' }}>NOVO</Typography>
+                            <Typography sx={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Adicionar produto</Typography>
+                        </Stack>
+                    </Box>
+                    <ChevronRight sx={{ color: 'rgba(255,255,255,0.6)' }} />
+                </Box>
+
+                {/* 📊 SEÇÃO: RESUMO INTELIGENTE (4 CARDS) */}
+                <Box sx={{ width: '100%' }}>
+                    <Typography sx={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}><TrendingUp sx={{ fontSize: 16 }} /> RESUMO INTELIGENTE</Typography>
+                    <Grid container spacing={1.2}>
+                        <Grid item xs={3}>
+                            <LayoutMobile._summaryCardCard>
+                                <Box className="badge blue"><Inventory2Outlined sx={{ fontSize: 12, color: '#fff' }} /></Box>
+                                <Typography className="title">Produtos</Typography>
+                                <Typography className="value">245</Typography>
+                                <Typography className="sub">No catálogo</Typography>
+                            </LayoutMobile._summaryCardCard>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <LayoutMobile._summaryCardCard>
+                                <Box className="badge purple"><HistoryOutlined sx={{ fontSize: 12, color: '#fff' }} /></Box>
+                                <Typography className="title">Em estoque</Typography>
+                                <Typography className="value">3.421</Typography>
+                                <Typography className="sub">Itens disponív.</Typography>
+                            </LayoutMobile._summaryCardCard>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <LayoutMobile._summaryCardCard>
+                                <Box className="badge green"><TrendingUp sx={{ fontSize: 12, color: '#fff' }} /></Box>
+                                <Typography className="title">Entradas</Typography>
+                                <Typography className="value text-green">32</Typography>
+                                <Typography className="sub">Novos prod.</Typography>
+                            </LayoutMobile._summaryCardCard>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <LayoutMobile._summaryCardCard className="warning">
+                                <Box className="badge orange"><WarningAmber sx={{ fontSize: 12, color: '#F97316' }} /></Box>
+                                <Typography className="title text-orange">Atenção</Typography>
+                                <Typography className="value text-orange">4</Typography>
+                                <Typography className="sub">Estoque baixo</Typography>
+                            </LayoutMobile._summaryCardCard>
+                        </Grid>
+                    </Grid>
+                </Box>
+
+                {/* 📈 🛑 CARD DE RELATÓRIOS DO VALOR TOTAL DO ESTOQUE (BLINDADO) */}
+                <Box sx={{ width: '100%', display: 'block', boxSizing: 'border-box' }}>
+                    <Card sx={{ width: '100%', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.04)', borderRadius: '16px', color: '#fff', boxShadow: 'none' }}>
+                        <CardContent sx={{ p: '20px !important', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%', boxSizing: 'border-box' }}>
+                            <Stack gap={0.5}>
+                                <Typography sx={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontWeight: '500', fontFamily: 'Urbanist, sans-serif' }}>
+                                    Valor total do estoque
+                                </Typography>
+                                <Box display="flex" alignItems="center" gap={1}>
+                                    <Typography sx={{ fontSize: '22px', fontWeight: '800', fontFamily: 'Urbanist, sans-serif' }}>
+                                        R$ 25.300
+                                    </Typography>
+                                    <Chip label="↑ 12,5%" size="small" sx={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10B981', fontSize: '11px', fontWeight: '700', height: 20 }} />
+                                </Box>
+                                <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'Urbanist, sans-serif' }}>
+                                    vs. semana passada
+                </Typography>
+                            </Stack>
+                            
+                            <Stack alignItems="flex-end" gap={1.5}>
+                                <svg width="110" height="35" viewBox="0 0 110 35" style={{ display: 'block' }}>
+                                    <path d="M0 28 Q 18 8, 36 22 T 72 12 T 110 4" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
+                                    <circle cx="110" cy="4" r="3" fill="#06B6D4" />
+                                </svg>
+                                <Button size="small" startIcon={<TrendingUp sx={{ fontSize: 14 }} />} sx={{ color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', fontSize: '11px', textTransform: 'none', px: 1.5, backgroundColor: 'rgba(255,255,255,0.02)', fontFamily: 'Urbanist, sans-serif' }}>
+                                    Ver relatório
+                                </Button>
+                            </Stack>
+                        </CardContent>
+                    </Card>
+                </Box>
+
+                {/* ⚡ SEÇÃO: AÇÕES RÁPIDAS */}
+                <Box sx={{ width: '100%' }}>
+                    <Typography sx={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', mb: 1.5 }}>⚡ AÇÕES RÁPIDAS</Typography>
+                    <Box sx={{ display: 'flex', gap: 1.2, overflowX: 'auto', pb: 1, width: '100%', '::-webkit-scrollbar': { display: 'none' } }}>
+                        {[
+                            { name: 'Adicionar produto', icon: <Add sx={{ color: '#A855F7' }} />, bg: 'rgba(168,85,247,0.1)' },
+                            { name: 'Entrada de estoque', icon: <ArrowDownward sx={{ color: '#06B6D4' }} />, bg: 'rgba(6,182,212,0.1)' },
+                            { name: 'Saída de estoque', icon: <ArrowUpward sx={{ color: '#F97316' }} />, bg: 'rgba(249,115,22,0.1)' },
+                            { name: 'Importar Excel', icon: <FilePresent sx={{ color: '#10B981' }} />, bg: 'rgba(16,185,129,0.1)' },
+                            { name: 'Escanear código', icon: <CropFree sx={{ color: '#6366F1' }} />, bg: 'rgba(99,102,241,0.1)' },
+                        ].map((act, i) => (
+                            <LayoutMobile._actionCard key={i}>
+                                <Box className="icon-box" sx={{ backgroundColor: act.bg }}>{act.icon}</Box>
+                                <Typography className="text">{act.name}</Typography>
+                            </LayoutMobile._actionCard>
+                        ))}
+                    </Box>
+                </Box>
+
+                {/* 📦 SEÇÃO: INVENTÁRIO CONSOLIDADO */}
+                <Box sx={{ width: '100%', pb: 2 }}>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={1.5}>
+                        <Typography sx={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.6)' }}>📦 INVENTÁRIO CONSOLIDADO</Typography>
+                        <Box display="flex" alignItems="center" sx={{ color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}>
+                            <Typography sx={{ fontSize: '12px', mr: 0.2 }}>Ver todos</Typography>
+                            <ChevronRight sx={{ fontSize: 16 }} />
+                        </Box>
+                    </Box>
+
+                    <Card sx={{ background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.04)', boxShadow: 'none' }}>
+                        <CardContent sx={{ p: '14px !important' }}>
+                            <Box display="flex" gap={1.8}>
+                                <Stack alignItems="center" gap={1}>
+                                    <Box sx={{ width: 76, height: 76, backgroundColor: 'rgba(255,255,255,0.01)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.04)' }}>
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="1.5">
+                                            <path d="M4 18 C 6 10, 10 10, 12 14 C 14 10, 18 10, 20 18 Z" />
+                                        </svg>
+                                    </Box>
+                                    <Chip icon={<CheckCircle sx={{ '&&': { color: '#10B981', fontSize: 11 } }} />} label="Em estoque" size="small" sx={{ backgroundColor: 'rgba(16, 185, 129, 0.08)', color: '#10B981', fontSize: '9px', height: 18 }} />
+                                </Stack>
+
+                                <Stack flex={1}>
+                                    <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                                        <Typography sx={{ fontWeight: '700', fontSize: '14px', color: '#fff' }}>Top Biquíni Cortininha</Typography>
+                                        <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.4)', p: 0 }}><MoreVertOutlined sx={{ fontSize: 18 }} /></IconButton>
+                                    </Box>
+                                    
+                                    <Grid container spacing={1} sx={{ mt: 1 }}>
+                                        <Grid item xs={4}><Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '8px' }}>PEÇA / MODELO</Typography><Typography sx={{ fontSize: '11px', fontWeight: '500' }}>Top Biquíni</Typography></Grid>
+                                        <Grid item xs={4}><Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '8px' }}>TAMANHO</Typography><Typography sx={{ fontSize: '11px', fontWeight: '500' }}>PP</Typography></Grid>
+                                        <Grid item xs={4}><Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '8px' }}>COR</Typography><Typography sx={{ fontSize: '11px', fontWeight: '500' }}>Laranja</Typography></Grid>
+                                    </Grid>
+
+                                    <Box display="flex" gap={1} mt={1.5}>
+                                        {['Estoque 100', 'Reservado 12', 'Disponível 88'].map((text, idx) => (
+                                            <Box key={idx} sx={{ backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '6px', px: 1, py: 0.5, textAlign: 'center', flex: 1 }}>
+                                                <Typography sx={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)' }}>{text.split(' ')[0]}</Typography>
+                                                <Typography sx={{ fontSize: '11px', fontWeight: '700' }}>{text.split(' ')[1]}</Typography>
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                </Stack>
+                            </Box>
+                        </CardContent>
+                    </Card>
                 </Box>
             </Box>
 
-            {/* 🌌 NEXUS CARDS FEED (PRODUTOS DO TENANT) */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, width: '100%' }}>
-                {produtosFiltrados.length === 0 ? (
-                    <Typography variant="body2" sx={{ color: '#8A2BE2', textAlign: 'center', mt: 4, fontFamily: 'Orbitron', letterSpacing: '2px' }}>
-                        // SISTEMA_VAZIO_REGISTRO_NULO
-                    </Typography>
-                ) : (
-                    produtosFiltrados.map((prod) => (
-                        <Card 
-                            key={prod.id} 
-                            sx={{ 
-                                background: 'linear-gradient(180deg, rgba(6, 6, 20, 0.85) 0%, rgba(2, 2, 8, 0.95) 100%)', 
-                                backdropFilter: 'blur(20px)',
-                                border: '1px solid rgba(138, 43, 226, 0.4)', // Linha roxa cyberpunk
-                                borderLeft: '4px solid #00FFFF', // Detalhe técnico ciano na esquerda
-                                borderRadius: '4px', // Formato de cartão de dados/chip
-                                color: 'white',
-                                position: 'relative',
-                                boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-                                '&:hover': { 
-                                    borderColor: '#00FFFF',
-                                    boxShadow: '0 0 20px rgba(0, 255, 255, 0.15)'
-                                }
-                            }}
-                        >
-                            {/* Linha técnica sutil no topo do card */}
-                            <Box sx={{ position: 'absolute', top: 0, right: '50px', left: '4px', height: '1px', background: 'linear-gradient(90deg, #00FFFF, transparent)' }} />
+            {/* 📥 MENU FLUTUANTE EXPANDIDO (NÃO QUEBRA POIS ESTÁ FORA DA ÁREA DE SCROLL) */}
+            {fabOpen && (
+                <LayoutMobile._fabMenuWrapper>
+                    {[
+                        { label: 'Adicionar produto', icon: <Add sx={{ fontSize: 16 }} />, color: '#8B5CF6' },
+                        { label: 'Entrada de estoque', icon: <ArrowDownward sx={{ fontSize: 16 }} />, color: '#06B6D4' },
+                        { label: 'Saída de estoque', icon: <ArrowUpward sx={{ fontSize: 16 }} />, color: '#F97316' },
+                        { label: 'Importar Excel', icon: <FilePresent sx={{ fontSize: 16 }} />, color: '#10B981' },
+                        { label: 'Escanear código', icon: <CropFree sx={{ fontSize: 16 }} />, color: '#6366F1' },
+                    ].map((menuItem, idx) => (
+                        <Box key={idx} className="menu-item-row">
+                            <Typography className="menu-text">{menuItem.label}</Typography>
+                            <Box className="menu-icon-circle" sx={{ backgroundColor: menuItem.color }}>{menuItem.icon}</Box>
+                        </Box>
+                    ))}
+                </LayoutMobile._fabMenuWrapper>
+            )}
 
-                            <CardContent sx={{ p: '22px !important' }}>
-                                
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <Chip 
-                                        label={prod.categoria?.toUpperCase() || "CORE"} 
-                                        size="small" 
-                                        sx={{ 
-                                            background: 'rgba(0, 255, 255, 0.05)', 
-                                            color: '#00FFFF', 
-                                            fontWeight: '700', 
-                                            fontFamily: 'Orbitron', 
-                                            fontSize: '9px', 
-                                            border: '1px solid rgba(0, 255, 255, 0.3)',
-                                            borderRadius: '2px',
-                                            letterSpacing: '1px'
-                                        }} 
-                                    />
-                                    <IconButton size="small" onClick={(e) => handleOpenMenu(e, prod.id)} sx={{ color: '#8A2BE2', '&:hover': { color: '#00FFFF' } }}><MoreVertOutlined /></IconButton>
-                                </Box>
+            {/* ➕ FAB BOTÃO INTERATIVO */}
+            <LayoutMobile._fabButton onClick={() => setFabOpen(!fabOpen)}>
+                {fabOpen ? <Close sx={{ fontSize: 22, color: '#fff' }} /> : <Add sx={{ fontSize: 24, color: '#fff' }} />}
+            </LayoutMobile._fabButton>
 
-                                {/* Nome do Produto Principal */}
-                                <Typography variant="h5" sx={{ fontFamily: 'Orbitron', fontWeight: '700', color: '#ffffff', mb: 0.5, letterSpacing: '0.5px' }}>
-                                    {prod.nome}
-                                </Typography>
-                                
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
-                                    <TerminalOutlined sx={{ color: 'rgba(255,255,255,0.2)', fontSize: '14px' }} />
-                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace', fontSize: '11px', letterSpacing: '0.5px' }}>
-                                        NODE_ID: {prod.id?.substring(0, 10).toUpperCase()}
-                                    </Typography>
-                                </Box>
-
-                                <Divider sx={{ backgroundColor: 'rgba(0, 255, 255, 0.1)', mb: 2.5 }} />
-
-                                {/* 🔄 CENTRAL DE TELEMETRIA DINÂMICA: GERA OS DADOS SENSÍVEIS DO TENANT */}
-                                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
-                                    {colunasDoTenant.map((col, idx) => {
-                                        const valorBruto = prod[col.campo];
-
-                                        // Status Monetário Futurista
-                                        if (col.isCurrency) {
-                                            return (
-                                                <Box key={idx} sx={{ borderLeft: '1px solid rgba(138,43,226,0.3)', pl: 1.5 }}>
-                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', display: 'block', fontSize: '9px', fontFamily: 'Orbitron', letterSpacing: '1px' }}>
-                                                        {col.label.toUpperCase()}
-                                                    </Typography>
-                                                    <Typography variant="body1" sx={{ fontFamily: 'Orbitron', fontWeight: '700', color: '#00FFFF', textShadow: '0 0 10px rgba(0,255,255,0.3)', mt: 0.5 }}>
-                                                        CR$ {valorBruto ? parseFloat(valorBruto).toFixed(2) : '0.00'}
-                                                    </Typography>
-                                                </Box>
-                                            );
-                                        }
-
-                                        // Status Logístico / Unidade de Medida
-                                        if (col.isUnit) {
-                                            return (
-                                                <Box key={idx} sx={{ borderLeft: '1px solid rgba(138,43,226,0.3)', pl: 1.5 }}>
-                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', display: 'block', fontSize: '9px', fontFamily: 'Orbitron', letterSpacing: '1px' }}>
-                                                        {col.label.toUpperCase()}
-                                                    </Typography>
-                                                    <Typography variant="body1" sx={{ fontFamily: 'Orbitron', fontWeight: '700', color: '#ffffff', mt: 0.5 }}>
-                                                        {valorBruto || 0} <span style={{ fontSize: '11px', color: '#8A2BE2', fontWeight: 'bold' }}>{tenant?.unidadeMedida?.toUpperCase() || 'UN'}</span>
-                                                    </Typography>
-                                                </Box>
-                                            );
-                                        }
-
-                                        // Atributos Genéricos Alinhados (Tamanho, Cor, Validade, etc.)
-                                        return (
-                                            <Box key={idx} sx={{ borderLeft: '1px solid rgba(138,43,226,0.3)', pl: 1.5 }}>
-                                                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', display: 'block', fontSize: '9px', fontFamily: 'Orbitron', letterSpacing: '1px' }}>
-                                                    {col.label.toUpperCase()}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ fontFamily: 'Urbanist', fontWeight: '600', color: 'rgba(255,255,255,0.85)', mt: 0.5 }}>
-                                                    {valorBruto || 'NUL_DATA'}
-                                                </Typography>
-                                            </Box>
-                                        );
-                                    })}
-                                </Box>
-
-                            </CardContent>
-                        </Card>
-                    ))
-                )}
-            </Box>
-
-            {/* CONTEXT MENU */}
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-                PaperProps={{
-                    sx: {
-                        backgroundColor: '#0a0a1e',
-                        border: '1px solid rgba(138, 43, 226, 0.4)',
-                        borderRadius: '10px',
-                        color: '#ffffff',
-                        '& .MuiMenuItem-root': { fontFamily: 'Urbanist', fontSize: '14px', py: 1.2 }
-                    }
-                }}
-            >
-                <MenuItem onClick={handleCloseMenu}>
-                    <ListItemIcon sx={{ color: '#00FFFF', minWidth: '35px' }}><EditOutlined fontSize="small" /></ListItemIcon>
-                    <ListItemText primary="Editar Registro" />
-                </MenuItem>
-
-                {role === 'owner' && (
-                    <MenuItem onClick={handleCloseMenu} sx={{ color: '#ff4444' }}>
-                        <ListItemIcon sx={{ color: '#ff4444', minWidth: '35px' }}><DeleteOutline fontSize="small" /></ListItemIcon>
-                        <ListItemText primary="Remover do Fluxo" />
-                    </MenuItem>
-                )}
-            </Menu>
-            <LayoutMobile._app_bar
-                sx={{
-                    position: 'fixed',
-                    bottom: 0,
-                    left: 0,
-                    width: '100%',
-                    background: 'rgba(5, 5, 18, 0.85)',
-                    backdropFilter: 'blur(20px)',
-                    borderTop: '1px solid rgba(0, 255, 255, 0.1)',
-                    boxShadow: '0 -5px 25px rgba(0,0,0,0.5)',
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    py: 1,
-                    zIndex: 99999
-                }}
-            >
+            {/* 📥 NAV FIXA INFERIOR */}
+            <LayoutMobile._app_bar>
                 {paths.map((item, index) => (
                     <Fragment key={index}>
-                        <MobileNavLink
-                            item={item}
-                            index={index}
-                            location={location}
-                            paths={paths}
-                        />
+                        <MobileNavLink item={item} location={location} />
                     </Fragment>
                 ))}
             </LayoutMobile._app_bar>

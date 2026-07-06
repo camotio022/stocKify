@@ -89,7 +89,7 @@ export const MainLayout = ({ children }) => {
     return (
         <Tag.MuiMainLayout>
             <Tag.AppBar>
-                <LogoMainLayout text={tenant?.name} />
+                <LogoMainLayout logged={'2vw'} text={tenant?.name} />
                 <UserItens />
             </Tag.AppBar>
 
