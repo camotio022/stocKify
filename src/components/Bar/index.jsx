@@ -30,7 +30,7 @@ const accentColor = tenant?.theme?.buttons?.secondary || Root.cyan;
     const isRoutesNow = [
         {
             label: 'Inventário Consolidado',
-            route: '/', canBar: true
+            route: '/movimentacoes', canBar: true
         },
         {
             label: 'Fluxo de Entradas',

@@ -39,12 +39,12 @@ export const MainLayout = ({ children }) => {
     const paths = [
         {
             name: 'Dashboard',
-            link: '/Dashboard',
+            link: '/',
             icon: <HomeOutlined />
         },
         {
             name: 'Estoque',
-            link: '/',
+            link: '/movimentacoes',
             icon: <Inventory2Outlined />
         },
         {

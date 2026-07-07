@@ -107,9 +107,13 @@ export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
                     <Badge badgeContent={8} sx={{ '& .MuiBadge-badge': { backgroundColor: '#6366F1', color: '#fff', fontSize: '10px', height: 16, minWidth: 16 } }}>
                         <NotificationsOutlined sx={{ color: '#fff', fontSize: 24 }} />
                     </Badge>
-                    <Button variant="contained" startIcon={<AutoAwesome sx={{ fontSize: 14 }} />} sx={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', textTransform: 'none', fontSize: '11px', fontWeight: '600', py: 0.6, color: '#A855F7', boxShadow: 'none' }}>
-                        Assistente
-                    </Button>
+           <Button 
+                               variant="contained" 
+                               startIcon={<AutoAwesome />} 
+                               sx={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)', textTransform: 'none', borderRadius: '12px', fontSize: '13px', fontWeight: '600', boxShadow: '0 4px 15px rgba(6, 182, 212, 0.3)' }}
+                           >
+                               Assistente IA
+                           </Button>
                 </Box>
             </LayoutMobile._app_bar_top>
 

@@ -12,6 +12,7 @@ import { Percepcoes } from "../pages/percepcoes";
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { ComponentCompanies } from "../auth/companies/ComponentCompanies";
 import { OnboardingScreen } from "../../hooks/OnboardingScreen";
+import { EstoqueContent } from "../pages/dashboard";
 
 export const MainRoutes = () => {
     const { isLoggedIn, loading, tenant } = useContext(AuthContext);
@@ -90,7 +91,9 @@ export const MainRoutes = () => {
             key={activeId}
             children={
                 <Routes>
-                    <Route path="/" element={<Stock />} />
+                    EstoqueContent
+                    <Route path="/" element={<EstoqueContent />} />
+                    <Route path="/movimentacoes" element={<Stock />} />
                     <Route path="/entradas" element={<Entradas />} />
                     <Route path="/exits" element={<ExitsItems />} />
                     <Route path="/details/:id" element={<DetailsItems />} />
