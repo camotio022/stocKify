@@ -43,7 +43,7 @@ import { useLocation, Link } from 'react-router-dom';
 const MobileNavLink = ({ item, location }) => {
     const isPathActive = location.pathname === item.link;
     return (
-        <Box 
+        <Box
             component={Link}
             to={item.link}
             sx={{
@@ -83,7 +83,7 @@ export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
 
     return (
         <Box sx={{ width: '100vw', height: '100vh', color: '#ffffff', display: 'flex', flexDirection: 'column', backgroundColor: '#04020d', overflow: 'hidden', position: 'relative' }}>
-            
+
             {/* 🔝 1. TOPBAR / CABEÇALHO FIXO */}
             <LayoutMobile._app_bar_top>
                 <Box display="flex" alignItems="center" gap={1.5}>
@@ -97,29 +97,29 @@ export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
                             <KeyboardArrowDown sx={{ color: '#fff', fontSize: 16 }} />
                         </Box>
                         <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                            Última sincronização: agora 
+                            Última sincronização: agora
                             <Box className="pulse-dot" sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
                         </Typography>
                     </Stack>
                 </Box>
-                
+
                 <Box display="flex" alignItems="center" gap={1.5}>
                     <Badge badgeContent={8} sx={{ '& .MuiBadge-badge': { backgroundColor: '#6366F1', color: '#fff', fontSize: '10px', height: 16, minWidth: 16 } }}>
                         <NotificationsOutlined sx={{ color: '#fff', fontSize: 24 }} />
                     </Badge>
-           <Button 
-                               variant="contained" 
-                               startIcon={<AutoAwesome />} 
-                               sx={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)', textTransform: 'none', borderRadius: '12px', fontSize: '13px', fontWeight: '600', boxShadow: '0 4px 15px rgba(6, 182, 212, 0.3)' }}
-                           >
-                               Assistente IA
-                           </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<AutoAwesome />}
+                        sx={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)', textTransform: 'none', borderRadius: '12px', fontSize: '13px', fontWeight: '600', boxShadow: '0 4px 15px rgba(6, 182, 212, 0.3)' }}
+                    >
+                        Assistente IA
+                    </Button>
                 </Box>
             </LayoutMobile._app_bar_top>
 
             {/* 📜 ÁREA DE SCROLL INDEPENDENTE */}
             <Box sx={{ flex: 1, overflowY: 'auto', px: 2, pt: '96px', pb: '94px', display: 'flex', flexDirection: 'column', gap: 3.5, width: '100%', boxSizing: 'border-box' }}>
-                
+
                 {/* 🔍 INPUT DE BUSCA ARREDONDADO */}
                 <TextField
                     fullWidth
@@ -204,9 +204,9 @@ export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
                                 </Box>
                                 <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'Urbanist, sans-serif' }}>
                                     vs. semana passada
-                </Typography>
+                                </Typography>
                             </Stack>
-                            
+
                             <Stack alignItems="flex-end" gap={1.5}>
                                 <svg width="110" height="35" viewBox="0 0 110 35" style={{ display: 'block' }}>
                                     <path d="M0 28 Q 18 8, 36 22 T 72 12 T 110 4" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
@@ -266,7 +266,7 @@ export const EstoqueMobile = ({ produtos = [], tenant, setNewItem }) => {
                                         <Typography sx={{ fontWeight: '700', fontSize: '14px', color: '#fff' }}>Top Biquíni Cortininha</Typography>
                                         <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.4)', p: 0 }}><MoreVertOutlined sx={{ fontSize: 18 }} /></IconButton>
                                     </Box>
-                                    
+
                                     <Grid container spacing={1} sx={{ mt: 1 }}>
                                         <Grid item xs={4}><Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '8px' }}>PEÇA / MODELO</Typography><Typography sx={{ fontSize: '11px', fontWeight: '500' }}>Top Biquíni</Typography></Grid>
                                         <Grid item xs={4}><Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '8px' }}>TAMANHO</Typography><Typography sx={{ fontSize: '11px', fontWeight: '500' }}>PP</Typography></Grid>

@@ -62,26 +62,51 @@ export const EstoqueContent = ({ produtos = [], tenant, setNewItem }) => {
                 {/* COLUNA ESQUERDA */}
                 <Grid item xs={12} lg={9} component={Stack} gap={3}>
                     
-                    {/* 4 Cards de Resumo */}
-                    <Grid container spacing={2}>
-                        {[
-                            { title: 'Produtos', val: '245', sub: 'No catálogo', color: 'blue', icon: <Inventory2Outlined sx={{ fontSize: 18 }}/> },
-                            { title: 'Em estoque', val: '3.421', sub: 'Disponíveis', color: 'purple', icon: <HistoryOutlined sx={{ fontSize: 18 }}/> },
-                            { title: 'Entradas hoje', val: '32', sub: '+12% que ontem', color: 'green', icon: <TrendingUp sx={{ fontSize: 18 }}/> },
-                            { title: 'Atenção', val: '4', sub: 'Estoque crítico', color: 'orange', icon: <WarningAmber sx={{ fontSize: 18 }}/>, warn: true }
-                        ].map((c, i) => (
-                            <Grid item xs={6} md={3} key={i}>
-                                <Box sx={{ p: 2, backgroundColor: c.warn ? 'rgba(255, 122, 27, 0.3)' : Root.columnTable, border: '1px solid', borderColor: c.warn ? 'rgba(249, 115, 22, 0.2)' : 'rgba(255,255,255,0.05)', borderRadius: '16px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <Box sx={{ width: 28, height: 28, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5, backgroundColor: c.color === 'blue' ? 'rgba(37,99,235,0.2)' : c.color === 'purple' ? 'rgba(124,58,237,0.2)' : c.color === 'green' ? 'rgba(16,185,129,0.2)' : 'rgba(249,115,22,0.2)', color: c.warn ? '#F97316' : '#00D2FF' }}>
-                                        {c.icon}
-                                    </Box>
-                                    <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: '600', whiteSpace: 'nowrap' }}>{c.title}</Typography>
-                                    <Typography sx={{ fontSize: { xs: '20px', md: '24px' }, fontWeight: '800', my: 0.2, color: c.warn ? '#F97316' : '#fff', fontFamily: 'Urbanist, sans-serif' }}>{c.val}</Typography>
-                                    <Typography sx={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>{c.sub}</Typography>
-                                </Box>
-                            </Grid>
-                        ))}
-                    </Grid>
+               {/* 4 Cards de Resumo em Grid 2x2 (Quadrados Perfeitos) */}
+<Grid container spacing={2}>
+    {[
+        { title: 'Produtos', val: '245', sub: 'No catálogo', color: 'blue', icon: <Inventory2Outlined sx={{ fontSize: 20 }}/> },
+        { title: 'Em estoque', val: '3.421', sub: 'Disponíveis', color: 'purple', icon: <HistoryOutlined sx={{ fontSize: 20 }}/> },
+        { title: 'Entradas hoje', val: '32', sub: '+12% que ontem', color: 'green', icon: <TrendingUp sx={{ fontSize: 20 }}/> },
+        { title: 'Atenção', val: '4', sub: 'Estoque crítico', color: 'orange', icon: <WarningAmber sx={{ fontSize: 20 }}/>, warn: true }
+    ].map((c, i) => (
+        // xs={6} e md={6} garantem que fiquem sempre 2 de cada lado!
+        <Grid item xs={6} md={6} key={i}>
+            <Box sx={{ 
+                p: 2.5, 
+                backgroundColor: c.warn ? 'rgba(255, 122, 27, 0.15)' : Root.columnTable, 
+                border: '1px solid', 
+                borderColor: c.warn ? 'rgba(249, 115, 22, 0.4)' : 'rgba(255,255,255,0.05)', 
+                borderRadius: '16px', 
+                
+                // 🔥 O SEGREDO DO QUADRADO LINDÃO: aspect-ratio!
+                aspectRatio: '1 / 1', 
+                width: '100%',
+                
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'center',
+                boxSizing: 'border-box',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                transition: '0.2s ease',
+                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.2)' }
+            }}>
+                <Box sx={{ width: 34, height: 34, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 'auto', backgroundColor: c.color === 'blue' ? 'rgba(37,99,235,0.2)' : c.color === 'purple' ? 'rgba(124,58,237,0.2)' : c.color === 'green' ? 'rgba(16,185,129,0.2)' : 'rgba(249,115,22,0.2)', color: c.warn ? '#F97316' : '#00D2FF' }}>
+                    {c.icon}
+                </Box>
+                <Typography sx={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontWeight: '600', whiteSpace: 'nowrap' }}>
+                    {c.title}
+                </Typography>
+                <Typography sx={{ fontSize: { xs: '24px', md: '28px' }, fontWeight: '900', my: 0.5, color: c.warn ? '#F97316' : '#fff', fontFamily: 'Urbanist, sans-serif' }}>
+                    {c.val}
+                </Typography>
+                <Typography sx={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+                    {c.sub}
+                </Typography>
+            </Box>
+        </Grid>
+    ))}
+</Grid>
 
                     {/* Card do Gráfico Corrigido (Sem sobrepor texto) */}
                     <Card sx={{ background: Root.columnTable, border: '1px solid rgba(255, 255, 255, 0.45)', borderRadius: '16px', color: '#fff', boxShadow: 'none' }}>
